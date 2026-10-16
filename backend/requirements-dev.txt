@@ -44,7 +44,7 @@ pluggy==1.7.0
     # via pytest
 prometheus-client==0.26.0
     # via -r relaydesk/backend/requirements.in
-psycopg==3.2.3
+psycopg==3.3.6
     # via -r relaydesk/backend/requirements.in
 pydantic==2.14.1
     # via

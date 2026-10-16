@@ -113,7 +113,18 @@ jobs:
         env:
           BACKEND_SCAN: ${{ steps.backend_scan.outcome }}
           FRONTEND_SCAN: ${{ steps.frontend_scan.outcome }}
-        run: test "$BACKEND_SCAN" = success && test "$FRONTEND_SCAN" = success
+        run: |
+          if [[ "$BACKEND_SCAN" != success || "$FRONTEND_SCAN" != success ]]; then
+            echo "::error::Container security gate failed: backend=$BACKEND_SCAN frontend=$FRONTEND_SCAN"
+            for report in backend-trivy.txt frontend-trivy.txt; do
+              if [[ -f "$report" ]]; then
+                echo "::group::$report"
+                cat "$report"
+                echo "::endgroup::"
+              fi
+            done
+            exit 1
+          fi
       - uses: actions/setup-node@v4
         with:
           node-version: '22'

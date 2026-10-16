@@ -1,11 +1,19 @@
-FROM python:3.12-slim-bookworm
+FROM python:3.12-alpine AS dependencies
+WORKDIR /build
+RUN apk add --no-cache build-base libpq-dev
+COPY requirements.txt .
+# Build the C adapter against Alpine's libpq; leave compilers in this stage.
+RUN pip install --no-cache-dir --prefix=/install -r requirements.txt 'psycopg[c]'
+
+FROM python:3.12-alpine
 WORKDIR /app
 ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 PIP_NO_CACHE_DIR=1
-RUN apt-get update && apt-get install -y --no-install-recommends libpq5 \
-    && rm -rf /var/lib/apt/lists/* \
-    && useradd --uid 10001 --create-home appuser
-COPY requirements.txt .
-RUN pip install -r requirements.txt
+RUN apk add --no-cache libpq \
+    && addgroup -g 10001 appuser \
+    && adduser -D -u 10001 -G appuser appuser
+COPY --from=dependencies /install /usr/local
+# Fail the image build if the PostgreSQL adapter cannot load its runtime library.
+RUN python -c 'import psycopg; assert psycopg.pq.__impl__ == "c"'
 COPY alembic.ini .
 COPY alembic ./alembic
 COPY app ./app

@@ -15,7 +15,7 @@ test('ticket lifecycle persists across reloads and mobile layout', async ({page,
     await dialog.getByLabel('Description', {exact:true}).fill('Disposable ticket created by the real-browser integration suite.');
     await dialog.getByLabel('Requester', {exact:true}).fill('Browser test');
     await dialog.getByLabel('Assigned to', {exact:true}).fill('Support team');
-    await dialog.getByLabel('Priority', {exact:true}).selectOption('HIGH');
+    await dialog.getByRole('combobox', {name:'Priority', exact:true}).selectOption('HIGH');
     const created = page.waitForResponse(r => r.url().endsWith('/api/tickets') && r.request().method()==='POST');
     await dialog.getByRole('button', {name:'Create ticket', exact:true}).click();
     const response = await created;
