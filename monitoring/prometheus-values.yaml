@@ -13,7 +13,10 @@ prometheus:
       matchLabels:
         release: monitoring
     serviceMonitorNamespaceSelector:
-      matchNames: [relaydesk, monitoring]
+      matchExpressions:
+        - key: kubernetes.io/metadata.name
+          operator: In
+          values: [relaydesk, monitoring]
     resources:
       requests: {cpu: 100m, memory: 400Mi}
       limits: {memory: 1Gi}

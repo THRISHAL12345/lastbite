@@ -173,6 +173,11 @@ jobs:
         run: bash scripts/check-kubernetes.sh
       - name: Verify live Prometheus scraping and Grafana dashboard
         run: bash scripts/check-monitoring.sh
+      - name: Verify Argo CD sync and automatic drift repair
+        env:
+          IMAGE_TAG: ${{ github.sha }}
+          REPO_REVISION: ${{ github.sha }}
+        run: bash scripts/check-gitops.sh
       - name: Collect Kubernetes failure diagnostics
         if: failure()
         run: |
@@ -181,6 +186,8 @@ jobs:
           kubectl get events -A --sort-by=.lastTimestamp > artifacts/kubernetes/events.txt || true
           kubectl logs -n relaydesk -l job-name --all-containers --tail=200 > artifacts/kubernetes/migration-logs.txt || true
           kubectl get pods -n monitoring -o wide > artifacts/kubernetes/monitoring-pods.txt || true
+          kubectl get pods -n argocd -o wide > artifacts/kubernetes/argocd-pods.txt || true
+          kubectl get application -n argocd -o json > artifacts/kubernetes/argocd-applications.json || true
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -192,6 +199,12 @@ jobs:
         with:
           name: monitoring-evidence
           path: artifacts/monitoring/
+          retention-days: 30
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: gitops-evidence
+          path: artifacts/gitops/
           retention-days: 30
       - uses: docker/login-action@v3
         if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
