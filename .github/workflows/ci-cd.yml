@@ -114,6 +114,42 @@ jobs:
           BACKEND_SCAN: ${{ steps.backend_scan.outcome }}
           FRONTEND_SCAN: ${{ steps.frontend_scan.outcome }}
         run: test "$BACKEND_SCAN" = success && test "$FRONTEND_SCAN" = success
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - name: Install real-browser test dependencies
+        working-directory: frontend
+        run: npm ci && npx playwright install --with-deps chromium
+      - name: Start the exact candidate images with PostgreSQL
+        run: |
+          docker tag "$IMAGE_PREFIX-backend:${{ github.sha }}" relaydesk-backend:dev
+          docker tag "$IMAGE_PREFIX-frontend:${{ github.sha }}" relaydesk-frontend:dev
+          docker compose up -d --no-build --wait --wait-timeout 180
+      - name: Verify non-root containers and live API workflow
+        run: |
+          test "$(docker compose exec -T backend id -u)" != 0
+          test "$(docker compose exec -T frontend id -u)" != 0
+          python3 scripts/smoke.py
+      - name: Exercise the UI against PostgreSQL in Chromium
+        working-directory: frontend
+        run: npm run test:e2e
+      - name: Collect Compose evidence
+        if: always()
+        run: |
+          mkdir -p artifacts/compose
+          docker compose ps --all > artifacts/compose/services.txt
+          docker compose logs --no-color > artifacts/compose/services.log
+      - name: Stop the disposable Compose stack
+        if: always()
+        run: docker compose down -v
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: compose-and-browser-evidence
+          path: artifacts/
+          retention-days: 30
       - uses: docker/login-action@v3
         if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
         with:
