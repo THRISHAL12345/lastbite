@@ -1,0 +1,8 @@
+# A private demo ingress. Port-forward this service to exercise host routing.
+service:
+  type: ClusterIP
+providers:
+  kubernetesIngress:
+    enabled: true
+  kubernetesGateway:
+    enabled: false

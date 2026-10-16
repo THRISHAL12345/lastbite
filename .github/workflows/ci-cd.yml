@@ -1,0 +1,139 @@
+name: RelayDesk CI and image delivery
+on:
+  push:
+    branches: [main]
+    paths-ignore: ["demo/**", "docs/**", "**/*.md", "helm/relaydesk/values-release.yaml"]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: relaydesk-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: relaydesk_test
+          POSTGRES_USER: relaydesk_test
+          POSTGRES_PASSWORD: ci-disposable-password
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U relaydesk_test -d relaydesk_test"
+          --health-interval 5s --health-timeout 3s --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Install PostgreSQL client runtime
+        run: sudo apt-get update && sudo apt-get install -y libpq5
+      - run: pip install -r backend/requirements-dev.txt
+      - name: Test API and real PostgreSQL migrations
+        working-directory: backend
+        env:
+          TEST_DATABASE_URL: postgresql+psycopg://relaydesk_test:ci-disposable-password@localhost:5432/relaydesk_test
+        run: pytest -v --junitxml=../artifacts/pytest.xml
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - run: npm ci && npm test && npm run build
+        working-directory: frontend
+      - uses: azure/setup-helm@v4.3.0
+      - run: |
+          helm lint helm/relaydesk
+          helm template relaydesk helm/relaydesk -f helm/relaydesk/values-prod.yaml > /tmp/relaydesk.yaml
+      - uses: hashicorp/setup-terraform@v3
+        with: {terraform_version: '1.16.4'}
+      - run: terraform fmt -check -recursive terraform
+      - run: terraform -chdir=terraform init -backend=false && terraform -chdir=terraform validate
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-results
+          path: artifacts/pytest.xml
+  images:
+    needs: test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set lowercase registry path
+        env: {OWNER: '${{ github.repository_owner }}'}
+        run: echo "IMAGE_PREFIX=ghcr.io/${OWNER,,}/relaydesk" >> "$GITHUB_ENV"
+      - uses: docker/setup-buildx-action@v3
+      - name: Build backend
+        uses: docker/build-push-action@v6
+        with:
+          context: backend
+          load: true
+          tags: ${{ env.IMAGE_PREFIX }}-backend:${{ github.sha }}
+          cache-from: type=gha,scope=backend
+          cache-to: type=gha,mode=max,scope=backend
+      - name: Build frontend
+        uses: docker/build-push-action@v6
+        with:
+          context: frontend
+          load: true
+          tags: ${{ env.IMAGE_PREFIX }}-frontend:${{ github.sha }}
+          cache-from: type=gha,scope=frontend
+          cache-to: type=gha,mode=max,scope=frontend
+      - name: Scan backend
+        id: backend_scan
+        continue-on-error: true
+        uses: aquasecurity/trivy-action@0.35.0
+        with:
+          image-ref: ${{ env.IMAGE_PREFIX }}-backend:${{ github.sha }}
+          severity: HIGH,CRITICAL
+          exit-code: '1'
+          format: table
+          output: backend-trivy.txt
+      - name: Scan frontend
+        id: frontend_scan
+        continue-on-error: true
+        uses: aquasecurity/trivy-action@0.35.0
+        with:
+          image-ref: ${{ env.IMAGE_PREFIX }}-frontend:${{ github.sha }}
+          severity: HIGH,CRITICAL
+          exit-code: '1'
+          format: table
+          output: frontend-trivy.txt
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: security-reports
+          path: '*-trivy.txt'
+      - name: Enforce both security gates
+        env:
+          BACKEND_SCAN: ${{ steps.backend_scan.outcome }}
+          FRONTEND_SCAN: ${{ steps.frontend_scan.outcome }}
+        run: test "$BACKEND_SCAN" = success && test "$FRONTEND_SCAN" = success
+      - uses: docker/login-action@v3
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Push the exact images that passed scanning
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        run: |
+          docker push "$IMAGE_PREFIX-backend:${{ github.sha }}"
+          docker push "$IMAGE_PREFIX-frontend:${{ github.sha }}"
+      - name: Prepare GitOps release values
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        env:
+          OWNER: ${{ github.repository_owner }}
+          COMMIT_SHA: ${{ github.sha }}
+        run: python scripts/promote.py "$OWNER" "$COMMIT_SHA"
+      - uses: actions/upload-artifact@v4
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        with:
+          name: gitops-release-values
+          path: helm/relaydesk/values-release.yaml

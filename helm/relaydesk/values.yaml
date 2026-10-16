@@ -1,0 +1,30 @@
+replicas: 2
+backend:
+  repository: relaydesk-backend
+  tag: dev
+frontend:
+  repository: relaydesk-frontend
+  tag: dev
+imagePullPolicy: IfNotPresent
+imagePullSecrets: []
+database:
+  name: relaydesk
+  user: relaydesk
+  existingSecret: relaydesk-db
+  passwordKey: password
+  storage: 5Gi
+  storageClass: ""
+  image: postgres:16-alpine
+ingress:
+  enabled: false
+  className: traefik
+  host: relaydesk.local
+  tls: []
+hpa:
+  enabled: false
+  minReplicas: 2
+  maxReplicas: 6
+  targetCPU: 60
+monitoring:
+  enabled: false
+  release: monitoring

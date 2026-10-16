@@ -1,0 +1,12 @@
+# Set your own hostname/TLS and image repositories in values-release.yaml.
+replicas: 2
+database:
+  storageClass: gp3
+  storage: 10Gi
+ingress:
+  enabled: true
+  host: relaydesk.example.com
+hpa:
+  enabled: true
+monitoring:
+  enabled: true

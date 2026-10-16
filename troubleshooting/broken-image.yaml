@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: relaydesk-lab-image
+  namespace: relaydesk
+spec:
+  replicas: 1
+  selector:
+    matchLabels: {app: relaydesk-lab-image}
+  template:
+    metadata:
+      labels: {app: relaydesk-lab-image}
+    spec:
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        seccompProfile: {type: RuntimeDefault}
+      containers:
+        - name: lab
+          image: ghcr.io/example/relaydesk-backend:deliberately-missing
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities: {drop: [ALL]}

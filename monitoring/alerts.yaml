@@ -1,0 +1,22 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: relaydesk
+  namespace: monitoring
+  labels: {release: monitoring}
+spec:
+  groups:
+    - name: relaydesk
+      rules:
+        - alert: RelayDeskHighErrorRate
+          expr: sum(rate(relaydesk_http_requests_total{namespace="relaydesk",status=~"5.."}[5m])) / clamp_min(sum(rate(relaydesk_http_requests_total{namespace="relaydesk"}[5m])), 0.001) > 0.05
+          for: 5m
+          labels: {severity: warning}
+          annotations:
+            summary: RelayDesk server errors exceed 5% of traffic
+        - alert: RelayDeskBackendUnavailable
+          expr: sum(up{namespace="relaydesk",service="relaydesk-backend"}) == 0 or absent(up{namespace="relaydesk",service="relaydesk-backend"})
+          for: 2m
+          labels: {severity: critical}
+          annotations:
+            summary: No healthy RelayDesk backend scrape targets

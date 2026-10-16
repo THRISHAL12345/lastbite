@@ -1,0 +1,28 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: relaydesk
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/REPLACE_OWNER/REPLACE_REPOSITORY.git
+    targetRevision: main
+    path: helm/relaydesk
+    helm:
+      releaseName: relaydesk
+      valueFiles:
+        - values-prod.yaml
+        - values-release.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: relaydesk
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+    retry:
+      limit: 3
+      backoff: {duration: 10s, factor: 2, maxDuration: 2m}
