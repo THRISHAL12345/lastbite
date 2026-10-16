@@ -24,21 +24,21 @@ secret = json.loads(subprocess.check_output([
 username = base64.b64decode(secret['admin-user']).decode()
 password = base64.b64decode(secret['admin-password']).decode()
 auth = 'Basic ' + base64.b64encode(f'{username}:{password}'.encode()).decode()
-query = 'sum(rate(relaydesk_http_requests_total{namespace="relaydesk"}[5m]))'
+query = 'sum(rate(lastbite_http_requests_total{namespace="lastbite"}[5m]))'
 deadline = time.monotonic() + 240
 last_error = None
 while time.monotonic() < deadline:
     try:
         # Keep real traffic flowing across at least two Prometheus scrapes.
         for _ in range(20):
-            fetch('http://127.0.0.1:8100/api/tickets?limit=1')
+            fetch('http://127.0.0.1:8100/api/listings?limit=1')
         targets = fetch('http://127.0.0.1:9090/api/v1/targets')['data']['activeTargets']
-        targets = [t for t in targets if t['labels'].get('namespace') == 'relaydesk'
-                   and t['labels'].get('service') == 'relaydesk-backend']
+        targets = [t for t in targets if t['labels'].get('namespace') == 'lastbite'
+                   and t['labels'].get('service') == 'lastbite-backend']
         assert len(targets) == 2 and all(t['health'] == 'up' for t in targets), 'Both backend targets must be UP'
         result = fetch('http://127.0.0.1:9090/api/v1/query?' + urlencode({'query': query}))
         assert result['data']['result'] and float(result['data']['result'][0]['value'][1]) > 0, 'Need positive request rate'
-        dashboard = fetch('http://127.0.0.1:3001/api/dashboards/uid/relaydesk-health', auth)
+        dashboard = fetch('http://127.0.0.1:3001/api/dashboards/uid/lastbite-health', auth)
         sources = fetch('http://127.0.0.1:3001/api/datasources', auth)
         source = next(s for s in sources if s['type'] == 'prometheus' and s['isDefault'])
         grafana = fetch(f"http://127.0.0.1:3001/api/datasources/proxy/uid/{source['uid']}/api/v1/query?" + urlencode({'query': query}), auth)

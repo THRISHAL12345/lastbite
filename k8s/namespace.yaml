@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: relaydesk
+  name: lastbite
   labels:
-    app.kubernetes.io/part-of: relaydesk
+    app.kubernetes.io/part-of: lastbite
     pod-security.kubernetes.io/enforce: restricted

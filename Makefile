@@ -4,12 +4,12 @@ up:
 down:
 	docker compose down
 test:
-	cd backend && ../.venv/bin/pytest -v
+	cd backend && ../.venv/bin/python -m pytest -v
 	cd frontend && npm test
 build:
 	cd frontend && npm ci && npm run build
 lint:
-	helm lint helm/relaydesk
+	helm lint helm/lastbite
 	terraform fmt -check -recursive terraform
 	docker compose config --quiet
 seed:

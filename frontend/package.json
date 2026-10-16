@@ -1,6 +1,6 @@
 {
-  "name": "relaydesk-frontend",
-  "version": "1.0.0",
+  "name": "lastbite-frontend",
+  "version": "2.0.0",
   "private": true,
   "type": "module",
   "scripts": {

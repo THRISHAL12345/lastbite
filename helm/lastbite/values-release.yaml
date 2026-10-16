@@ -1,0 +1,8 @@
+# LastBite has not been published. Run scripts/promote.py after a successful LastBite CI run.
+# Promote only after BOTH image scans and pushes succeed.
+backend:
+  repository: ghcr.io/thrishal12345/lastbite-backend
+  tag: "build-required"
+frontend:
+  repository: ghcr.io/thrishal12345/lastbite-frontend
+  tag: "build-required"

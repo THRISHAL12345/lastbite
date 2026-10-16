@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "relaydesk.name" . }}-backend
+  name: {{ include "lastbite.name" . }}-backend
 spec:
   {{- if not .Values.hpa.enabled }}
   replicas: {{ .Values.replicas }}
@@ -29,7 +29,7 @@ spec:
           image: "{{ .Values.backend.repository }}:{{ .Values.backend.tag }}"
           imagePullPolicy: {{ .Values.imagePullPolicy }}
           ports: [{name: http, containerPort: 8000}]
-          env: {{ include "relaydesk.dbEnv" . | nindent 12 }}
+          env: {{ include "lastbite.dbEnv" . | nindent 12 }}
           startupProbe:
             httpGet: {path: /health, port: http}
             periodSeconds: 5
@@ -51,7 +51,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "relaydesk.name" . }}-backend
+  name: {{ include "lastbite.name" . }}-backend
   labels:
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/component: backend

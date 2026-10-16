@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "relaydesk.name" . }}-frontend
+  name: {{ include "lastbite.name" . }}-frontend
 spec:
   replicas: {{ .Values.replicas }}
   selector:
@@ -29,7 +29,7 @@ spec:
           imagePullPolicy: {{ .Values.imagePullPolicy }}
           env:
             - name: BACKEND_HOST
-              value: {{ include "relaydesk.name" . }}-backend
+              value: {{ include "lastbite.name" . }}-backend
           ports: [{name: http, containerPort: 8080}]
           readinessProbe:
             httpGet: {path: /healthz, port: http}
@@ -47,7 +47,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "relaydesk.name" . }}-frontend
+  name: {{ include "lastbite.name" . }}-frontend
 spec:
   type: ClusterIP
   selector:

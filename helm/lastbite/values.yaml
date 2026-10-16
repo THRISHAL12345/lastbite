@@ -1,16 +1,16 @@
 replicas: 2
 backend:
-  repository: relaydesk-backend
+  repository: lastbite-backend
   tag: dev
 frontend:
-  repository: relaydesk-frontend
+  repository: lastbite-frontend
   tag: dev
 imagePullPolicy: IfNotPresent
 imagePullSecrets: []
 database:
-  name: relaydesk
-  user: relaydesk
-  existingSecret: relaydesk-db
+  name: lastbite
+  user: lastbite
+  existingSecret: lastbite-db
   passwordKey: password
   storage: 5Gi
   storageClass: ""
@@ -18,7 +18,7 @@ database:
 ingress:
   enabled: false
   className: traefik
-  host: relaydesk.local
+  host: lastbite.local
   tls: []
 hpa:
   enabled: false

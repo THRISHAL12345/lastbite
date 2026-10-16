@@ -1,4 +1,4 @@
-# RelayDesk AWS infrastructure
+# LastBite AWS infrastructure
 
 This module provisions a two-AZ VPC, public/private subnets, a single NAT gateway, EKS 1.35, two managed worker nodes, control-plane logs and an EBS CSI IAM role/add-on. `k8s/storageclass.yaml` creates encrypted gp3 volumes after the cluster is ready.
 

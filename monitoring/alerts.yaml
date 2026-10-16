@@ -1,22 +1,22 @@
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
-  name: relaydesk
+  name: lastbite
   namespace: monitoring
   labels: {release: monitoring}
 spec:
   groups:
-    - name: relaydesk
+    - name: lastbite
       rules:
-        - alert: RelayDeskHighErrorRate
-          expr: sum(rate(relaydesk_http_requests_total{namespace="relaydesk",status=~"5.."}[5m])) / clamp_min(sum(rate(relaydesk_http_requests_total{namespace="relaydesk"}[5m])), 0.001) > 0.05
+        - alert: LastBiteHighErrorRate
+          expr: sum(rate(lastbite_http_requests_total{namespace="lastbite",status=~"5.."}[5m])) / clamp_min(sum(rate(lastbite_http_requests_total{namespace="lastbite"}[5m])), 0.001) > 0.05
           for: 5m
           labels: {severity: warning}
           annotations:
-            summary: RelayDesk server errors exceed 5% of traffic
-        - alert: RelayDeskBackendUnavailable
-          expr: sum(up{namespace="relaydesk",service="relaydesk-backend"}) == 0 or absent(up{namespace="relaydesk",service="relaydesk-backend"})
+            summary: LastBite server errors exceed 5% of traffic
+        - alert: LastBiteBackendUnavailable
+          expr: sum(up{namespace="lastbite",service="lastbite-backend"}) == 0 or absent(up{namespace="lastbite",service="lastbite-backend"})
           for: 2m
           labels: {severity: critical}
           annotations:
-            summary: No healthy RelayDesk backend scrape targets
+            summary: No healthy LastBite backend scrape targets

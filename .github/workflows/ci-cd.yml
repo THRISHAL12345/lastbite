@@ -1,4 +1,4 @@
-name: RelayDesk CI and image delivery
+name: LastBite CI and image delivery
 on:
   push:
     branches: [main]
@@ -8,7 +8,7 @@ on:
 permissions:
   contents: read
 concurrency:
-  group: relaydesk-${{ github.ref }}
+  group: lastbite-${{ github.ref }}
   cancel-in-progress: true
 jobs:
   test:
@@ -17,12 +17,12 @@ jobs:
       postgres:
         image: postgres:16-alpine
         env:
-          POSTGRES_DB: relaydesk_test
-          POSTGRES_USER: relaydesk_test
+          POSTGRES_DB: lastbite_test
+          POSTGRES_USER: lastbite_test
           POSTGRES_PASSWORD: ci-disposable-password
         ports: ["5432:5432"]
         options: >-
-          --health-cmd "pg_isready -U relaydesk_test -d relaydesk_test"
+          --health-cmd "pg_isready -U lastbite_test -d lastbite_test"
           --health-interval 5s --health-timeout 3s --health-retries 10
     steps:
       - uses: actions/checkout@v4
@@ -34,7 +34,7 @@ jobs:
       - name: Test API and real PostgreSQL migrations
         working-directory: backend
         env:
-          TEST_DATABASE_URL: postgresql+psycopg://relaydesk_test:ci-disposable-password@localhost:5432/relaydesk_test
+          TEST_DATABASE_URL: postgresql+psycopg://lastbite_test:ci-disposable-password@localhost:5432/lastbite_test
         run: pytest -v --junitxml=../artifacts/pytest.xml
       - uses: actions/setup-node@v4
         with:
@@ -45,8 +45,8 @@ jobs:
         working-directory: frontend
       - uses: azure/setup-helm@v4.3.0
       - run: |
-          helm lint helm/relaydesk
-          helm template relaydesk helm/relaydesk -f helm/relaydesk/values-prod.yaml > /tmp/relaydesk.yaml
+          helm lint helm/lastbite
+          helm template lastbite helm/lastbite -f helm/lastbite/values-prod.yaml > /tmp/lastbite.yaml
       - uses: hashicorp/setup-terraform@v3
         with: {terraform_version: '1.16.4'}
       - run: terraform fmt -check -recursive terraform
@@ -67,7 +67,7 @@ jobs:
       - uses: actions/checkout@v4
       - name: Set lowercase registry path
         env: {OWNER: '${{ github.repository_owner }}'}
-        run: echo "IMAGE_PREFIX=ghcr.io/${OWNER,,}/relaydesk" >> "$GITHUB_ENV"
+        run: echo "IMAGE_PREFIX=ghcr.io/${OWNER,,}/lastbite" >> "$GITHUB_ENV"
       - uses: docker/setup-buildx-action@v3
       - name: Build backend
         uses: docker/build-push-action@v6
@@ -136,8 +136,8 @@ jobs:
         run: npm ci && npx playwright install --with-deps chromium
       - name: Start the exact candidate images with PostgreSQL
         run: |
-          docker tag "$IMAGE_PREFIX-backend:${{ github.sha }}" relaydesk-backend:dev
-          docker tag "$IMAGE_PREFIX-frontend:${{ github.sha }}" relaydesk-frontend:dev
+          docker tag "$IMAGE_PREFIX-backend:${{ github.sha }}" lastbite-backend:dev
+          docker tag "$IMAGE_PREFIX-frontend:${{ github.sha }}" lastbite-frontend:dev
           docker compose up -d --no-build --wait --wait-timeout 180
       - name: Verify non-root containers and live API workflow
         run: |
@@ -166,7 +166,7 @@ jobs:
       - name: Create disposable Kubernetes cluster
         uses: helm/kind-action@v1.12.0
         with:
-          cluster_name: relaydesk-ci
+          cluster_name: lastbite-ci
       - name: Verify Helm deployment and real ingress routing
         env:
           IMAGE_TAG: ${{ github.sha }}
@@ -177,14 +177,15 @@ jobs:
         env:
           IMAGE_TAG: ${{ github.sha }}
           REPO_REVISION: ${{ github.sha }}
+          REPO_URL: https://github.com/${{ github.repository }}.git
         run: bash scripts/check-gitops.sh
       - name: Collect Kubernetes failure diagnostics
         if: failure()
         run: |
           mkdir -p artifacts/kubernetes
-          kubectl get pods,svc,ingress,jobs -n relaydesk -o wide > artifacts/kubernetes/failure-resources.txt || true
+          kubectl get pods,svc,ingress,jobs -n lastbite -o wide > artifacts/kubernetes/failure-resources.txt || true
           kubectl get events -A --sort-by=.lastTimestamp > artifacts/kubernetes/events.txt || true
-          kubectl logs -n relaydesk -l job-name --all-containers --tail=200 > artifacts/kubernetes/migration-logs.txt || true
+          kubectl logs -n lastbite -l job-name --all-containers --tail=200 > artifacts/kubernetes/migration-logs.txt || true
           kubectl get pods -n monitoring -o wide > artifacts/kubernetes/monitoring-pods.txt || true
           kubectl get pods -n argocd -o wide > artifacts/kubernetes/argocd-pods.txt || true
           kubectl get application -n argocd -o json > artifacts/kubernetes/argocd-applications.json || true
@@ -227,4 +228,4 @@ jobs:
         if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
         with:
           name: gitops-release-values
-          path: helm/relaydesk/values-release.yaml
+          path: helm/lastbite/values-release.yaml

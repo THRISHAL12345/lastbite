@@ -10,6 +10,6 @@ terraform {
 provider "aws" {
   region = var.aws_region
   default_tags {
-    tags = { Project = "RelayDesk", Environment = var.environment, ManagedBy = "Terraform" }
+    tags = { Project = "LastBite", Environment = var.environment, ManagedBy = "Terraform" }
   }
 }

@@ -4,7 +4,7 @@ variable "aws_region" {
 }
 variable "cluster_name" {
   type    = string
-  default = "relaydesk-eks"
+  default = "lastbite-eks"
 }
 variable "environment" {
   type    = string
@@ -24,5 +24,5 @@ variable "admin_cidrs" {
 }
 variable "node_instance_type" {
   type    = string
-  default = "t3.large"
+  default = "m7i-flex.large"
 }

@@ -1,25 +1,16 @@
-# Final walkthrough recording
+# LastBite recording guide
 
-The real MP4 is still to be recorded after deployment. This file is a recording plan, not video evidence. Upload the video under `demo/` or as a GitHub release asset and link it here. Large recordings can use a release asset or Git LFS according to instructor rules.
+Present `slides.pdf` first, then show the live workflow. Use fictional kitchens and customers. Record your own explanation; automated browser clips do not satisfy the mandatory narrated presentation.
 
-Suggested order (about 10-15 minutes):
+1. Explain restaurant management and the surplus-food problem. Describe meal listings, stock reservations and code-verified pickup.
+2. In Kitchen desk, publish five meal boxes with a pickup window that is open now. Explore boxes, reserve two, and show three remaining. Cancel and show stock restored. Reserve again, enter the pickup code, and show meals rescued increasing only after collection.
+3. Show category/dietary filters, search, an expired listing and mobile layout. Explain that shared demo users see all reservations and that no online payment occurs.
+4. Show models, migration `0002_lastbite`, integer-paise prices, conditional stock updates, row locks, duplicate-cancellation guards, and disposable-database tests. Explain the preserved legacy migration.
+5. After publication is authorized, make a real LastBite commit using `gh-personal` and THRISHAL12345; show the new pipeline, test gates, both image scans and full-SHA GHCR tags.
+6. Show Terraform plan/apply output and actual AWS Console VPC/EKS proof. Show LastBite pods, two replicas, Services, Ingress and Helm configuration.
+7. Show Argo CD Synced/Healthy on a LastBite revision. Change frontend replicas to one and show automatic repair. Explain why the HPA owns backend replicas.
+8. Show Prometheus targets UP and Grafana request/latency/error/replica charts populated by real LastBite traffic. Inspect HPA readings; do not claim a scaling event unless observed.
+9. Run the isolated broken-image/service-selector lab and explain the diagnosis.
+10. Remove application data volumes and cloud resources using the deployment cleanup guide. Capture completion and verify no billed demo resources remain.
 
-1. Present all ten pages of `slides.pdf`. Explain the helpdesk domain, architecture, delivery gates and limits.
-2. Show the codebase: models, SLA calculations, migration, tests, Dockerfiles and Helm values. Explain why readiness depends on the database while liveness does not.
-3. Create a ticket in the UI, assign it, start work, add a note, resolve and reopen it. Show search, filters and the API documentation. Explain the continuous-hours SLA policy.
-4. Make a small real source change, commit it and push. Show PostgreSQL tests, UI build, image builds, both Trivy reports, successful publication and matching SHA tags in GHCR.
-5. Show Terraform plan/apply output and the actual VPC, subnets, EKS cluster and worker nodes in the correct AWS account and region. Keep credential values off screen.
-6. Promote the successful source SHA in a reviewed values commit. Show Argo CD moving to Synced/Healthy, its Helm configuration, PostgreSQL readiness and migration order.
-7. Show `kubectl get pods,svc,ingress,hpa -n relaydesk`. Explain why an Argo-rendered chart is not a Helm CLI release; capture direct Helm evidence separately if required.
-8. Generate traffic. Show Prometheus Targets with the backend UP and populated Grafana request/latency panels. Show HPA metrics without claiming a scaling event that did not occur.
-9. Apply an isolated troubleshooting manifest, inspect the failure, describe the root cause, then delete the lab resource. Show the main application still works.
-10. Explain limitations, lessons and cleanup. Capture Terraform destroy completion and verify retained EBS volumes are deliberately cleaned up.
-
-Rebuild the slide PDF if you change the implementation:
-
-```bash
-python3 -m pip install reportlab
-python3 demo/build_slides.py
-```
-
-Add real recording location here when complete: **Pending**.
+The ten-slide deck describes the architecture and demonstration plan. It does not claim a new remote CI run or AWS deployment occurred. Capture those for LastBite after publication. Never display passwords or access keys in the recording.

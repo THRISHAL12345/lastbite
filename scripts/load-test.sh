@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 # Use the API endpoint that is routed by Ingress; fail visibly on HTTP errors.
-URL="${URL:-http://relaydesk.local/api/tickets?limit=20}"
+URL="${URL:-http://lastbite.local/api/listings?limit=20}"
 REQUESTS="${REQUESTS:-500}"
 CONCURRENCY="${CONCURRENCY:-10}"
 export URL

@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ include "relaydesk.name" . }}-migrate-{{ printf "%s:%s" .Values.backend.repository .Values.backend.tag | sha256sum | trunc 10 }}
+  name: {{ include "lastbite.name" . }}-migrate-{{ printf "%s:%s" .Values.backend.repository .Values.backend.tag | sha256sum | trunc 10 }}
   annotations:
     argocd.argoproj.io/hook: Sync
     argocd.argoproj.io/sync-wave: "-1"
@@ -25,7 +25,7 @@ spec:
           image: "{{ .Values.backend.repository }}:{{ .Values.backend.tag }}"
           imagePullPolicy: {{ .Values.imagePullPolicy }}
           command: [sh, -c, 'python -m app.wait_db && alembic upgrade head']
-          env: {{ include "relaydesk.dbEnv" . | nindent 12 }}
+          env: {{ include "lastbite.dbEnv" . | nindent 12 }}
           resources:
             requests: {cpu: 100m, memory: 128Mi}
             limits: {cpu: 500m, memory: 256Mi}

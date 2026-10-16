@@ -4,7 +4,7 @@ Reviewed all 58 text/source/configuration files under `devsecops-python-main`, i
 
 The README, GRADING and SUBMISSION documents together require an original application domain, at least five API tests, PostgreSQL migrations, non-root containers, CI tests and frontend build, SHA-tagged GHCR images, a blocking Trivy scan, real Terraform/EKS evidence, Helm/Ingress/HPA, Prometheus/Grafana, Argo CD in the video, and an eight-slide minimum deck plus a real recording.
 
-| Finding in the reference | RelayDesk change |
+| Finding in the reference | LastBite change |
 |---|---|
 | Root `ci-cd.yml` and active workflow describe different registries and deployment paths | One active workflow uses GHCR, SHA tags and an explicit GitOps promotion boundary |
 | Active Trivy commands omit `--exit-code 1` | Both scan outcomes gate image publication |
@@ -24,4 +24,4 @@ The README, GRADING and SUBMISSION documents together require an original applic
 | Load script targets nonexistent `/api/health` and suppresses failures | Bounded concurrent API requests with visible HTTP failures |
 | Argo CD requested by the rubric but absent in scaffold | Argo CD Application, sync waves, migration hook and promotion instructions |
 
-RelayDesk replaces task management with IT support: requester/category fields, deterministic SLA deadlines, reopen behavior, comments, audit events, queue filters and pagination. The new UI is a support workspace, with functional queue navigation and ticket detail actions.
+LastBite replaces task management with restaurant surplus-food rescue: meal listings, integer-paise prices, pickup windows, atomic stock reservations, cancellation, code-verified collection and persisted impact totals. The UI has a marketplace, reservation history and kitchen desk.

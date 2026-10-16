@@ -31,39 +31,47 @@ def run(frontend_url, backend_url):
     front, back = frontend_url.rstrip("/"), backend_url.rstrip("/")
     assert request(back + "/health") == {"status": "UP"}
     assert request(back + "/ready") == {"status": "READY"}
-    checks.append("API liveness and database readiness")
     assert '<div id="root">' in request(front + "/")
-    checks.append("Frontend HTML served")
-    title = "Smoke test " + uuid.uuid4().hex[:12]
-    payload = {"title": title, "requester": "Automated demo test", "priority": "URGENT", "category": "NETWORK", "assignee": "Smoke test", "status": "OPEN", "description": "Disposable test record; removed by smoke.py."}
-    ticket = request(front + "/api/tickets", "POST", payload, 201)
-    path = front + f"/api/tickets/{ticket['id']}"
-    try:
-        assert ticket['title'] == title and not ticket['overdue']
-        assert datetime.fromisoformat(ticket['due_at'].replace('Z', '+00:00')) - datetime.fromisoformat(ticket['created_at'].replace('Z', '+00:00')) == timedelta(hours=4)
-        assert request(path)['id'] == ticket['id']
-        checks.append("Create/read through frontend proxy and four-hour SLA")
-        page = request(front + "/api/tickets?q=" + title.replace(' ', '%20'))
-        assert any(item['id'] == ticket['id'] for item in page['items'])
-        assert request(front + "/api/tickets/stats")['total'] >= 1
-        checks.append("Search and statistics")
-        updated = request(path, "PUT", {**payload, "status": "IN_PROGRESS"})
-        assert updated['status'] == 'IN_PROGRESS'
-        assert request(path + '/comments', 'POST', {'message': 'Test note'}, 201)['kind'] == 'COMMENT'
-        assert len(request(path + '/events')) >= 3
-        resolved = request(path, 'PUT', {**payload, 'status': 'RESOLVED'})
-        assert resolved['resolved_at'] and not resolved['overdue']
-        reopened = request(path, 'PUT', payload)
-        assert reopened['resolved_at'] is None and reopened['due_at'] == ticket['due_at']
-        checks.append("Update, comment, resolution and reopening")
-        metrics = request(back + '/metrics')
-        assert 'relaydesk_http_requests_total' in metrics
-        assert 'route="/api/tickets/{ticket_id}"' in metrics
-        checks.append("Prometheus metrics with bounded route labels")
-    finally:
-        request(path, 'DELETE', expected=204)
+    checks.append("Frontend, API liveness and migrated database readiness")
+    title = "Smoke box " + uuid.uuid4().hex[:12]
+    now = datetime.now(timezone.utc)
+    payload = {"title": title, "restaurant": "Automated demo kitchen", "address": "Fictional test address",
+               "price_paise": 9900, "original_price_paise": 29900, "quantity_total": 2,
+               "pickup_start": (now-timedelta(minutes=1)).isoformat(), "pickup_end": (now+timedelta(hours=1)).isoformat()}
+    item = request(front + "/api/listings", "POST", payload, 201)
+    path = front + f"/api/listings/{item['id']}"
+    assert request(path)['quantity_available'] == 2
+    assert request(front + "/api/listings?q=" + title.replace(' ', '%20'))['total'] == 1
+    request(path, "PUT", {**payload, "title": title + " updated"})
+    request(path, "DELETE", expected=204)
     request(path, expected=404)
-    checks.append("Delete and subsequent 404")
+    checks.append("Listing create/read/update/delete and search through frontend proxy")
+    item = request(front + "/api/listings", "POST", payload, 201)
+    path = front + f"/api/listings/{item['id']}"
+    reservation = request(path + "/reservations", "POST", {"customer":"Smoke demo", "quantity":2}, 201)
+    request(path + "/reservations", "POST", {"customer":"Overflow", "quantity":1}, 409)
+    assert request(path)['quantity_available'] == 0
+    request(front + f"/api/reservations/{reservation['id']}/cancel", "POST")
+    assert request(path)['quantity_available'] == 2
+    checks.append("Reservation decrements stock, overselling blocked, cancellation restores stock")
+    before = request(front + "/api/stats")
+    reservation = request(path + "/reservations", "POST", {"customer":"Smoke demo", "quantity":1}, 201)
+    pickup_path = front + f"/api/reservations/{reservation['id']}/pickup"
+    request(pickup_path, "POST", {"pickup_code":"WRONG"}, 422)
+    request(pickup_path, "POST", {"pickup_code":reservation['pickup_code']})
+    request(pickup_path, "POST", {"pickup_code":reservation['pickup_code']}, 409)
+    after = request(front + "/api/stats")
+    assert after['meals_rescued'] == before['meals_rescued'] + 1
+    assert after['savings_paise'] == before['savings_paise'] + 20000
+    checks.append("Pickup code validated, duplicate pickup blocked, persisted impact totals")
+    # Keep reservation history, but close the synthetic listing to new reservations.
+    request(path, "PUT", {**payload, "status":"PAUSED"})
+    request(path, "DELETE", expected=409)
+    checks.append("Reserved listing history protected; synthetic listing paused")
+    metrics = request(back + '/metrics')
+    assert 'lastbite_http_requests_total' in metrics
+    assert 'route="/api/listings/{listing_id}"' in metrics
+    checks.append("Prometheus metrics with bounded route labels")
     return checks
 
 

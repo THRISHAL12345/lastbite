@@ -2,7 +2,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ include "relaydesk.name" . }}
+  name: {{ include "lastbite.name" . }}
 spec:
   ingressClassName: {{ .Values.ingress.className }}
   {{- with .Values.ingress.tls }}
@@ -16,12 +16,12 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: {{ include "relaydesk.name" . }}-backend
+                name: {{ include "lastbite.name" . }}-backend
                 port: {number: 8000}
           - path: /
             pathType: Prefix
             backend:
               service:
-                name: {{ include "relaydesk.name" . }}-frontend
+                name: {{ include "lastbite.name" . }}-frontend
                 port: {number: 8080}
 {{- end }}

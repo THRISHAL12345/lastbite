@@ -1,19 +1,19 @@
-name: relaydesk
+name: lastbite
 x-backend: &backend
   build: ./backend
-  image: relaydesk-backend:dev
+  image: lastbite-backend:dev
   environment: &database
     DB_HOST: postgres
-    DB_NAME: relaydesk
-    DB_USER: relaydesk
-    DB_PASSWORD: ${POSTGRES_PASSWORD:-relaydesk-local-only}
+    DB_NAME: lastbite
+    DB_USER: lastbite
+    DB_PASSWORD: ${POSTGRES_PASSWORD:-lastbite-local-only}
 services:
   postgres:
     image: postgres:16-alpine
     environment:
-      POSTGRES_DB: relaydesk
-      POSTGRES_USER: relaydesk
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-relaydesk-local-only}
+      POSTGRES_DB: lastbite
+      POSTGRES_USER: lastbite
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-lastbite-local-only}
     volumes:
       - postgres-data:/var/lib/postgresql/data
     healthcheck:
@@ -30,7 +30,7 @@ services:
     restart: "no"
   backend:
     <<: *backend
-    ports: ["127.0.0.1:8000:8000"]
+    ports: ["127.0.0.1:${BACKEND_PORT:-8000}:8000"]
     depends_on:
       migrate:
         condition: service_completed_successfully
@@ -43,8 +43,8 @@ services:
     cap_drop: [ALL]
   frontend:
     build: ./frontend
-    image: relaydesk-frontend:dev
-    ports: ["127.0.0.1:3000:8080"]
+    image: lastbite-frontend:dev
+    ports: ["127.0.0.1:${FRONTEND_PORT:-3000}:8080"]
     depends_on:
       backend:
         condition: service_healthy

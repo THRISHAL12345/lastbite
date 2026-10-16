@@ -5,22 +5,22 @@ cd "$(dirname "$0")/.."
 for tool in kind docker kubectl helm node python3 git; do
   command -v "$tool" >/dev/null || { echo "Install $tool before continuing." >&2; exit 1; }
 done
-if kind get clusters | grep -qx relaydesk-demo; then
-  echo 'relaydesk-demo already exists. Use scripts/demo-access.sh to reopen it.' >&2
-  echo 'To intentionally discard that demo first: kind delete cluster --name relaydesk-demo' >&2
+if kind get clusters | grep -qx lastbite-demo; then
+  echo 'lastbite-demo already exists. Use scripts/demo-access.sh to reopen it.' >&2
+  echo 'To intentionally discard that demo first: kind delete cluster --name lastbite-demo' >&2
   exit 1
 fi
 git diff --quiet -- backend frontend helm || { echo 'Commit application changes before building evidence.' >&2; exit 1; }
 export REPO_REVISION="$(git rev-parse HEAD)"
 export IMAGE_TAG="$REPO_REVISION"
-export IMAGE_PREFIX=relaydesk-demo
-export KIND_CLUSTER_NAME=relaydesk-demo
+export IMAGE_PREFIX=lastbite-demo
+export KIND_CLUSTER_NAME=lastbite-demo
 docker info >/dev/null
 npm --prefix frontend ci
 node frontend/node_modules/playwright/cli.js install chromium
 docker build -t "$IMAGE_PREFIX-backend:$IMAGE_TAG" backend
 docker build -t "$IMAGE_PREFIX-frontend:$IMAGE_TAG" frontend
-kind create cluster --name relaydesk-demo --wait 180s
+kind create cluster --name lastbite-demo --wait 180s
 bash scripts/check-kubernetes.sh
 bash scripts/check-monitoring.sh
 bash scripts/check-gitops.sh

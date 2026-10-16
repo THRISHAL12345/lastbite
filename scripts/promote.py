@@ -13,9 +13,9 @@ if not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9-]*", args.owner):
 if not re.fullmatch(r"[a-fA-F0-9]{40}", args.sha):
     parser.error("Use a full 40-character commit SHA")
 root = Path(__file__).resolve().parents[1]
-path = root / "helm/relaydesk/values-release.yaml"
+path = root / "helm/lastbite/values-release.yaml"
 path.write_text("# Promote only after BOTH image scans and pushes succeed.\n" + "".join(
-    f'{component}:\n  repository: ghcr.io/{args.owner.lower()}/relaydesk-{component}\n  tag: "{args.sha.lower()}"\n'
+    f'{component}:\n  repository: ghcr.io/{args.owner.lower()}/lastbite-{component}\n  tag: "{args.sha.lower()}"\n'
     for component in ("backend", "frontend")
 ))
 print(f"Prepared {path.relative_to(root)}. Review and commit this file to promote the release.")

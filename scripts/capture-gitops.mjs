@@ -16,7 +16,7 @@ try {
   if (!token) throw new Error('Argo CD session could not be established');
   await context.addCookies([{name:'argocd.token',value:token,url:'https://127.0.0.1:8443',httpOnly:true,secure:true,sameSite:'Lax'}]);
   const page = await context.newPage();
-  await page.goto('https://127.0.0.1:8443/applications/argocd/relaydesk?view=tree');
+  await page.goto('https://127.0.0.1:8443/applications/argocd/lastbite?view=tree');
   await page.getByText('Healthy', {exact:true}).first().waitFor({timeout:60000});
   await page.getByText('Synced', {exact:true}).first().waitFor({timeout:60000});
   await page.screenshot({path:'artifacts/gitops/argocd-synced-healthy.png',fullPage:true});

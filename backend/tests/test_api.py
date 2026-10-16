@@ -1,108 +1,206 @@
-from datetime import datetime, timedelta
+from concurrent.futures import ThreadPoolExecutor
+from datetime import timedelta
 import pytest
+from sqlalchemy import inspect, select
 from sqlalchemy.exc import OperationalError
-from app.db import SessionLocal, get_db
+from app.db import SessionLocal, engine, get_db
 from app.main import app
-from app.models import Ticket, utcnow
+from app.models import Listing, Reservation, utcnow
 
 
 def create(client, payload):
-    response = client.post("/api/tickets", json=payload)
+    response = client.post('/api/listings', json=payload)
     assert response.status_code == 201, response.text
     return response.json()
 
 
-def test_health_and_readiness(client):
-    assert client.get("/health").json() == {"status": "UP"}
-    assert client.get("/ready").json() == {"status": "READY"}
+def reserve(client, listing_id, quantity=1):
+    return client.post(f'/api/listings/{listing_id}/reservations', json={'customer':'Alex', 'quantity':quantity})
 
 
-def test_readiness_returns_503_on_db_failure(client):
-    class FailedDB:
-        def execute(self, *_):
-            raise OperationalError("unavailable", {}, Exception())
-    app.dependency_overrides[get_db] = lambda: FailedDB()
+def expire(listing_id):
+    with SessionLocal() as db:
+        item=db.get(Listing,listing_id)
+        item.pickup_start=utcnow()-timedelta(hours=2)
+        item.pickup_end=utcnow()-timedelta(seconds=1)
+        db.commit()
+
+
+def test_migrations_and_health(client):
+    assert {'listings','reservations','tickets'}.issubset(inspect(engine).get_table_names())
+    assert client.get('/health').json()=={'status':'UP'}
+    assert client.get('/ready').json()=={'status':'READY'}
+    assert client.get('/').json()['service']=='LastBite API'
+
+
+def test_crud(client,payload):
+    item=create(client,payload)
+    assert item['quantity_available']==5 and item['state']=='AVAILABLE'
+    assert item['discount_percent']==67
+    path=f"/api/listings/{item['id']}"
+    assert client.get(path).json()['title']==payload['title']
+    changed=client.put(path,json={**payload,'title':'New supper','quantity_total':8})
+    assert changed.status_code==200 and changed.json()['quantity_available']==8
+    assert client.delete(path).status_code==204
+    assert client.get(path).status_code==404
+
+
+@pytest.mark.parametrize('change',[{'title':' '},{'quantity_total':0},{'quantity_total':True},{'price_paise':0},{'price_paise':29901},{'category':'TICKETS'},{'dietary':'UNKNOWN'},{'unexpected':1},{'address':''},{'quantity_total':1.5}])
+def test_listing_validation(client,payload,change):
+    assert client.post('/api/listings',json={**payload,**change}).status_code==422
+
+
+def test_invalid_times(client,payload):
+    for change in [{'pickup_end':payload['pickup_start']},{'pickup_end':(utcnow()-timedelta(minutes=1)).isoformat()}, {'pickup_start':'2026-10-16T12:00:00'}]:
+        assert client.post('/api/listings',json={**payload,**change}).status_code==422
+
+
+def test_search_filters_and_pagination(client,payload):
+    first=create(client,{**payload,'title':'100% rescue','category':'BAKERY','dietary':'VEGAN'})
+    create(client,{**payload,'title':'Other meal'})
+    create(client,{**payload,'title':'Paused meal','status':'PAUSED'})
+    found=client.get('/api/listings?q=%25&category=BAKERY&dietary=VEGAN').json()
+    assert found['total']==1 and found['items'][0]['id']==first['id']
+    assert client.get('/api/listings?state=AVAILABLE').json()['total']==2
+    assert client.get('/api/listings?state=PAUSED').json()['total']==1
+    assert len(client.get('/api/listings?limit=1&offset=1').json()['items'])==1
+    assert client.get('/api/listings?state=INVALID').status_code==422
+    assert client.get('/api/listings?limit=101').status_code==422
+
+
+def test_reservation_stock_and_snapshot(client,payload):
+    item=create(client,payload)
+    r=reserve(client,item['id'],2)
+    assert r.status_code==201
+    assert r.json()['total_paise']==19800 and len(r.json()['pickup_code'])==8
+    assert client.get(f"/api/listings/{item['id']}").json()['quantity_available']==3
+    assert client.get('/api/stats').json()['meals_rescued']==0
+    assert client.get('/api/stats').json()['awaiting_pickup']==2
+    assert client.get('/api/reservations').json()[0]['customer']=='Alex'
+
+
+def test_overselling_is_rejected(client,payload):
+    item=create(client,{**payload,'quantity_total':1})
+    assert reserve(client,item['id']).status_code==201
+    assert reserve(client,item['id']).status_code==409
+    assert client.get(f"/api/listings/{item['id']}").json()['state']=='SOLD_OUT'
+    assert client.get('/api/listings?state=SOLD_OUT').json()['total']==1
+
+
+def test_concurrent_reservations_do_not_oversell(client,payload):
+    item=create(client,{**payload,'quantity_total':3})
+    with ThreadPoolExecutor(max_workers=8) as pool:
+        statuses=list(pool.map(lambda _:reserve(client,item['id']).status_code,range(8)))
+    assert statuses.count(201)==3 and statuses.count(409)==5
+    assert client.get(f"/api/listings/{item['id']}").json()['quantity_available']==0
+    assert len(client.get('/api/reservations').json())==3
+
+
+def test_cancel_restores_stock_once(client,payload):
+    item=create(client,payload)
+    r=reserve(client,item['id'],2).json()
+    path=f"/api/reservations/{r['id']}/cancel"
+    assert client.post(path).json()['status']=='CANCELLED'
+    assert client.post(path).status_code==409
+    assert client.get(f"/api/listings/{item['id']}").json()['quantity_available']==5
+    assert client.get('/api/stats').json()['awaiting_pickup']==0
+
+
+def test_concurrent_cancel_does_not_duplicate_stock(client,payload):
+    item=create(client,payload)
+    r=reserve(client,item['id'],2).json()
+    with ThreadPoolExecutor(max_workers=2) as pool:
+        results=list(pool.map(lambda _:client.post(f"/api/reservations/{r['id']}/cancel").status_code,range(2)))
+    assert sorted(results)==[200,409]
+    assert client.get(f"/api/listings/{item['id']}").json()['quantity_available']==5
+
+
+def test_pickup_code_and_rescued_statistics(client,payload):
+    item=create(client,payload)
+    r=reserve(client,item['id'],2).json()
+    path=f"/api/reservations/{r['id']}/pickup"
+    assert client.post(path,json={'pickup_code':'WRONG'}).status_code==422
+    result=client.post(path,json={'pickup_code':r['pickup_code'].lower()})
+    assert result.status_code==200 and result.json()['picked_up_at']
+    assert client.post(path,json={'pickup_code':r['pickup_code']}).status_code==409
+    assert client.post(f"/api/reservations/{r['id']}/cancel").status_code==409
+    stats=client.get('/api/stats').json()
+    assert stats['meals_rescued']==2 and stats['savings_paise']==40000 and stats['boxes_available']==3
+
+
+def test_pickup_before_window_rejected(client,payload):
+    item=create(client,{**payload,'pickup_start':(utcnow()+timedelta(hours=1)).isoformat()})
+    r=reserve(client,item['id']).json()
+    assert client.post(f"/api/reservations/{r['id']}/pickup",json={'pickup_code':r['pickup_code']}).status_code==409
+
+
+def test_expiry_is_enforced_without_background_job(client,payload):
+    item=create(client,payload)
+    r=reserve(client,item['id']).json()
+    expire(item['id'])
+    assert client.get(f"/api/listings/{item['id']}").json()['state']=='EXPIRED'
+    assert reserve(client,item['id']).status_code==409
+    assert client.post(f"/api/reservations/{r['id']}/cancel").status_code==409
+    assert client.post(f"/api/reservations/{r['id']}/pickup",json={'pickup_code':r['pickup_code']}).status_code==409
+    assert client.get('/api/reservations').json()[0]['status']=='EXPIRED'
+    assert client.get('/api/listings?state=AVAILABLE').json()['total']==0
+    stats=client.get('/api/stats').json()
+    assert stats['awaiting_pickup']==stats['boxes_available']==stats['meals_rescued']==0
+    assert client.put(f"/api/listings/{item['id']}",json=payload).status_code==409
+
+
+def test_paused_listing_rejects_new_reservations_but_allows_pickup(client,payload):
+    item=create(client,payload)
+    r=reserve(client,item['id']).json()
+    assert client.put(f"/api/listings/{item['id']}",json={**payload,'status':'PAUSED'}).status_code==200
+    assert reserve(client,item['id']).status_code==409
+    assert client.post(f"/api/reservations/{r['id']}/pickup",json={'pickup_code':r['pickup_code']}).status_code==200
+
+
+def test_reservation_history_and_promises_protected(client,payload):
+    item=create(client,payload)
+    reserve(client,item['id'],2)
+    path=f"/api/listings/{item['id']}"
+    assert client.delete(path).status_code==409
+    assert client.put(path,json={**payload,'quantity_total':1}).status_code==409
+    for change in [{'price_paise':10000},{'pickup_end':(utcnow()+timedelta(hours=3)).isoformat()},{'allergens':'None'}]:
+        assert client.put(path,json={**payload,**change}).status_code==409
+    result=client.put(path,json={**payload,'quantity_total':7})
+    assert result.status_code==200 and result.json()['quantity_available']==5
+
+
+@pytest.mark.parametrize('quantity',[0,-1,21,1.5,True])
+def test_reservation_validation(client,payload,quantity):
+    item=create(client,payload)
+    assert reserve(client,item['id'],quantity).status_code==422
+    assert client.get(f"/api/listings/{item['id']}").json()['quantity_available']==5
+
+
+def test_missing_resources(client,payload):
+    assert client.get('/api/listings/99999').status_code==404
+    assert reserve(client,99999).status_code==404
+    assert client.post('/api/reservations/99999/cancel').status_code==404
+    assert client.delete('/api/listings/99999').status_code==404
+
+
+def test_readiness_failure_does_not_break_liveness(client):
+    class BrokenDB:
+        def execute(self,*args):
+            raise OperationalError('read',{},Exception('offline'))
+    app.dependency_overrides[get_db]=lambda:BrokenDB()
     try:
-        assert client.get("/ready").status_code == 503
-        assert client.get("/health").status_code == 200
+        assert client.get('/ready').status_code==503
+        assert client.get('/health').status_code==200
     finally:
         app.dependency_overrides.clear()
 
 
-def test_create_and_get(client, payload):
-    ticket = create(client, payload)
-    assert client.get(f"/api/tickets/{ticket['id']}").json() == ticket
-    assert ticket["overdue"] is False
-    assert datetime.fromisoformat(ticket["due_at"]) - datetime.fromisoformat(ticket["created_at"]) == timedelta(hours=8)
-
-
-@pytest.mark.parametrize("field,value", [("title", "  "), ("title", "x"*201), ("requester", ""),
-                                         ("priority", "INVALID"), ("status", None), ("category", "BAD")])
-def test_validation(client, payload, field, value):
-    payload[field] = value
-    assert client.post("/api/tickets", json=payload).status_code == 422
-
-
-def test_update_resolve_and_reopen(client, payload):
-    ticket = create(client, payload)
-    path = f"/api/tickets/{ticket['id']}"
-    resolved = client.put(path, json={**payload, "status": "RESOLVED"}).json()
-    assert resolved["resolved_at"] is not None
-    reopened = client.put(path, json={**payload, "priority": "URGENT"}).json()
-    assert reopened["resolved_at"] is None
-    assert reopened["due_at"] < ticket["due_at"]
-    assert len(client.get(path + "/events").json()) == 3
-
-
-def test_update_null_rejected(client, payload):
-    ticket = create(client, payload)
-    assert client.put(f"/api/tickets/{ticket['id']}", json={**payload, "assignee": None}).status_code == 422
-
-
-def test_filters_and_pagination(client, payload):
-    create(client, payload)
-    create(client, {**payload, "title": "Laptop replacement", "status": "IN_PROGRESS", "priority": "LOW"})
-    assert client.get("/api/tickets?status=OPEN").json()["total"] == 1
-    assert client.get("/api/tickets?priority=LOW").json()["items"][0]["title"] == "Laptop replacement"
-    assert client.get("/api/tickets?q=vPn").json()["total"] == 1
-    assert client.get("/api/tickets?q=%25").json()["total"] == 0
-    page = client.get("/api/tickets?limit=1&offset=1").json()
-    assert page["total"] == 2 and len(page["items"]) == 1
-    assert client.get("/api/tickets?limit=0").status_code == 422
-
-
-def test_overdue_and_statistics(client, payload):
-    ticket = create(client, payload)
-    with SessionLocal() as db:
-        db.get(Ticket, ticket["id"]).due_at = utcnow() - timedelta(hours=1)
-        db.commit()
-    create(client, {**payload, "status": "RESOLVED"})
-    stats = client.get("/api/tickets/stats").json()
-    assert stats == {"total": 2, "open": 1, "in_progress": 0, "resolved": 1, "overdue": 1}
-    assert client.get("/api/tickets?overdue=true").json()["items"][0]["overdue"] is True
-
-
-def test_comments_activity_and_cascade_delete(client, payload):
-    ticket = create(client, payload)
-    path = f"/api/tickets/{ticket['id']}"
-    assert client.post(path + "/comments", json={"message": "Investigating VPN logs"}).status_code == 201
-    assert client.post(path + "/comments", json={"message": "  "}).status_code == 422
-    assert client.get("/api/activity").json()[0]["kind"] == "COMMENT"
-    assert client.delete(path).status_code == 204
-    assert client.get(path).status_code == 404
-    assert client.get("/api/activity").json() == []
-
-
-@pytest.mark.parametrize("method,suffix", [("get", ""), ("delete", ""), ("get", "/events"), ("post", "/comments")])
-def test_not_found(client, method, suffix):
-    kwargs = {"json": {"message": "hello"}} if method == "post" else {}
-    assert getattr(client, method)("/api/tickets/99999" + suffix, **kwargs).status_code == 404
-
-
-def test_metrics_use_route_templates(client, payload):
-    ticket = create(client, payload)
-    client.get(f"/api/tickets/{ticket['id']}")
-    metrics = client.get("/metrics")
-    assert "text/plain" in metrics.headers["content-type"]
-    assert 'route="/api/tickets/{ticket_id}"' in metrics.text
-    assert "relaydesk_http_request_duration_seconds_bucket" in metrics.text
+def test_metrics_use_route_templates(client,payload):
+    item=create(client,payload)
+    client.get(f"/api/listings/{item['id']}")
+    client.get('/unknown-test-path')
+    metrics=client.get('/metrics').text
+    assert 'lastbite_http_requests_total' in metrics
+    assert 'route="/api/listings/{listing_id}"' in metrics
+    assert 'route="unmatched"' in metrics
+    assert 'route="/unknown-test-path"' not in metrics

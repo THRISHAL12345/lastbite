@@ -1,7 +1,0 @@
-# Promote only after BOTH image scans and pushes succeed.
-backend:
-  repository: ghcr.io/thrishal12345/relaydesk-backend
-  tag: "5458a53f041404022c1d9b268fc2cff3734bdac7"
-frontend:
-  repository: ghcr.io/thrishal12345/relaydesk-frontend
-  tag: "5458a53f041404022c1d9b268fc2cff3734bdac7"

@@ -1,15 +1,15 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: relaydesk-lab-image
-  namespace: relaydesk
+  name: lastbite-lab-image
+  namespace: lastbite
 spec:
   replicas: 1
   selector:
-    matchLabels: {app: relaydesk-lab-image}
+    matchLabels: {app: lastbite-lab-image}
   template:
     metadata:
-      labels: {app: relaydesk-lab-image}
+      labels: {app: lastbite-lab-image}
     spec:
       automountServiceAccountToken: false
       securityContext:
@@ -18,7 +18,7 @@ spec:
         seccompProfile: {type: RuntimeDefault}
       containers:
         - name: lab
-          image: ghcr.io/example/relaydesk-backend:deliberately-missing
+          image: ghcr.io/example/lastbite-backend:deliberately-missing
           securityContext:
             allowPrivilegeEscalation: false
             capabilities: {drop: [ALL]}

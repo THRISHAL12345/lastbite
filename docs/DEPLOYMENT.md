@@ -1,9 +1,12 @@
+# LastBite publication prerequisite
+
+The repository has been renamed to `THRISHAL12345/lastbite` and the conversion is committed locally. Before following cloud/GitOps commands, publish it using gh-personal when authorized, run its CI, and promote real LastBite image SHA tags. `values-release.yaml` currently says `build-required`. Use your existing AWS profile `relaydesk`; changing the application name does not rename CLI profiles.
+
 # Deployment runbook
 
-Run commands from the RelayDesk repository root unless a working directory is shown. These are deployment instructions, not a record of a completed AWS deployment. Use a dedicated demonstration cluster. Choose either direct Helm ownership or Argo CD ownership for the application.
+Run commands from the LastBite repository root unless a working directory is shown. These are deployment instructions, not a record of a completed AWS deployment. Use a dedicated demonstration cluster. Choose either direct Helm ownership or Argo CD ownership for the application.
 
-For an account-specific sequence with credential setup, exact pinned platform versions,
-recording and submission steps, start with [YOUR-NEXT-STEPS.md](YOUR-NEXT-STEPS.md).
+For the short handoff, start with [YOUR-NEXT-STEPS.md](YOUR-NEXT-STEPS.md). Pinned platform chart versions are in `scripts/platform-versions.sh`.
 
 ## 1. Build and publish
 
@@ -13,13 +16,15 @@ Push this project as its own GitHub repository. Wait for the `test` and `images`
 python3 scripts/promote.py YOUR_OWNER FULL_40_CHARACTER_COMMIT_SHA
 ```
 
-Replace the repo URL in `gitops/application.yaml`. Replace the ingress hostname in `values-prod.yaml` with `relaydesk.local` for the local port-forward demo, or a domain you control for a separately secured public deployment. Commit these changes and the generated release values.
+Replace the repo URL in `gitops/application.yaml`. Replace the ingress hostname in `values-prod.yaml` with `lastbite.local` for the local port-forward demo, or a domain you control for a separately secured public deployment. Commit these changes and the generated release values.
 
 ## 2. Provision EKS
 
 Requirements: AWS CLI and configured AWS credentials, Terraform >=1.7, kubectl, Helm. Verify your AWS account and role before making changes.
 
 ```bash
+export AWS_PROFILE=relaydesk
+export AWS_REGION=ap-south-1
 aws sts get-caller-identity
 cp terraform/terraform.tfvars.example terraform/terraform.tfvars
 # Edit admin_cidrs to your real public IP /32. Do not leave the example address.
@@ -28,7 +33,7 @@ terraform -chdir=terraform fmt -check
 terraform -chdir=terraform validate
 terraform -chdir=terraform plan -out=deployment.tfplan
 terraform -chdir=terraform apply deployment.tfplan
-aws eks update-kubeconfig --region ap-south-1 --name relaydesk-eks
+aws eks update-kubeconfig --region ap-south-1 --name lastbite-eks
 kubectl get nodes
 kubectl apply -f k8s/storageclass.yaml
 ```
@@ -41,8 +46,8 @@ The committed `.terraform.lock.hcl` pins provider selections for Linux AMD64 and
 kubectl apply -f k8s/namespace.yaml
 # Generate a password without storing it in a shell history argument.
 DB_PASSWORD="$(openssl rand -hex 24)"
-printf '%s' "$DB_PASSWORD" | kubectl create secret generic relaydesk-db \
-  -n relaydesk --from-file=password=/dev/stdin
+printf '%s' "$DB_PASSWORD" | kubectl create secret generic lastbite-db \
+  -n lastbite --from-file=password=/dev/stdin
 unset DB_PASSWORD
 ```
 
@@ -76,11 +81,11 @@ For repeatable platform installations, select and record compatible versions of 
 ## 5A. Direct Helm demonstration
 
 ```bash
-helm upgrade --install relaydesk ./helm/relaydesk -n relaydesk \
-  -f helm/relaydesk/values-prod.yaml -f helm/relaydesk/values-release.yaml \
+helm upgrade --install lastbite ./helm/lastbite -n lastbite \
+  -f helm/lastbite/values-prod.yaml -f helm/lastbite/values-release.yaml \
   --wait --wait-for-jobs --timeout 10m
-kubectl get pods,svc,ingress,hpa -n relaydesk
-helm list -n relaydesk
+kubectl get pods,svc,ingress,hpa -n lastbite
+helm list -n lastbite
 ```
 
 The migration Job is named from the image reference. Use unique SHA tags for every release. Never reuse a tag for different migration content. Helm leaves completed jobs as release resources; later upgrades remove the old job when its name changes. Avoid concurrent Helm upgrades of the same release.
@@ -92,7 +97,7 @@ For the required GitOps walkthrough, bootstrap Argo CD and let it own the app fr
 ```bash
 helm upgrade --install argocd argo/argo-cd -n argocd --create-namespace --wait --timeout 10m
 kubectl apply -f gitops/application.yaml
-kubectl get application relaydesk -n argocd
+kubectl get application lastbite -n argocd
 kubectl port-forward -n argocd svc/argocd-server 8443:443
 ```
 
@@ -104,42 +109,42 @@ Argo CD applies PostgreSQL at sync wave -2, a Sync migration hook at -1, then th
 
 ## 6. Reach the application and inspect metrics
 
-For the private ingress demo, set `ingress.host: relaydesk.local` in the environment values and add `127.0.0.1 relaydesk.local` to your local hosts file. In separate terminals:
+For the private ingress demo, set `ingress.host: lastbite.local` in the environment values and add `127.0.0.1 lastbite.local` to your local hosts file. In separate terminals:
 
 ```bash
 kubectl port-forward -n ingress-system svc/traefik 3000:80
-kubectl port-forward -n relaydesk svc/relaydesk-backend 8000:8000
+kubectl port-forward -n lastbite svc/lastbite-backend 8000:8000
 kubectl port-forward -n monitoring svc/monitoring-kube-prometheus-prometheus 9090:9090
 kubectl port-forward -n monitoring svc/monitoring-grafana 3001:80
 ```
 
-Open http://relaydesk.local:3000 (through Ingress), http://localhost:8000/docs, http://localhost:9090/targets and http://localhost:3001. Alternatively test ingress without changing hosts:
+Open http://lastbite.local:3000 (through Ingress), http://localhost:8000/docs, http://localhost:9090/targets and http://localhost:3001. Alternatively test ingress without changing hosts:
 
 ```bash
-curl --fail -H 'Host: relaydesk.local' http://127.0.0.1:3000/api/tickets
+curl --fail -H 'Host: lastbite.local' http://127.0.0.1:3000/api/listings
 curl --fail http://localhost:8000/metrics
 python3 scripts/seed.py
-URL=http://relaydesk.local:3000/api/tickets REQUESTS=1000 bash scripts/load-test.sh
-kubectl top pods -n relaydesk
-kubectl get hpa -n relaydesk -w
+URL=http://lastbite.local:3000/api/listings REQUESTS=1000 bash scripts/load-test.sh
+kubectl top pods -n lastbite
+kubectl get hpa -n lastbite -w
 ```
 
-Find Grafana's generated admin password in the `monitoring-grafana` secret. Open **RelayDesk · Service health**, select the Prometheus data source, generate traffic and allow two or more scrapes. If panels are empty, check the namespace and ServiceMonitor labels, the Prometheus Targets page, and the selected time window. Requests to `/health`, `/ready` and `/metrics` are excluded from application traffic measurements.
+Find Grafana's generated admin password in the `monitoring-grafana` secret. Open **LastBite · Service health**, select the Prometheus data source, generate traffic and allow two or more scrapes. If panels are empty, check the namespace and ServiceMonitor labels, the Prometheus Targets page, and the selected time window. Requests to `/health`, `/ready` and `/metrics` are excluded from application traffic measurements.
 
 ## 7. Rollback and recovery
 
-For Argo CD, revert the promotion commit and push so Git remains authoritative. Use backward-compatible migrations; reverting an image does not undo a database schema change. For direct Helm only, inspect `helm history relaydesk -n relaydesk` and use `helm rollback relaydesk REVISION -n relaydesk --wait`. Capture the migration Job's logs before retrying failures. If the DB PVC is pending, inspect the EBS CSI pods, IAM role, gp3 StorageClass and available zones.
+For Argo CD, revert the promotion commit and push so Git remains authoritative. Use backward-compatible migrations; reverting an image does not undo a database schema change. For direct Helm only, inspect `helm history lastbite -n lastbite` and use `helm rollback lastbite REVISION -n lastbite --wait`. Capture the migration Job's logs before retrying failures. If the DB PVC is pending, inspect the EBS CSI pods, IAM role, gp3 StorageClass and available zones.
 
 ## 8. Cleanup after evaluation
 
 First capture any required evidence and back up data you need. Stop Argo CD reconciliation, remove workload ownership, and delete the optional failure labs. For Argo, this Application has no resources finalizer, so deleting it stops reconciliation without deleting resources; remove its workloads explicitly:
 
 ```bash
-kubectl delete application relaydesk -n argocd --ignore-not-found
-kubectl delete -n relaydesk deployment,service,statefulset,job,ingress,hpa --all
+kubectl delete application lastbite -n argocd --ignore-not-found
+kubectl delete -n lastbite deployment,service,statefulset,job,ingress,hpa --all
 # If you used direct Helm instead:
-# helm uninstall relaydesk -n relaydesk
-kubectl get pvc -n relaydesk
+# helm uninstall lastbite -n lastbite
+kubectl get pvc -n lastbite
 kubectl get pv
 ```
 

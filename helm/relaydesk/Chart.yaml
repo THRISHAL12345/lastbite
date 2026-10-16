@@ -1,6 +1,0 @@
-apiVersion: v2
-name: relaydesk
-description: IT helpdesk with SLA tracking and a complete DevSecOps delivery path
-type: application
-version: 1.0.0
-appVersion: "1.0.0"

@@ -13,7 +13,7 @@ try {
   const login = await context.request.post('http://127.0.0.1:3001/login', {data:{user:username,password}});
   if (!login.ok()) throw new Error(`Grafana login failed: ${login.status()}`);
   const page = await context.newPage();
-  await page.goto('http://127.0.0.1:3001/d/relaydesk-health/relaydesk?orgId=1&from=now-15m&to=now&timezone=utc');
+  await page.goto('http://127.0.0.1:3001/d/lastbite-health/lastbite?orgId=1&from=now-15m&to=now&timezone=utc');
   await page.getByText('Requests per second', {exact:true}).waitFor({timeout:60000});
   // A fresh cluster can show replica data before the request-rate range query
   // has enough samples. Let the dashboard's 15-second refresh fill all panels.
@@ -24,8 +24,8 @@ try {
   }
   await page.waitForTimeout(2000);
   await page.screenshot({path:`${output}/grafana-dashboard.png`, fullPage:true});
-  await page.goto('http://127.0.0.1:9090/targets?search=relaydesk-backend');
-  await page.getByText(/relaydesk/).first().waitFor({timeout:60000});
+  await page.goto('http://127.0.0.1:9090/targets?search=lastbite-backend');
+  await page.getByText(/lastbite/).first().waitFor({timeout:60000});
   await page.waitForTimeout(2000);
   await page.screenshot({path:`${output}/prometheus-targets.png`, fullPage:true});
   console.log('Saved live Prometheus and Grafana screenshots.');

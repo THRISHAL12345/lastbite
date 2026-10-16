@@ -12,20 +12,20 @@ if not re.fullmatch(r'[a-f0-9]{40}', revision):
 parameters = {
     'backend.repository': prefix + '-backend', 'backend.tag': tag,
     'frontend.repository': prefix + '-frontend', 'frontend.tag': tag,
-    'ingress.enabled': 'true', 'ingress.host': 'relaydesk.local',
+    'ingress.enabled': 'true', 'ingress.host': 'lastbite.local',
     'monitoring.enabled': 'true',
 }
 print(json.dumps({
     'apiVersion': 'argoproj.io/v1alpha1', 'kind': 'Application',
-    'metadata': {'name': 'relaydesk', 'namespace': 'argocd'},
+    'metadata': {'name': 'lastbite', 'namespace': 'argocd'},
     'spec': {
         'project': 'default',
-        'source': {'repoURL': 'https://github.com/THRISHAL12345/relaydesk.git',
-                   'targetRevision': revision, 'path': 'helm/relaydesk',
-                   'helm': {'releaseName': 'relaydesk', 'parameters': [
+        'source': {'repoURL': os.environ.get('REPO_URL', 'https://github.com/THRISHAL12345/lastbite.git'),
+                   'targetRevision': revision, 'path': 'helm/lastbite',
+                   'helm': {'releaseName': 'lastbite', 'parameters': [
                        {'name': key, 'value': value, 'forceString': key.endswith(('.tag', '.repository'))}
                        for key, value in parameters.items()]}},
-        'destination': {'server': 'https://kubernetes.default.svc', 'namespace': 'relaydesk'},
+        'destination': {'server': 'https://kubernetes.default.svc', 'namespace': 'lastbite'},
         'syncPolicy': {'automated': {'prune': True, 'selfHeal': True},
                        'syncOptions': ['CreateNamespace=true'], 'retry': {'limit': 3}},
     },

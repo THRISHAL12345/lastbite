@@ -2,7 +2,7 @@
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: {{ include "relaydesk.name" . }}
+  name: {{ include "lastbite.name" . }}
   labels:
     release: {{ .Values.monitoring.release }}
 spec:

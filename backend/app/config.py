@@ -5,9 +5,9 @@ from sqlalchemy import URL
 class Settings(BaseSettings):
     database_url: str | None = None
     db_host: str = "localhost"
-    db_name: str = "relaydesk"
-    db_user: str = "relaydesk"
-    db_password: str = "relaydesk-local-only"
+    db_name: str = "lastbite"
+    db_user: str = "lastbite"
+    db_password: str = "lastbite-local-only"
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
     @property

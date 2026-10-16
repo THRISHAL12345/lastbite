@@ -11,7 +11,7 @@ import subprocess
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('run_id', type=int)
 args = parser.parse_args()
-repo = 'THRISHAL12345/relaydesk'
+repo = 'THRISHAL12345/lastbite'
 root = Path(__file__).resolve().parents[1]
 run = json.loads(subprocess.check_output([
     'gh', 'run', 'view', str(args.run_id), '--repo', repo, '--json',
@@ -32,7 +32,7 @@ artifacts = {
     'gitops-evidence': ['application.json', 'deployment-drift.json', 'deployment-healed.json',
                        'smoke.json', 'resources.txt', 'argocd-synced-healthy.png'],
     'compose-and-browser-evidence': ['smoke.json', 'compose/services.txt',
-                                   '**/desktop-queue.png', '**/mobile-queue.png', '**/resolved-ticket.png'],
+                                   '**/desktop-marketplace.png', '**/mobile-marketplace.png', '**/pickup-confirmed.png'],
 }
 selected = []
 for artifact, patterns in artifacts.items():

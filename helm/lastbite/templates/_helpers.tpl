@@ -1,9 +1,9 @@
-{{- define "relaydesk.name" -}}
+{{- define "lastbite.name" -}}
 {{- .Release.Name | trunc 40 | trimSuffix "-" -}}
 {{- end -}}
-{{- define "relaydesk.dbEnv" -}}
+{{- define "lastbite.dbEnv" -}}
 - name: DB_HOST
-  value: {{ include "relaydesk.name" . }}-postgres
+  value: {{ include "lastbite.name" . }}-postgres
 - name: DB_NAME
   value: {{ .Values.database.name | quote }}
 - name: DB_USER

@@ -1,218 +1,164 @@
-# RelayDesk
+# LastBite
 
-An original IT helpdesk built for the DevSecOps capstone. RelayDesk gives support teams a searchable ticket queue, clear ownership, continuous resolution targets, and a history of updates and team notes.
+**Good food. Second chance.** LastBite is a surplus-food rescue application in the **restaurant management** domain. Kitchens publish discounted meal boxes, customers reserve available portions, and staff confirm pickup with a code. The impact dashboard counts actual collected boxes and the savings on those pickups.
 
-This is a new project based on the **requirements and delivery architecture** of `devsecops-python-main`, with a different domain, data model, API, interface, tests, and operational configuration. The reference folder remains separate.
+Built for the DevSecOps capstone using React, FastAPI, PostgreSQL, Docker, GitHub Actions, Trivy, Terraform, Kubernetes, Helm, Argo CD, Prometheus and Grafana.
 
-## Start here
-
-Repository: [THRISHAL12345/relaydesk](https://github.com/THRISHAL12345/relaydesk).
-For the remaining AWS, recording and submission actions, follow
-[your complete step-by-step handoff](docs/YOUR-NEXT-STEPS.md).
-
-Requirements: Docker Engine/Desktop with Compose. From this directory:
+## Run locally
 
 ```bash
 cp .env.example .env
-docker compose up --build -d
-docker compose ps
-```
-
-Open **http://localhost:3000**. API documentation: **http://localhost:8000/docs**.
-
-The first run creates an empty queue. To add optional fictional demonstration records:
-
-```bash
+docker compose up --build -d --wait
 python3 scripts/seed.py
 ```
 
-The seed command refuses a non-empty queue. Create, inspect, edit, assign, resolve, reopen, comment on, and delete tickets through the UI. Filter by status or priority, search by subject/requester, and inspect the **Past SLA** queue. The latest-updates panel reads persisted events, not placeholder activity.
+Default addresses: **http://localhost:3000** for the app and **http://localhost:8000/docs** for API documentation. Set `FRONTEND_PORT` and `BACKEND_PORT` in `.env` if those ports are occupied. This workspace's ignored `.env` uses **3002** and **8002**; seed it with `python3 scripts/seed.py --url http://localhost:8002`.
+
+The seed script adds six fictional kitchens, eight completed meal pickups, and a pending reservation. It refuses to change a non-empty database. Pickup times are relative to when it runs, so sample listings eventually expire just like real ones. Publish new boxes from Kitchen desk for a later demonstration.
+
+- **Explore boxes:** browse available meals, bakery items, produce and desserts; search kitchens; filter dietary preference; view pickup times, prices and allergens.
+- **Reservations:** view pickup codes, cancel an uncollected reservation, or confirm handover with a matching code during the pickup window.
+- **Kitchen desk:** publish, edit, pause and delete meal listings. Listings with reservation history are retained.
+- **Impact dashboard:** available boxes, collected meals, active kitchens and savings from confirmed pickups. All figures come from the database.
+
+This is a shared classroom demo without accounts or real payment processing. All reservations and kitchen controls are visible to all demo users. Each box represents one meal for the demo's impact count. Prices are in INR; payment at pickup is descriptive, not a payment integration. Use fictional data. Authentication, role enforcement and payment reconciliation are future work before a public deployment.
 
 ```bash
+docker compose ps
 docker compose logs backend migrate
-docker compose down                # keep database data
-# Only when the demo data is no longer needed:
-docker compose down -v             # delete the database volume
+docker compose down       # retain data
+# Only to intentionally discard this demo database:
+docker compose down -v
 ```
-
-**Scope:** this is an internal demonstration application without authentication or authorization. Compose publishes only on loopback; the documented Kubernetes ingress uses port-forwarding. Add identity, access controls, TLS and backup procedures before exposing it to real users. Do not use real personal or confidential support data in the demo.
 
 ## Architecture
 
 ```mermaid
 flowchart LR
     Browser --> Ingress[Traefik Ingress]
-    Ingress -->|/| Frontend[React / Nginx :8080]
-    Ingress -->|/api| API[FastAPI :8000]
-    Frontend -->|same-origin API proxy| API
-    API --> DB[(PostgreSQL / PVC)]
-    Migration[Alembic migration job] --> DB
+    Ingress -->|/| Frontend[React / unprivileged Nginx]
+    Ingress -->|/api| API[FastAPI]
+    Frontend -->|same-origin proxy| API
+    API --> DB[(PostgreSQL: listings + reservations)]
+    Migration[Alembic migration Job] --> DB
     Prometheus -->|/metrics| API
     Grafana --> Prometheus
 ```
 
 ```mermaid
 flowchart LR
-    Commit[Application commit] --> Tests[Pytest / UI build / IaC checks]
-    Tests --> Build[Build both images]
-    Build --> Scan[Trivy HIGH + CRITICAL gate]
-    Scan --> Integration[Compose / Chromium / Kubernetes / Monitoring / Argo checks]
-    Integration --> GHCR[GHCR / commit SHA tags]
-    GHCR --> Review[Review release-values commit]
-    Review --> Argo[Argo CD sync]
-    Argo --> Helm[Helm-rendered Kubernetes resources]
-    Terraform[Terraform VPC + EKS] --> Helm
+    Commit --> Tests[API tests / frontend tests / build / IaC checks]
+    Tests --> Images[Build backend + frontend]
+    Images --> Trivy[HIGH + CRITICAL security gate]
+    Trivy --> Integration[Compose / Chromium / Kind / monitoring / GitOps checks]
+    Integration --> GHCR[Publish exact scanned images with commit SHA]
+    GHCR --> Promotion[Reviewed release-values change]
+    Promotion --> Argo[Argo CD / Helm]
+    Terraform[Terraform VPC + EKS] --> Argo
 ```
 
-| Layer | Implementation |
-|---|---|
-| Interface | React, Vite, custom responsive CSS, native accessible dialogs |
-| API | Python 3.12, FastAPI, Pydantic validation, SQLAlchemy |
-| Persistence | PostgreSQL 16, Alembic migrations; SQLite only for lightweight tests/preview |
-| Packaging | Multi-stage frontend image; non-root Nginx and API; Docker Compose |
-| Delivery | GitHub Actions, Trivy, GHCR, reviewed promotion, Argo CD |
-| Infrastructure | Terraform, AWS VPC, EKS managed nodes, EBS CSI, encrypted gp3 |
-| Workloads | Helm, StatefulSet, migration Job, Deployments, Services, Ingress, HPA |
-| Observability | Prometheus metrics, ServiceMonitor, alert rules, Grafana dashboard |
+## Domain rules
 
-## Repository map
+1. Prices are integer paise, avoiding floating-point money calculations. Rescue price cannot exceed original value. Stock and quantities must be positive integers.
+2. Reserving a box locks its listing in PostgreSQL and conditionally decrements stock in the same transaction as creating the reservation. Competing requests cannot oversell the last box.
+3. Cancellation before pickup ends restores stock exactly once. Duplicate cancellation or pickup returns `409`.
+4. Pickup requires a matching code and must occur between the listing's start and end times. Only confirmed pickups count towards meals rescued and savings.
+5. Expiration is derived from the current UTC time on every API request, with no scheduler required. Expired reservations cannot be collected or cancelled. Expired listings leave the marketplace; their history remains in the kitchen desk.
+6. Once any reservation exists, food details, allergens, prices, address and pickup window are immutable. Kitchens may adjust total stock (never below reserved/collected quantities) or pause new reservations. Existing reservations can still be collected while the listing is paused.
+7. Listings with reservation history cannot be deleted. This protects pickup records and impact totals. An unreserved listing can be deleted.
+8. All API times include timezone information; the UI displays the browser's local time. Listings and reservations are paginated. Marketplace data refreshes every 30 seconds, and the server rechecks availability on submission.
 
-```text
-backend/app/             API, models, validation, metrics, DB wait helper
-backend/alembic/         Versioned tickets and ticket_events schema
-backend/tests/           API and migration tests
-frontend/src/            React workspace, dialogs, responsive styling
-.github/workflows/       Test, build, scan, publish and release-values artifact
-helm/relaydesk/          Application chart and environment values
-terraform/              VPC, EKS, node group and EBS CSI identity
-k8s/                    Namespace, storage class and ingress controller values
-gitops/                 Argo CD Application
-monitoring/             Prometheus values, alert rules and dashboard
-scripts/                Optional demo seed, promotion and load generator
-troubleshooting/        Isolated broken-image and broken-selector exercises
-demo/                   PDF slide deck and recording guide
-docs/                   Deployment runbook, review findings and evidence checklist
-```
+## API
 
-## API and domain rules
-
-| Method | Endpoint | Behavior |
+| Method | Endpoint | Purpose |
 |---|---|---|
-| GET | `/health` | Cheap process liveness |
-| GET | `/ready` | Verify DB access and migrated tickets table; 503 on failure |
-| GET | `/metrics` | Prometheus request counters and latency histogram |
-| GET | `/api/tickets` | Paginated queue; `status`, `priority`, `q`, `overdue`, `limit`, `offset` |
-| POST | `/api/tickets` | Create a validated ticket and its initial event |
-| GET | `/api/tickets/stats` | Global counts and currently overdue tickets |
-| GET | `/api/tickets/{id}` | Ticket details, timestamps and computed overdue flag |
-| PUT | `/api/tickets/{id}` | Replace writable ticket fields; record changes |
-| DELETE | `/api/tickets/{id}` | Delete a ticket and cascade its history |
-| GET | `/api/tickets/{id}/events` | Ticket history, newest first |
-| POST | `/api/tickets/{id}/comments` | Persist a team note |
-| GET | `/api/activity` | Latest 12 events across tickets |
+| GET | `/health` | Process liveness |
+| GET | `/ready` | Verify both migrated application tables and DB connection |
+| GET | `/metrics` | Prometheus request counts and latency |
+| GET / POST | `/api/listings` | Search/filter/paginate listings or publish a box |
+| GET / PUT / DELETE | `/api/listings/{id}` | Read, update or delete an unreserved listing |
+| POST | `/api/listings/{id}/reservations` | Reserve stock atomically |
+| GET | `/api/reservations` | Paginated shared-demo reservation history |
+| POST | `/api/reservations/{id}/cancel` | Release a reservation's stock |
+| POST | `/api/reservations/{id}/pickup` | Confirm collection using `pickup_code` |
+| GET | `/api/stats` | Persistent food-rescue impact totals |
 
-`PUT` expects a complete writable representation (title and requester are required; omitted optional fields take their defaults). GET responses contain read-only fields that should not be echoed into PUT. The UI uses an explicit allowlist.
+Listing filters: `category`, `dietary`, `state`, `q`, `limit`, `offset`. Categories: `MEALS`, `BAKERY`, `PRODUCE`, `DESSERTS`. Dietary values: `VEGETARIAN`, `VEGAN`, `MIXED`. States: `AVAILABLE`, `SOLD_OUT`, `PAUSED`, `EXPIRED`. Missing resources return `404`, invalid payloads `422`, and stock/state conflicts `409`.
 
-Statuses are `OPEN`, `IN_PROGRESS`, `RESOLVED`. Priorities are `URGENT`, `HIGH`, `MEDIUM`, `LOW`; categories are `ACCESS`, `HARDWARE`, `SOFTWARE`, `NETWORK`, `OTHER`. Unknown fields and invalid/null required values return 422; missing tickets return 404.
+`PUT` expects the complete writable listing representation. The frontend's `writeFields` helper excludes computed state, ID, timestamps and available-stock counters.
 
-SLA targets are **4 / 8 / 24 / 72 elapsed hours**, respectively, measured from creation. Reprioritizing recalculates the deadline from the original creation time. Reopening clears the resolution timestamp without resetting the SLA clock. Resolved tickets are excluded from current overdue counts. This is a continuous-hours teaching policy, not a business-calendar SLA engine. Timestamps use UTC and display in the browser's local timezone.
+## Data and migrations
+
+`0002_lastbite` creates `listings` and `reservations` with foreign keys, quantity/price/window checks and indexes. The historical `0001_tickets` migration is preserved so an existing RelayDesk database can upgrade without rewriting its migration history or deleting its old records. LastBite does not expose the old ticket tables or API. A fresh installation applies both revisions; rollback drops LastBite's tables and leaves the old revision intact.
+
+Compose creates a separate `lastbite_postgres-data` volume. Kubernetes uses `lastbite` resource names and a separate database secret. Existing RelayDesk data and deployment evidence are not relabelled as LastBite data.
 
 ## Development and tests
+
+Python 3.12 and Node 22 are used by CI. Dependencies are pinned in `backend/requirements*.txt` and `frontend/package-lock.json`.
 
 ```bash
 python3.12 -m venv .venv
 .venv/bin/pip install -r backend/requirements-dev.txt
 cd backend
-../.venv/bin/pytest -v
+../.venv/bin/python -m pytest -v
+cd ../frontend
+npm ci
+npm test
+npm run build
 ```
 
-Run `cd frontend && npm test` from the project root for the React ticket workflow test.
+The API tests always use a temporary SQLite database unless `TEST_DATABASE_URL` explicitly points to a disposable PostgreSQL database. They apply real migrations, exercise competing reservations and cancellations, validate pickup timing, and downgrade at teardown. Never use a production database for `TEST_DATABASE_URL`.
 
-The API suite migrates a fresh temporary SQLite database, cleans records between tests, and downgrades the schema at teardown. It never reuses `DATABASE_URL`. CI explicitly supplies a disposable PostgreSQL database through `TEST_DATABASE_URL` and runs the same tests. **Only point TEST_DATABASE_URL at an expendable test database**; teardown drops its application tables.
-
-For a lightweight local API preview, from `backend/`:
-
-```bash
-export DATABASE_URL=sqlite:///./relaydesk.db
-../.venv/bin/alembic upgrade head
-../.venv/bin/uvicorn app.main:app --reload --port 8000
-```
-
-In a second terminal:
+For real browser tests against the running stack:
 
 ```bash
 cd frontend
-npm ci
-npm run dev
+npx playwright install chromium
+FRONTEND_URL=http://localhost:3002 npm run test:e2e
 ```
 
-Vite serves http://localhost:5173 and proxies `/api` to port 8000. PostgreSQL is required for the full capstone deployment. Its driver uses system `libpq` (included in the backend Docker image); direct PostgreSQL development also needs libpq available on your machine.
-
-Runtime dependencies and the frontend dependency tree are pinned in `requirements.txt` and `package-lock.json`. `requirements-dev.txt` adds testing tools. When upgrading, regenerate both Python files from their `.in` files with `uv pip compile --upgrade --universal --python-version 3.12`, run the tests, rebuild and rerun the image scans. Runtime images intentionally exclude test dependencies.
-
-## CI/CD and security
-
-Use **this directory as the GitHub repository root** so `.github/workflows/ci-cd.yml` is discovered. Do not publish the parent directory containing both projects without adjusting workflow paths.
-
-The repository is already published as `THRISHAL12345/relaydesk`; commit and push
-real changes to its existing `main` branch. Repository-local author and committer
-identity should remain `THRISHAL12345`.
-
-The workflow runs on main pushes, pull requests and manual dispatch. It tests against PostgreSQL, builds the frontend, checks Helm and Terraform, builds both images once, and scans both images. Both scan outcomes must be successful before publication. HIGH and CRITICAL findings, including unfixed findings, block publication; there are no blanket vulnerability exceptions. CI uploads the scan reports even when a scan fails.
-
-Those exact images must also pass the live Compose API and Chromium workflow,
-two-replica Helm deployment and ingress tests, Prometheus/Grafana checks, and Argo CD
-sync/self-healing checks. Monitoring and GitOps stages save actual UI screenshots
-and API/resource evidence. Tests never create AWS resources.
-
-Only main builds push to GHCR, using the lowercase repository owner and full commit SHA. Pull requests never log in or push. The job uses `GITHUB_TOKEN` with package-write permission; no Docker Hub credentials are required. Enable Actions and allow package creation for the repository. For private packages, configure an imagePullSecret for **both deployments and the migration job**; public demo packages can be pulled without one.
-
-CD uses an explicit promotion boundary. After both images pass CI and reach GHCR:
+The browser suite publishes a listing, reserves/cancels/re-reserves, checks pickup-code errors, confirms a pickup, reloads persisted state, edits stock, deletes an unreserved listing, and checks mobile overflow. Synthetic listings with reservation history are paused rather than erased. The smoke test likewise preserves its reservation history:
 
 ```bash
-python3 scripts/promote.py THRISHAL12345 FULL_40_CHARACTER_SOURCE_COMMIT_SHA
-git diff -- helm/relaydesk/values-release.yaml
-git add helm/relaydesk/values-release.yaml
-git commit -m "Promote scanned RelayDesk release to EKS"
-git push
+python3 scripts/smoke.py --frontend-url http://localhost:3002 --backend-url http://localhost:8002
 ```
 
-The script validates syntax, not the CI outcome; use the SHA from a successful CI run or copy the workflow's `gitops-release-values` artifact. Argo CD watches that file and reconciles the release. Protect main and review promotion commits. Every main push runs CI, including release-values and documentation changes. The workflow publishes a promotion artifact but does not commit or push changes, so it cannot create a promotion loop. Do not manage the same release with both Argo CD and `helm upgrade` concurrently.
+For direct API development, use `DATABASE_URL=sqlite:///./lastbite.db` and run `alembic upgrade head` before Uvicorn. Vite's dev proxy defaults to backend port 8000. PostgreSQL is the full deployment database.
 
-## AWS, Kubernetes and monitoring
+## Delivery, infrastructure and security
 
-The full ordered commands are in [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md).
+- Both containers run as non-root users; the frontend is a multi-stage Node/Nginx image. Compose binds published ports to loopback.
+- CI tests against PostgreSQL before building. Trivy scans both images and blocks publication on HIGH or CRITICAL findings, including unfixed findings. No blanket CVE exclusions are configured.
+- Only successful main builds publish to GHCR. Images use the full Git commit SHA. Integration checks run against the exact candidate images; pull requests do not publish.
+- `helm/lastbite` deploys two frontend replicas, two backend replicas (or an HPA), PostgreSQL on a PVC, migration Job, Services and Ingress. Secrets are referenced, not committed.
+- Terraform provisions two public and two private subnets, a NAT gateway, EKS, managed workers and EBS CSI. The example uses `m7i-flex.large`, which worked in the configured account during the earlier demo; recheck account eligibility and region capacity before deploying.
+- Prometheus scrapes `lastbite_http_requests_total` and the latency histogram. Grafana panels show traffic, p95 latency, errors and available replicas. Metric labels use route templates, not individual IDs.
+- See [deployment steps](docs/DEPLOYMENT.md), [Terraform notes](terraform/README.md), and [isolated troubleshooting exercises](troubleshooting/README.md).
 
-Terraform defines two public and two private subnets across two AZs, one NAT gateway, EKS with two managed nodes, restricted public API CIDRs, control-plane logs, and an EBS CSI IAM role. Set your administrator IP in `terraform.tfvars`, then initialize, validate and review the plan before applying. Credentials come from your AWS profile/SSO; never put keys in repository files. The local state is ignored; use a secured remote backend with locking for shared infrastructure work.
+## Publication status
 
-The chart runs PostgreSQL on a StatefulSet, migrations in a Job, two frontend replicas, and either two API replicas or an HPA with a minimum of two. Argo CD sync waves wait for PostgreSQL before migrations and then the API. Direct Helm installation uses `--wait --wait-for-jobs`; the API stays unready until the schema exists. Credentials reference an existing Secret. Ingress routes `/` to frontend port 8080 and `/api` to API port 8000. `/metrics`, `/ready` and `/docs` remain available through direct backend port-forwarding rather than public ingress.
+The repository has been renamed to [THRISHAL12345/lastbite](https://github.com/THRISHAL12345/lastbite) using `gh-personal`, and the local Git remote points to that URL. The LastBite conversion is committed locally with author and committer `THRISHAL12345 <73953301+THRISHAL12345@users.noreply.github.com>`. It has **not been pushed**. GitHub still contains the previous application until an explicitly authorized push.
 
-The dashboard shows request rate, P95 latency, 5xx percentage and available replicas. Request labels use route templates to avoid a series for each ticket ID. Generate some traffic, allow at least two scrapes, and select the Prometheus data source in Grafana. HPA also needs Metrics Server; lightweight HTTP traffic alone may not saturate CPU.
+Use `gh-personal` for future GitHub operations and retain the `THRISHAL12345` commit identity.
 
-## Presentation and submission
+The Argo Application points to the renamed `lastbite` repository; its LastBite chart is not available remotely until the conversion is pushed. `values-release.yaml` deliberately uses `build-required`; it must not point to an old RelayDesk image. After a successful LastBite CI run and image publication, generate values with:
 
-- [demo/slides.pdf](demo/slides.pdf): 10-slide presentation; editable generation source included.
-- [docs/YOUR-NEXT-STEPS.md](docs/YOUR-NEXT-STEPS.md): exact remaining AWS, recording, cleanup and submission steps.
-- [demo/evidence/README.md](demo/evidence/README.md): observed CI/monitoring/GitOps evidence with source revision and hashes.
-- [docs/SCORECARD.md](docs/SCORECARD.md): criterion-by-criterion estimate and the remaining points.
-- [demo/RECORDING.md](demo/RECORDING.md): slide-first live walkthrough and capture order.
-- [docs/SUBMISSION-CHECKLIST.md](docs/SUBMISSION-CHECKLIST.md): M1-M10 mapping and outstanding real evidence.
-- [docs/SCAFFOLD-REVIEW.md](docs/SCAFFOLD-REVIEW.md): original scaffold review and corrections.
-- [docs/VALIDATION.md](docs/VALIDATION.md): what was actually checked locally and what still needs a real environment.
+```bash
+python3 scripts/promote.py THRISHAL12345 FULL_40_CHARACTER_LASTBITE_COMMIT_SHA
+```
 
-The evidence index records actual CI and Kind results. AWS screenshots and your narrated
-walkthrough remain required. The supplied submission file calls 19 October 2026 a
-Sunday; that calendar date is Monday, so confirm the intended deadline with the instructor.
+Do not apply the Argo Application before the repository and tested images exist. Do not let Helm CLI and Argo CD own the same resources simultaneously.
+
+## Evidence and presentation
+
+- [Validation record](docs/VALIDATION.md): checks actually run for LastBite.
+- [Submission checklist](docs/SUBMISSION-CHECKLIST.md): required new evidence.
+- [Recording guide](demo/RECORDING.md) and [slides](demo/slides.pdf).
+- [Scorecard](docs/SCORECARD.md): why historical evidence is not a new grade.
+- `demo/legacy-relaydesk/` contains historical, unchanged RelayDesk evidence. It is not proof of LastBite deployment or CI.
+- The earlier AWS demo has been destroyed. No LastBite AWS resources are provisioned by this conversion.
 
 ## Known limits
 
-- No login, RBAC, attachments, email notifications, optimistic concurrency control, or business-hours calendar.
-- Single-instance in-cluster PostgreSQL and one NAT gateway favor a classroom demo over high availability. Backups and managed RDS are follow-up production work.
-- The gp3 StorageClass retains volumes. Deleting workloads or Terraform alone does not remove retained data volumes; follow the cleanup runbook.
-- Image base tags are moving tags; CI scans each build, but this is not a promise that every future CVE scan will pass. Resolve findings before promoting. Pin image digests after validation for reproducible production releases.
-- Local fonts fall back to system fonts when Google Fonts is unavailable. The app does not require the font service to function.
-- AWS provisioning still needs your credentials. Passing Kind integration checks does not prove an EKS deployment.
-
-## Reference documentation
-
-The delivery behavior follows [Trivy's exit-code controls](https://trivy.dev/docs/latest/guide/configuration/reporting/) and [Argo CD sync phases and waves](https://argo-cd.readthedocs.io/en/stable/user-guide/sync-waves/). EKS 1.35 is documented by [AWS](https://aws.amazon.com/about-aws/whats-new/2026/01/amazon-eks-distro-kubernetes-version-1-35/). The chart uses Traefik instead of the retired community Ingress NGINX controller; see the [Kubernetes retirement announcement](https://kubernetes.io/blog/2026/01/29/ingress-nginx-statement/) and [Traefik chart](https://github.com/traefik/traefik-helm-chart).
+This classroom application has no authentication, customer isolation, online payments, notifications, geolocation or food-safety certification. Pickup codes support the workflow but are not an authorization boundary in the shared demo. A response lost after reservation creation can lead to a duplicate if retried; production needs authenticated idempotency keys. Expiration is evaluated on access, not persisted by a background worker. PostgreSQL is a single in-cluster instance and needs backups for production. The gp3 storage class retains disks: remove retained EBS volumes explicitly during cleanup. Remote fonts have system fallbacks.

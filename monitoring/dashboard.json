@@ -1,6 +1,6 @@
 {
-  "title": "RelayDesk \u00b7 Service health",
-  "uid": "relaydesk-health",
+  "title": "LastBite \u00b7 Service health",
+  "uid": "lastbite-health",
   "schemaVersion": 39,
   "version": 1,
   "refresh": "15s",
@@ -9,7 +9,7 @@
     "to": "now"
   },
   "tags": [
-    "relaydesk"
+    "lastbite"
   ],
   "templating": {
     "list": [
@@ -39,7 +39,7 @@
       },
       "targets": [
         {
-          "expr": "sum(rate(relaydesk_http_requests_total{namespace=\"relaydesk\"}[5m]))",
+          "expr": "sum(rate(lastbite_http_requests_total{namespace=\"lastbite\"}[5m]))",
           "refId": "A"
         }
       ],
@@ -66,7 +66,7 @@
       },
       "targets": [
         {
-          "expr": "histogram_quantile(0.95, sum by (le) (rate(relaydesk_http_request_duration_seconds_bucket{namespace=\"relaydesk\"}[5m])))",
+          "expr": "histogram_quantile(0.95, sum by (le) (rate(lastbite_http_request_duration_seconds_bucket{namespace=\"lastbite\"}[5m])))",
           "refId": "A"
         }
       ],
@@ -93,7 +93,7 @@
       },
       "targets": [
         {
-          "expr": "100 * (sum(rate(relaydesk_http_requests_total{namespace=\"relaydesk\",status=~\"5..\"}[5m])) or vector(0)) / clamp_min(sum(rate(relaydesk_http_requests_total{namespace=\"relaydesk\"}[5m])), 0.001)",
+          "expr": "100 * (sum(rate(lastbite_http_requests_total{namespace=\"lastbite\",status=~\"5..\"}[5m])) or vector(0)) / clamp_min(sum(rate(lastbite_http_requests_total{namespace=\"lastbite\"}[5m])), 0.001)",
           "refId": "A"
         }
       ],
@@ -120,7 +120,7 @@
       },
       "targets": [
         {
-          "expr": "kube_deployment_status_replicas_available{namespace=\"relaydesk\",deployment=\"relaydesk-backend\"}",
+          "expr": "kube_deployment_status_replicas_available{namespace=\"lastbite\",deployment=\"lastbite-backend\"}",
           "refId": "A"
         }
       ],

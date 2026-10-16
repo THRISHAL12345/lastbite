@@ -1,0 +1,6 @@
+apiVersion: v2
+name: lastbite
+description: Surplus food reservations and pickup tracking with a complete DevSecOps delivery path
+type: application
+version: 2.0.0
+appVersion: "2.0.0"

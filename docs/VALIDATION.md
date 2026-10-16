@@ -1,79 +1,27 @@
-# Local validation record
+# LastBite validation record
 
-Checked on 16 October 2026 in the supplied macOS workspace.
+Checked locally on 16 October 2026 after replacing the RelayDesk application. After validation, the owner authorized renaming the repository and committing: `gh-personal` selected `THRISHAL12345`, the repository was renamed to `THRISHAL12345/lastbite`, and the conversion was committed locally under that identity. No GitHub push or AWS creation was performed.
 
-## Passed
+## Passed for this version
 
-- **19 backend tests** against a fresh temporary SQLite database, including actual Alembic upgrade/downgrade, CRUD, enum/string validation, search/pagination, SLA calculations, resolve/reopen semantics, comments, cascade deletion, readiness failure and metric labels.
-- **1 frontend workflow test** using React and JSDOM: create a ticket, open its details, start work, add a comment, resolve, reopen, edit and delete. This checks application behavior with a mocked API; it is not a browser rendering test or full-stack integration test.
-- **Vite production build**, with installed package-lock dependencies.
-- **Docker Compose configuration** parsing with `docker compose config --quiet`.
-- **Helm lint and render** with default and production values. Rendered resource checks verified ingress service/port references, HPA target, ServiceMonitor labels and non-root security contexts.
-- **Terraform formatting/HCL parsing** using `terraform fmt -check -recursive`.
-- **YAML parsing**, shell script syntax and Makefile recipe inspection.
-- **10-slide PDF** generated, text inspected, pages rendered and visually reviewed.
+- **32 API tests on a fresh SQLite database**, including actual Alembic upgrade/downgrade, listing CRUD, search, filters, validation, atomic reservations, concurrent last-box contention, concurrent cancellation, code matching, time-window rules, expiry, stock editing, retained history, readiness failure and bounded metric labels.
+- **The same 32 tests on a separate PostgreSQL 16 database.** Eight concurrent customers competing for three boxes produced exactly three reservations; two simultaneous cancellations restored stock only once. The disposable test container was stopped and removed afterwards.
+- **5 frontend tests** covering readable API error handling, validation errors, empty DELETE responses, countdown boundaries and writable-field filtering.
+- **Vite production build** and both rebuilt Docker images.
+- **Healthy Compose deployment** with PostgreSQL, a completed migration service, non-root backend UID 10001, and non-root frontend UID 101. The running local demo uses frontend port 3002 and backend port 8002.
+- **Live API smoke checks:** listing CRUD/search through the Nginx proxy, reservation stock accounting, oversell rejection, cancellation, pickup-code validation, duplicate-pickup rejection, impact totals, history protection and Prometheus metrics.
+- **2 real Chromium browser tests:** publish/edit/delete listings; reserve/cancel/re-reserve; persist across reload; reject an incorrect code; confirm pickup; edit stock; and navigate mobile with no horizontal overflow at 390px. A rotated SVG overflow found by the first run was fixed before the final passing run.
+- **Trivy local ARM64 image scans:** zero HIGH or CRITICAL findings for both LastBite backend and frontend. Both severity gates remain enforced; no exceptions were added. These findings describe the scanned images and database at this time, not future builds or unscanned architectures.
+- **Helm lint and production chart rendering**, **Terraform formatting and validation**, Compose configuration parsing, Python/shell syntax, dashboard JSON, and Git whitespace checks for text files.
+- **Updated ten-slide PDF**, rendered and visually inspected. It covers the LastBite workflow and delivery architecture; it does not claim a new AWS deployment.
 
-## First GitHub run and security remediation
+Logs and reports are under ignored `artifacts/lastbite/`. Browser test screenshots/video are in `artifacts/browser/`. The clean demo has six fictional kitchens, eight collected sample meals and one pending reservation. Test-created kitchen records were removed after validation; saved test evidence remains intact.
 
-[Run 38901893181](https://github.com/THRISHAL12345/relaydesk/actions/runs/38901893181)
-passed the PostgreSQL API tests and migrations, frontend test/build, Helm checks,
-and Terraform initialization/validation. Both Docker images built. The frontend
-security scan passed, but the backend scan blocked delivery with 62 HIGH and
-2 CRITICAL findings in Debian OS packages; the Python dependencies had no
-HIGH/CRITICAL findings. This run did not reach the live integration tests or publication.
+## Not yet demonstrated for LastBite
 
-The backend now uses Alpine with a separate compiler stage for the pinned
-Psycopg 3.3.6 C adapter, updated for the current PostgreSQL client headers.
-The final image contains the system libpq runtime and runs
-as UID 10001; compilers remain in the build stage. A build-time import assertion
-checks that the adapter can load libpq. This follows the
-[Psycopg local installation guidance](https://www.psycopg.org/psycopg3/docs/basic/install.html#local-installation).
-Both HIGH/CRITICAL security gates remain enabled, with no CVE suppressions.
-Failed scans now print their reports directly in the gate's job log.
+- A new GitHub Actions run and LastBite GHCR image publication.
+- LastBite deployed through Helm/Argo CD on Kubernetes, its HPA readings, Prometheus targets and live Grafana panels.
+- LastBite Terraform plan/apply on AWS, Console screenshots, or a LastBite cloud teardown.
+- A personal narrated presentation and submission-form confirmation.
 
-Local verification of the replacement image on 16 October 2026 passed:
-
-- Fresh Trivy database and image scan: **0 HIGH/CRITICAL findings** across OS and Python packages.
-- Compose with PostgreSQL: successful Alembic migration and healthy backend/frontend.
-- Runtime users: backend UID 10001 and frontend UID 101.
-- `scripts/smoke.py`: all seven live API/proxy/database/metrics checks passed.
-- Real Chromium ticket lifecycle, reload persistence, and mobile layout: **1 passed**.
-  The priority selector now uses the combobox's accessible name instead of an exact
-  wrapping-label text match that included option text.
-
-Local scan and smoke reports, browser screenshots, video, and trace/report files
-are under ignored `artifacts/`. GitHub CI separately verifies Linux AMD64 images
-before publication; local ARM64 results do not substitute for that run.
-
-## Live Kubernetes, monitoring and GitOps validation
-
-The dedicated local `kind-relaydesk-demo` cluster successfully ran the application
-with two backend and two frontend replicas, PostgreSQL, Traefik, Prometheus,
-Grafana and Argo CD. The namespace manifest applied, Helm deployed the application,
-and the smoke test exercised `/` and `/api` through the real ingress controller.
-
-Prometheus reported both backend targets UP. The verification script queried a
-positive request rate through Prometheus and through Grafana's data-source proxy.
-The actual Grafana screenshot was visually checked for populated request-rate,
-latency, error-rate and replica panels. Screenshot capture now waits for chart
-rendering rather than only the panel title.
-
-Argo CD synced an immutable Git revision and became Healthy. Scaling the backend
-to one replica was automatically repaired to two; the test saved the before/after
-deployment objects and reran the live application smoke test. Traefik publishes
-the private demonstration's localhost endpoint so Ingress health is observable.
-The same checks are gates in GitHub CI before image publication.
-
-See [the evidence index](../demo/evidence/README.md) for the archived successful
-remote run, its source revision, actual screenshots, reports and file hashes.
-The repository now has at least ten meaningful commits under `THRISHAL12345`.
-
-## Evidence still required from the user
-
-- Terraform plan, apply and destroy require configured AWS credentials. Provider validation does not prove infrastructure will provision.
-- EKS deployment and HPA readings still require the cloud walkthrough. Existing
-  Kind monitoring/Argo evidence does not establish that EKS was provisioned.
-- A real presenter walkthrough and AWS screenshots are still required for submission.
-
-Follow [YOUR-NEXT-STEPS.md](YOUR-NEXT-STEPS.md) for the remaining commands, required
-screenshots, own narration, cleanup and official submission.
+The historical RelayDesk evidence is preserved under `demo/legacy-relaydesk/` and ignored `artifacts/aws/`. Its earlier AWS demo was destroyed. Those historical results are not relabelled as LastBite validation. `values-release.yaml` remains explicitly unpromoted until a real LastBite build passes CI and publishes.

@@ -1,22 +1,23 @@
+# Repository renamed; do not apply before the LastBite commit and images are published.
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: relaydesk
+  name: lastbite
   namespace: argocd
 spec:
   project: default
   source:
-    repoURL: https://github.com/THRISHAL12345/relaydesk.git
+    repoURL: https://github.com/THRISHAL12345/lastbite.git
     targetRevision: main
-    path: helm/relaydesk
+    path: helm/lastbite
     helm:
-      releaseName: relaydesk
+      releaseName: lastbite
       valueFiles:
         - values-prod.yaml
         - values-release.yaml
   destination:
     server: https://kubernetes.default.svc
-    namespace: relaydesk
+    namespace: lastbite
   syncPolicy:
     automated:
       prune: true
