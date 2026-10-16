@@ -6,6 +6,10 @@ This is a new project based on the **requirements and delivery architecture** of
 
 ## Start here
 
+Repository: [THRISHAL12345/relaydesk](https://github.com/THRISHAL12345/relaydesk).
+For the remaining AWS, recording and submission actions, follow
+[your complete step-by-step handoff](docs/YOUR-NEXT-STEPS.md).
+
 Requirements: Docker Engine/Desktop with Compose. From this directory:
 
 ```bash
@@ -52,7 +56,8 @@ flowchart LR
     Commit[Application commit] --> Tests[Pytest / UI build / IaC checks]
     Tests --> Build[Build both images]
     Build --> Scan[Trivy HIGH + CRITICAL gate]
-    Scan --> GHCR[GHCR / commit SHA tags]
+    Scan --> Integration[Compose / Chromium / Kubernetes / Monitoring / Argo checks]
+    Integration --> GHCR[GHCR / commit SHA tags]
     GHCR --> Review[Review release-values commit]
     Review --> Argo[Argo CD sync]
     Argo --> Helm[Helm-rendered Kubernetes resources]
@@ -149,22 +154,23 @@ Runtime dependencies and the frontend dependency tree are pinned in `requirement
 
 Use **this directory as the GitHub repository root** so `.github/workflows/ci-cd.yml` is discovered. Do not publish the parent directory containing both projects without adjusting workflow paths.
 
-```bash
-git init -b main
-git add .
-git commit -m "Build RelayDesk helpdesk and DevSecOps delivery platform"
-git remote add origin https://github.com/YOUR_OWNER/YOUR_REPO.git
-git push -u origin main
-```
+The repository is already published as `THRISHAL12345/relaydesk`; commit and push
+real changes to its existing `main` branch. Repository-local author and committer
+identity should remain `THRISHAL12345`.
 
 The workflow runs on main pushes, pull requests and manual dispatch. It tests against PostgreSQL, builds the frontend, checks Helm and Terraform, builds both images once, and scans both images. Both scan outcomes must be successful before publication. HIGH and CRITICAL findings, including unfixed findings, block publication; there are no blanket vulnerability exceptions. CI uploads the scan reports even when a scan fails.
+
+Those exact images must also pass the live Compose API and Chromium workflow,
+two-replica Helm deployment and ingress tests, Prometheus/Grafana checks, and Argo CD
+sync/self-healing checks. Monitoring and GitOps stages save actual UI screenshots
+and API/resource evidence. Tests never create AWS resources.
 
 Only main builds push to GHCR, using the lowercase repository owner and full commit SHA. Pull requests never log in or push. The job uses `GITHUB_TOKEN` with package-write permission; no Docker Hub credentials are required. Enable Actions and allow package creation for the repository. For private packages, configure an imagePullSecret for **both deployments and the migration job**; public demo packages can be pulled without one.
 
 CD uses an explicit promotion boundary. After both images pass CI and reach GHCR:
 
 ```bash
-python3 scripts/promote.py YOUR_OWNER FULL_40_CHARACTER_SOURCE_COMMIT_SHA
+python3 scripts/promote.py THRISHAL12345 FULL_40_CHARACTER_SOURCE_COMMIT_SHA
 git diff -- helm/relaydesk/values-release.yaml
 git add helm/relaydesk/values-release.yaml
 git commit -m "Promote scanned RelayDesk release to EKS"
@@ -186,6 +192,7 @@ The dashboard shows request rate, P95 latency, 5xx percentage and available repl
 ## Presentation and submission
 
 - [demo/slides.pdf](demo/slides.pdf): 10-slide presentation; editable generation source included.
+- [docs/YOUR-NEXT-STEPS.md](docs/YOUR-NEXT-STEPS.md): exact remaining AWS, recording, cleanup and submission steps.
 - [demo/RECORDING.md](demo/RECORDING.md): slide-first live walkthrough and capture order.
 - [docs/SUBMISSION-CHECKLIST.md](docs/SUBMISSION-CHECKLIST.md): M1-M10 mapping and outstanding real evidence.
 - [docs/SCAFFOLD-REVIEW.md](docs/SCAFFOLD-REVIEW.md): original scaffold review and corrections.
@@ -200,7 +207,7 @@ The required video, GitHub run links, AWS screenshots and live cluster evidence 
 - The gp3 StorageClass retains volumes. Deleting workloads or Terraform alone does not remove retained data volumes; follow the cleanup runbook.
 - Image base tags are moving tags; CI scans each build, but this is not a promise that every future CVE scan will pass. Resolve findings before promoting. Pin image digests after validation for reproducible production releases.
 - Local fonts fall back to system fonts when Google Fonts is unavailable. The app does not require the font service to function.
-- Cluster provisioning, image scans and browser rendering still require the environment checks listed in the validation report.
+- AWS provisioning still needs your credentials. Passing Kind integration checks does not prove an EKS deployment.
 
 ## Reference documentation
 

@@ -50,7 +50,7 @@ jobs:
       - uses: hashicorp/setup-terraform@v3
         with: {terraform_version: '1.16.4'}
       - run: terraform fmt -check -recursive terraform
-      - run: terraform -chdir=terraform init -backend=false && terraform -chdir=terraform validate
+      - run: terraform -chdir=terraform init -backend=false -lockfile=readonly && terraform -chdir=terraform validate
       - uses: actions/upload-artifact@v4
         if: always()
         with:

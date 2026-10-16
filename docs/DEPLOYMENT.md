@@ -2,6 +2,9 @@
 
 Run commands from the RelayDesk repository root unless a working directory is shown. These are deployment instructions, not a record of a completed AWS deployment. Use a dedicated demonstration cluster. Choose either direct Helm ownership or Argo CD ownership for the application.
 
+For an account-specific sequence with credential setup, exact pinned platform versions,
+recording and submission steps, start with [YOUR-NEXT-STEPS.md](YOUR-NEXT-STEPS.md).
+
 ## 1. Build and publish
 
 Push this project as its own GitHub repository. Wait for the `test` and `images` jobs to pass. Set the GHCR packages public for a non-sensitive classroom demo, or create a registry pull secret and set `imagePullSecrets: [{name: ghcr}]` in your environment values. Only promote the SHA of a successful run with both published images:
