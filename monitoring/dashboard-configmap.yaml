@@ -102,7 +102,7 @@ data:
           },
           "targets": [
             {
-              "expr": "100 * sum(rate(relaydesk_http_requests_total{namespace=\"relaydesk\",status=~\"5..\"}[5m])) / clamp_min(sum(rate(relaydesk_http_requests_total{namespace=\"relaydesk\"}[5m])), 0.001)",
+              "expr": "100 * (sum(rate(relaydesk_http_requests_total{namespace=\"relaydesk\",status=~\"5..\"}[5m])) or vector(0)) / clamp_min(sum(rate(relaydesk_http_requests_total{namespace=\"relaydesk\"}[5m])), 0.001)",
               "refId": "A"
             }
           ],

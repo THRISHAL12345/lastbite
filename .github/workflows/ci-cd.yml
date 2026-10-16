@@ -59,6 +59,7 @@ jobs:
   images:
     needs: test
     runs-on: ubuntu-latest
+    timeout-minutes: 40
     permissions:
       contents: read
       packages: write
@@ -170,18 +171,27 @@ jobs:
         env:
           IMAGE_TAG: ${{ github.sha }}
         run: bash scripts/check-kubernetes.sh
+      - name: Verify live Prometheus scraping and Grafana dashboard
+        run: bash scripts/check-monitoring.sh
       - name: Collect Kubernetes failure diagnostics
         if: failure()
         run: |
           mkdir -p artifacts/kubernetes
-          kubectl get pods,svc,ingress,jobs -n relaydesk-ci -o wide > artifacts/kubernetes/failure-resources.txt || true
-          kubectl get events -n relaydesk-ci --sort-by=.lastTimestamp > artifacts/kubernetes/events.txt || true
-          kubectl logs -n relaydesk-ci -l job-name --all-containers --tail=200 > artifacts/kubernetes/migration-logs.txt || true
+          kubectl get pods,svc,ingress,jobs -n relaydesk -o wide > artifacts/kubernetes/failure-resources.txt || true
+          kubectl get events -A --sort-by=.lastTimestamp > artifacts/kubernetes/events.txt || true
+          kubectl logs -n relaydesk -l job-name --all-containers --tail=200 > artifacts/kubernetes/migration-logs.txt || true
+          kubectl get pods -n monitoring -o wide > artifacts/kubernetes/monitoring-pods.txt || true
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: kubernetes-evidence
           path: artifacts/kubernetes/
+          retention-days: 30
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: monitoring-evidence
+          path: artifacts/monitoring/
           retention-days: 30
       - uses: docker/login-action@v3
         if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
