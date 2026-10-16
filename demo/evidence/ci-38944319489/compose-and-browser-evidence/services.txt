@@ -1,0 +1,5 @@
+NAME                  IMAGE                   COMMAND                  SERVICE    CREATED          STATUS                      PORTS
+lastbite-backend-1    lastbite-backend:dev    "uvicorn app.main:ap…"   backend    37 seconds ago   Up 27 seconds (healthy)     127.0.0.1:8000->8000/tcp
+lastbite-frontend-1   lastbite-frontend:dev   "/docker-entrypoint.…"   frontend   37 seconds ago   Up 16 seconds (healthy)     127.0.0.1:3000->8080/tcp
+lastbite-migrate-1    lastbite-backend:dev    "sh -c 'python -m ap…"   migrate    37 seconds ago   Exited (0) 28 seconds ago   
+lastbite-postgres-1   postgres:16-alpine      "docker-entrypoint.s…"   postgres   37 seconds ago   Up 36 seconds (healthy)     5432/tcp

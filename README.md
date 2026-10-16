@@ -132,7 +132,7 @@ For direct API development, use `DATABASE_URL=sqlite:///./lastbite.db` and run `
 - CI tests against PostgreSQL before building. Trivy scans both images and blocks publication on HIGH or CRITICAL findings, including unfixed findings. No blanket CVE exclusions are configured.
 - Only successful main builds publish to GHCR. Images use the full Git commit SHA. Integration checks run against the exact candidate images; pull requests do not publish.
 - `helm/lastbite` deploys two frontend replicas, two backend replicas (or an HPA), PostgreSQL on a PVC, migration Job, Services and Ingress. Secrets are referenced, not committed.
-- Terraform provisions two public and two private subnets, a NAT gateway, EKS, managed workers and EBS CSI. The example uses `m7i-flex.large`, which worked in the configured account during the earlier demo; recheck account eligibility and region capacity before deploying.
+- Terraform provisions two public and two private subnets, a NAT gateway, EKS, managed workers and EBS CSI. The example uses `m7i-flex.large`, which worked in the configured account during the verified LastBite demo; recheck account eligibility and region capacity before deploying.
 - Prometheus scrapes `lastbite_http_requests_total` and the latency histogram. Grafana panels show traffic, p95 latency, errors and available replicas. Metric labels use route templates, not individual IDs.
 - See [deployment steps](docs/DEPLOYMENT.md), [Terraform notes](terraform/README.md), and [isolated troubleshooting exercises](troubleshooting/README.md).
 
@@ -142,7 +142,7 @@ Source repository: [THRISHAL12345/lastbite](https://github.com/THRISHAL12345/las
 
 Use `gh-personal` for future GitHub operations and retain the `THRISHAL12345` commit identity.
 
-The Argo Application points to the `lastbite` repository and its `helm/lastbite` chart. `values-release.yaml` deliberately uses `build-required`; it must not point to an old RelayDesk image. After a successful LastBite CI run and image publication, generate values with:
+The Argo Application points to the `lastbite` repository and its `helm/lastbite` chart. `values-release.yaml` pins the scanned and published LastBite revision `178015224d2786be2f2621554e6d09beb25d01b2`. For future releases, generate values only after the new CI run and both image pushes succeed:
 
 ```bash
 python3 scripts/promote.py THRISHAL12345 FULL_40_CHARACTER_LASTBITE_COMMIT_SHA
@@ -155,9 +155,9 @@ Do not apply the Argo Application before the repository and tested images exist.
 - [Validation record](docs/VALIDATION.md): checks actually run for LastBite.
 - [Submission checklist](docs/SUBMISSION-CHECKLIST.md): required new evidence.
 - [Recording guide](demo/RECORDING.md) and [slides](demo/slides.pdf).
-- [Scorecard](docs/SCORECARD.md): why historical evidence is not a new grade.
+- [Scorecard](docs/SCORECARD.md), [submission evidence](demo/evidence/README.md), and [security results](docs/SECURITY-RESULTS.md).
 - `demo/legacy-relaydesk/` contains historical, unchanged RelayDesk evidence. It is not proof of LastBite deployment or CI.
-- The earlier AWS demo has been destroyed. No LastBite AWS resources are provisioned by this conversion.
+- LastBite was deployed to a real EKS cluster in `ap-south-1`, verified with live monitoring, and then removed. [AWS proof and cleanup verification](demo/evidence/aws/README.md) are archived; recreate the demo for your recording.
 
 ## Known limits
 

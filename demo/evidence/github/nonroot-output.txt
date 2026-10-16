@@ -1,0 +1,22 @@
+﻿2026-10-16T18:07:22.8414396Z ##[group]Run test "$(docker compose exec -T backend id -u)" != 0
+2026-10-16T18:07:22.8414792Z ^[[36;1mtest "$(docker compose exec -T backend id -u)" != 0^[[0m
+2026-10-16T18:07:22.8415147Z ^[[36;1mtest "$(docker compose exec -T frontend id -u)" != 0^[[0m
+2026-10-16T18:07:22.8415606Z ^[[36;1mpython3 scripts/smoke.py^[[0m
+2026-10-16T18:07:22.8473856Z shell: /usr/bin/bash -e {0}
+2026-10-16T18:07:22.8474102Z env:
+2026-10-16T18:07:22.8474312Z   IMAGE_PREFIX: ghcr.io/thrishal12345/lastbite
+2026-10-16T18:07:22.8474575Z ##[endgroup]
+2026-10-16T18:07:23.2445484Z {
+2026-10-16T18:07:23.2445962Z   "started_at": "2026-10-16T18:07:23.098584+00:00",
+2026-10-16T18:07:23.2446358Z   "frontend_url": "http://127.0.0.1:3000",
+2026-10-16T18:07:23.2446649Z   "backend_url": "http://127.0.0.1:8000",
+2026-10-16T18:07:23.2446900Z   "checks": [
+2026-10-16T18:07:23.2447178Z     "Frontend, API liveness and migrated database readiness",
+2026-10-16T18:07:23.2447602Z     "Listing create/read/update/delete and search through frontend proxy",
+2026-10-16T18:07:23.2448163Z     "Reservation decrements stock, overselling blocked, cancellation restores stock",
+2026-10-16T18:07:23.2448643Z     "Pickup code validated, duplicate pickup blocked, persisted impact totals",
+2026-10-16T18:07:23.2449251Z     "Reserved listing history protected; synthetic listing paused",
+2026-10-16T18:07:23.2449629Z     "Prometheus metrics with bounded route labels"
+2026-10-16T18:07:23.2449897Z   ],
+2026-10-16T18:07:23.2450092Z   "passed": true
+2026-10-16T18:07:23.2450287Z }

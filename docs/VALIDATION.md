@@ -1,6 +1,6 @@
 # LastBite validation record
 
-Checked locally on 16 October 2026 after replacing the RelayDesk application. After validation, the owner authorized renaming the repository and committing: `gh-personal` selected `THRISHAL12345`, the repository was renamed to `THRISHAL12345/lastbite`, and the conversion was committed locally under that identity. No GitHub push or AWS creation was performed.
+Checked locally on 16 October 2026 after replacing the RelayDesk application. After validation, the owner authorized renaming the repository and committing: `gh-personal` selected `THRISHAL12345`, the repository was renamed to `THRISHAL12345/lastbite`, and the conversion was committed locally under that identity. Those initial checks preceded publication. The updates below record subsequent validation separately.
 
 ## Passed for this version
 
@@ -17,11 +17,20 @@ Checked locally on 16 October 2026 after replacing the RelayDesk application. Af
 
 Logs and reports are under ignored `artifacts/lastbite/`. Browser test screenshots/video are in `artifacts/browser/`. The clean demo has six fictional kitchens, eight collected sample meals and one pending reservation. Test-created kitchen records were removed after validation; saved test evidence remains intact.
 
-## Not yet demonstrated for LastBite
+## Verified after publication
 
-- A new GitHub Actions run and LastBite GHCR image publication.
-- LastBite deployed through Helm/Argo CD on Kubernetes, its HPA readings, Prometheus targets and live Grafana panels.
-- LastBite Terraform plan/apply on AWS, Console screenshots, or a LastBite cloud teardown.
-- A personal narrated presentation and submission-form confirmation.
+[Run 38944319489](https://github.com/THRISHAL12345/lastbite/actions/runs/38944319489), for revision `178015224d2786be2f2621554e6d09beb25d01b2`, passed every job. It proved both AMD64 image scans, non-root Compose services, PostgreSQL/browser tests, two ready backend and frontend replicas on Kind, real ingress routing, two UP Prometheus targets, four populated Grafana panels, Argo CD Synced/Healthy, automatic drift repair, and both SHA-tagged GHCR pushes. Anonymous pulls of both published manifests were verified. See the [evidence index](../demo/evidence/README.md).
 
-The historical RelayDesk evidence is preserved under `demo/legacy-relaydesk/` and ignored `artifacts/aws/`. Its earlier AWS demo was destroyed. Those historical results are not relabelled as LastBite validation. `values-release.yaml` remains explicitly unpromoted until a real LastBite build passes CI and publishes.
+The owner reports the instructor's submission form is complete. The security results now have a [written explanation](SECURITY-RESULTS.md). Release values pin the tested revision.
+
+## Verified on AWS
+
+On 16 October 2026 UTC (17 October in India), Terraform provisioned 60 resources for `lastbite-eks` in `ap-south-1`: a VPC, two public and two private subnets, EKS 1.35, two managed worker nodes, and supporting resources. The promoted images ran with two Ready replicas for each application deployment, a working PostgreSQL database, private ingress, two UP Prometheus targets, and four populated Grafana panels. The [AWS evidence](../demo/evidence/aws/README.md) contains Console, app and monitoring screenshots plus actual command output.
+
+The application, platform releases and retained database volume were removed. The first Terraform destroy removed 44 resources before an EC2 hostname DNS failure; retrying against AWS's official alternate endpoint removed the remaining 16. Independent AWS checks confirmed the cluster, workers, disks, VPC, NAT, Elastic IP, interfaces and logs were removed, no demo load balancers remained, and Terraform state was empty. The KMS key is scheduled for deletion on 16 November 2026 India time. The original attempts and successful completion are preserved, rather than hiding the recovery.
+
+## Remaining presentation work
+
+The personal narrated video is still required. Capture native pytest/Compose terminal screenshots during the recording if the instructor requires that exact format; the current command-output screenshots show genuine archived output in browser views. HPA readings were observed, but no scale-up event is claimed.
+
+The historical RelayDesk evidence is preserved under `demo/legacy-relaydesk/` and ignored `artifacts/aws/`. Its earlier AWS demo was destroyed. Those historical results are not relabelled as LastBite validation. `values-release.yaml` now pins the successful LastBite build listed above.

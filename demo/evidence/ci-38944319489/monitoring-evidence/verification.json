@@ -1,0 +1,336 @@
+{
+  "checked_at": "2026-10-16T18:11:31.682736+00:00",
+  "passed": true,
+  "backend_targets": [
+    {
+      "discoveredLabels": {
+        "__address__": "10.244.0.7:8000",
+        "__always_scrape_classic_histograms__": "false",
+        "__convert_classic_histograms_to_nhcb__": "false",
+        "__meta_kubernetes_endpoint_address_target_kind": "Pod",
+        "__meta_kubernetes_endpoint_address_target_name": "lastbite-backend-77bbcc7df7-vp66r",
+        "__meta_kubernetes_endpoint_node_name": "lastbite-ci-control-plane",
+        "__meta_kubernetes_endpoint_port_name": "http",
+        "__meta_kubernetes_endpoint_port_protocol": "TCP",
+        "__meta_kubernetes_endpoint_ready": "true",
+        "__meta_kubernetes_endpoints_annotation_endpoints_kubernetes_io_last_change_trigger_time": "2026-10-16T18:08:50Z",
+        "__meta_kubernetes_endpoints_annotationpresent_endpoints_kubernetes_io_last_change_trigger_time": "true",
+        "__meta_kubernetes_endpoints_label_app_kubernetes_io_component": "backend",
+        "__meta_kubernetes_endpoints_label_app_kubernetes_io_instance": "lastbite",
+        "__meta_kubernetes_endpoints_label_app_kubernetes_io_managed_by": "Helm",
+        "__meta_kubernetes_endpoints_labelpresent_app_kubernetes_io_component": "true",
+        "__meta_kubernetes_endpoints_labelpresent_app_kubernetes_io_instance": "true",
+        "__meta_kubernetes_endpoints_labelpresent_app_kubernetes_io_managed_by": "true",
+        "__meta_kubernetes_endpoints_name": "lastbite-backend",
+        "__meta_kubernetes_namespace": "lastbite",
+        "__meta_kubernetes_pod_container_image": "ghcr.io/thrishal12345/lastbite-backend:178015224d2786be2f2621554e6d09beb25d01b2",
+        "__meta_kubernetes_pod_container_init": "false",
+        "__meta_kubernetes_pod_container_name": "backend",
+        "__meta_kubernetes_pod_container_port_name": "http",
+        "__meta_kubernetes_pod_container_port_number": "8000",
+        "__meta_kubernetes_pod_container_port_protocol": "TCP",
+        "__meta_kubernetes_pod_controller_kind": "ReplicaSet",
+        "__meta_kubernetes_pod_controller_name": "lastbite-backend-77bbcc7df7",
+        "__meta_kubernetes_pod_host_ip": "172.18.0.2",
+        "__meta_kubernetes_pod_ip": "10.244.0.7",
+        "__meta_kubernetes_pod_label_app_kubernetes_io_component": "backend",
+        "__meta_kubernetes_pod_label_app_kubernetes_io_instance": "lastbite",
+        "__meta_kubernetes_pod_label_pod_template_hash": "77bbcc7df7",
+        "__meta_kubernetes_pod_labelpresent_app_kubernetes_io_component": "true",
+        "__meta_kubernetes_pod_labelpresent_app_kubernetes_io_instance": "true",
+        "__meta_kubernetes_pod_labelpresent_pod_template_hash": "true",
+        "__meta_kubernetes_pod_name": "lastbite-backend-77bbcc7df7-vp66r",
+        "__meta_kubernetes_pod_node_name": "lastbite-ci-control-plane",
+        "__meta_kubernetes_pod_phase": "Running",
+        "__meta_kubernetes_pod_ready": "true",
+        "__meta_kubernetes_pod_uid": "225da578-ab23-4f79-88b3-f2163d11bf65",
+        "__meta_kubernetes_service_annotation_meta_helm_sh_release_name": "lastbite",
+        "__meta_kubernetes_service_annotation_meta_helm_sh_release_namespace": "lastbite",
+        "__meta_kubernetes_service_annotationpresent_meta_helm_sh_release_name": "true",
+        "__meta_kubernetes_service_annotationpresent_meta_helm_sh_release_namespace": "true",
+        "__meta_kubernetes_service_label_app_kubernetes_io_component": "backend",
+        "__meta_kubernetes_service_label_app_kubernetes_io_instance": "lastbite",
+        "__meta_kubernetes_service_label_app_kubernetes_io_managed_by": "Helm",
+        "__meta_kubernetes_service_labelpresent_app_kubernetes_io_component": "true",
+        "__meta_kubernetes_service_labelpresent_app_kubernetes_io_instance": "true",
+        "__meta_kubernetes_service_labelpresent_app_kubernetes_io_managed_by": "true",
+        "__meta_kubernetes_service_name": "lastbite-backend",
+        "__metrics_path__": "/metrics",
+        "__scheme__": "http",
+        "__scrape_interval__": "15s",
+        "__scrape_native_histograms__": "false",
+        "__scrape_timeout__": "10s",
+        "job": "serviceMonitor/lastbite/lastbite/0"
+      },
+      "labels": {
+        "container": "backend",
+        "endpoint": "http",
+        "instance": "10.244.0.7:8000",
+        "job": "lastbite-backend",
+        "namespace": "lastbite",
+        "pod": "lastbite-backend-77bbcc7df7-vp66r",
+        "service": "lastbite-backend"
+      },
+      "scrapePool": "serviceMonitor/lastbite/lastbite/0",
+      "scrapeUrl": "http://10.244.0.7:8000/metrics",
+      "globalUrl": "http://10.244.0.7:8000/metrics",
+      "lastError": "",
+      "lastScrape": "2026-10-16T18:11:23.908472211Z",
+      "lastScrapeDuration": 0.004158212,
+      "health": "up",
+      "scrapeInterval": "15s",
+      "scrapeTimeout": "10s"
+    },
+    {
+      "discoveredLabels": {
+        "__address__": "10.244.0.9:8000",
+        "__always_scrape_classic_histograms__": "false",
+        "__convert_classic_histograms_to_nhcb__": "false",
+        "__meta_kubernetes_endpoint_address_target_kind": "Pod",
+        "__meta_kubernetes_endpoint_address_target_name": "lastbite-backend-77bbcc7df7-9j5kh",
+        "__meta_kubernetes_endpoint_node_name": "lastbite-ci-control-plane",
+        "__meta_kubernetes_endpoint_port_name": "http",
+        "__meta_kubernetes_endpoint_port_protocol": "TCP",
+        "__meta_kubernetes_endpoint_ready": "true",
+        "__meta_kubernetes_endpoints_annotation_endpoints_kubernetes_io_last_change_trigger_time": "2026-10-16T18:08:50Z",
+        "__meta_kubernetes_endpoints_annotationpresent_endpoints_kubernetes_io_last_change_trigger_time": "true",
+        "__meta_kubernetes_endpoints_label_app_kubernetes_io_component": "backend",
+        "__meta_kubernetes_endpoints_label_app_kubernetes_io_instance": "lastbite",
+        "__meta_kubernetes_endpoints_label_app_kubernetes_io_managed_by": "Helm",
+        "__meta_kubernetes_endpoints_labelpresent_app_kubernetes_io_component": "true",
+        "__meta_kubernetes_endpoints_labelpresent_app_kubernetes_io_instance": "true",
+        "__meta_kubernetes_endpoints_labelpresent_app_kubernetes_io_managed_by": "true",
+        "__meta_kubernetes_endpoints_name": "lastbite-backend",
+        "__meta_kubernetes_namespace": "lastbite",
+        "__meta_kubernetes_pod_container_image": "ghcr.io/thrishal12345/lastbite-backend:178015224d2786be2f2621554e6d09beb25d01b2",
+        "__meta_kubernetes_pod_container_init": "false",
+        "__meta_kubernetes_pod_container_name": "backend",
+        "__meta_kubernetes_pod_container_port_name": "http",
+        "__meta_kubernetes_pod_container_port_number": "8000",
+        "__meta_kubernetes_pod_container_port_protocol": "TCP",
+        "__meta_kubernetes_pod_controller_kind": "ReplicaSet",
+        "__meta_kubernetes_pod_controller_name": "lastbite-backend-77bbcc7df7",
+        "__meta_kubernetes_pod_host_ip": "172.18.0.2",
+        "__meta_kubernetes_pod_ip": "10.244.0.9",
+        "__meta_kubernetes_pod_label_app_kubernetes_io_component": "backend",
+        "__meta_kubernetes_pod_label_app_kubernetes_io_instance": "lastbite",
+        "__meta_kubernetes_pod_label_pod_template_hash": "77bbcc7df7",
+        "__meta_kubernetes_pod_labelpresent_app_kubernetes_io_component": "true",
+        "__meta_kubernetes_pod_labelpresent_app_kubernetes_io_instance": "true",
+        "__meta_kubernetes_pod_labelpresent_pod_template_hash": "true",
+        "__meta_kubernetes_pod_name": "lastbite-backend-77bbcc7df7-9j5kh",
+        "__meta_kubernetes_pod_node_name": "lastbite-ci-control-plane",
+        "__meta_kubernetes_pod_phase": "Running",
+        "__meta_kubernetes_pod_ready": "true",
+        "__meta_kubernetes_pod_uid": "1b671b49-8586-4381-ad06-290280b1d34b",
+        "__meta_kubernetes_service_annotation_meta_helm_sh_release_name": "lastbite",
+        "__meta_kubernetes_service_annotation_meta_helm_sh_release_namespace": "lastbite",
+        "__meta_kubernetes_service_annotationpresent_meta_helm_sh_release_name": "true",
+        "__meta_kubernetes_service_annotationpresent_meta_helm_sh_release_namespace": "true",
+        "__meta_kubernetes_service_label_app_kubernetes_io_component": "backend",
+        "__meta_kubernetes_service_label_app_kubernetes_io_instance": "lastbite",
+        "__meta_kubernetes_service_label_app_kubernetes_io_managed_by": "Helm",
+        "__meta_kubernetes_service_labelpresent_app_kubernetes_io_component": "true",
+        "__meta_kubernetes_service_labelpresent_app_kubernetes_io_instance": "true",
+        "__meta_kubernetes_service_labelpresent_app_kubernetes_io_managed_by": "true",
+        "__meta_kubernetes_service_name": "lastbite-backend",
+        "__metrics_path__": "/metrics",
+        "__scheme__": "http",
+        "__scrape_interval__": "15s",
+        "__scrape_native_histograms__": "false",
+        "__scrape_timeout__": "10s",
+        "job": "serviceMonitor/lastbite/lastbite/0"
+      },
+      "labels": {
+        "container": "backend",
+        "endpoint": "http",
+        "instance": "10.244.0.9:8000",
+        "job": "lastbite-backend",
+        "namespace": "lastbite",
+        "pod": "lastbite-backend-77bbcc7df7-9j5kh",
+        "service": "lastbite-backend"
+      },
+      "scrapePool": "serviceMonitor/lastbite/lastbite/0",
+      "scrapeUrl": "http://10.244.0.9:8000/metrics",
+      "globalUrl": "http://10.244.0.9:8000/metrics",
+      "lastError": "",
+      "lastScrape": "2026-10-16T18:11:27.099648418Z",
+      "lastScrapeDuration": 0.004305794,
+      "health": "up",
+      "scrapeInterval": "15s",
+      "scrapeTimeout": "10s"
+    }
+  ],
+  "prometheus_query": {
+    "status": "success",
+    "data": {
+      "resultType": "vector",
+      "result": [
+        {
+          "metric": {},
+          "value": [
+            1792174291.625,
+            "0.5603466666666667"
+          ]
+        }
+      ]
+    }
+  },
+  "grafana_query": {
+    "status": "success",
+    "data": {
+      "resultType": "vector",
+      "result": [
+        {
+          "metric": {},
+          "value": [
+            1792174291.65,
+            "0.5606800000000001"
+          ]
+        }
+      ]
+    }
+  },
+  "dashboard_uid": "lastbite-health",
+  "datasource_uid": "prometheus",
+  "panels": [
+    {
+      "id": 1,
+      "title": "Requests per second",
+      "query": "sum(rate(lastbite_http_requests_total{namespace=\"lastbite\"}[5m]))",
+      "result": {
+        "status": "success",
+        "data": {
+          "resultType": "matrix",
+          "result": [
+            {
+              "metric": {},
+              "values": [
+                [
+                  1792174276,
+                  "0.3520133333333333"
+                ],
+                [
+                  1792174291,
+                  "0.5520133333333332"
+                ]
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 2,
+      "title": "P95 response time",
+      "query": "histogram_quantile(0.95, sum by (le) (rate(lastbite_http_request_duration_seconds_bucket{namespace=\"lastbite\"}[5m])))",
+      "result": {
+        "status": "success",
+        "data": {
+          "resultType": "matrix",
+          "result": [
+            {
+              "metric": {},
+              "values": [
+                [
+                  1792174276,
+                  "0.007499999999999988"
+                ],
+                [
+                  1792174291,
+                  "0.004956521739130435"
+                ]
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 3,
+      "title": "Server error percentage",
+      "query": "100 * (sum(rate(lastbite_http_requests_total{namespace=\"lastbite\",status=~\"5..\"}[5m])) or vector(0)) / clamp_min(sum(rate(lastbite_http_requests_total{namespace=\"lastbite\"}[5m])), 0.001)",
+      "result": {
+        "status": "success",
+        "data": {
+          "resultType": "matrix",
+          "result": [
+            {
+              "metric": {},
+              "values": [
+                [
+                  1792174276,
+                  "0"
+                ],
+                [
+                  1792174291,
+                  "0"
+                ]
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 4,
+      "title": "Backend replicas available",
+      "query": "kube_deployment_status_replicas_available{namespace=\"lastbite\",deployment=\"lastbite-backend\"}",
+      "result": {
+        "status": "success",
+        "data": {
+          "resultType": "matrix",
+          "result": [
+            {
+              "metric": {
+                "__name__": "kube_deployment_status_replicas_available",
+                "container": "kube-state-metrics",
+                "deployment": "lastbite-backend",
+                "endpoint": "http",
+                "instance": "10.244.0.16:8080",
+                "job": "kube-state-metrics",
+                "namespace": "lastbite",
+                "pod": "monitoring-kube-state-metrics-77bbf99c5c-m4cmw",
+                "service": "monitoring-kube-state-metrics"
+              },
+              "values": [
+                [
+                  1792174186,
+                  "2"
+                ],
+                [
+                  1792174201,
+                  "2"
+                ],
+                [
+                  1792174216,
+                  "2"
+                ],
+                [
+                  1792174231,
+                  "2"
+                ],
+                [
+                  1792174246,
+                  "2"
+                ],
+                [
+                  1792174261,
+                  "2"
+                ],
+                [
+                  1792174276,
+                  "2"
+                ],
+                [
+                  1792174291,
+                  "2"
+                ]
+              ]
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

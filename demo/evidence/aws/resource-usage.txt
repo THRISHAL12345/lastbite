@@ -1,0 +1,6 @@
+NAME                                CPU(cores)   MEMORY(bytes)   
+lastbite-backend-7687cfc496-6dp85   4m           61Mi            
+lastbite-backend-7687cfc496-gc9tm   4m           62Mi            
+lastbite-frontend-c95cbd678-4r8vh   1m           3Mi             
+lastbite-frontend-c95cbd678-6xzk6   1m           3Mi             
+lastbite-postgres-0                 8m           40Mi            

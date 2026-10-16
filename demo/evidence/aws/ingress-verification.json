@@ -1,0 +1,8 @@
+{
+  "checked_at": "2026-10-16T18:42:51.022642+00:00",
+  "environment": "AWS EKS lastbite-eks ap-south-1",
+  "access": "localhost:3100 via private Traefik ingress port-forward",
+  "http_status": 200,
+  "listing_count": 6,
+  "image_source_revision": "178015224d2786be2f2621554e6d09beb25d01b2"
+}

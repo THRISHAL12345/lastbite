@@ -1,0 +1,400 @@
+{
+    "apiVersion": "argoproj.io/v1alpha1",
+    "kind": "Application",
+    "metadata": {
+        "annotations": {
+            "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"argoproj.io/v1alpha1\",\"kind\":\"Application\",\"metadata\":{\"annotations\":{},\"name\":\"lastbite\",\"namespace\":\"argocd\"},\"spec\":{\"destination\":{\"namespace\":\"lastbite\",\"server\":\"https://kubernetes.default.svc\"},\"project\":\"default\",\"source\":{\"helm\":{\"parameters\":[{\"forceString\":true,\"name\":\"backend.repository\",\"value\":\"ghcr.io/thrishal12345/lastbite-backend\"},{\"forceString\":true,\"name\":\"backend.tag\",\"value\":\"178015224d2786be2f2621554e6d09beb25d01b2\"},{\"forceString\":true,\"name\":\"frontend.repository\",\"value\":\"ghcr.io/thrishal12345/lastbite-frontend\"},{\"forceString\":true,\"name\":\"frontend.tag\",\"value\":\"178015224d2786be2f2621554e6d09beb25d01b2\"},{\"forceString\":false,\"name\":\"ingress.enabled\",\"value\":\"true\"},{\"forceString\":false,\"name\":\"ingress.host\",\"value\":\"lastbite.local\"},{\"forceString\":false,\"name\":\"monitoring.enabled\",\"value\":\"true\"}],\"releaseName\":\"lastbite\"},\"path\":\"helm/lastbite\",\"repoURL\":\"https://github.com/THRISHAL12345/lastbite.git\",\"targetRevision\":\"178015224d2786be2f2621554e6d09beb25d01b2\"},\"syncPolicy\":{\"automated\":{\"prune\":true,\"selfHeal\":true},\"retry\":{\"limit\":3},\"syncOptions\":[\"CreateNamespace=true\"]}}}\n"
+        },
+        "creationTimestamp": "2026-10-16T18:12:12Z",
+        "generation": 22,
+        "name": "lastbite",
+        "namespace": "argocd",
+        "resourceVersion": "1822",
+        "uid": "ca824016-6bb2-40f4-b824-829ebea773a1"
+    },
+    "spec": {
+        "destination": {
+            "namespace": "lastbite",
+            "server": "https://kubernetes.default.svc"
+        },
+        "project": "default",
+        "source": {
+            "helm": {
+                "parameters": [
+                    {
+                        "forceString": true,
+                        "name": "backend.repository",
+                        "value": "ghcr.io/thrishal12345/lastbite-backend"
+                    },
+                    {
+                        "forceString": true,
+                        "name": "backend.tag",
+                        "value": "178015224d2786be2f2621554e6d09beb25d01b2"
+                    },
+                    {
+                        "forceString": true,
+                        "name": "frontend.repository",
+                        "value": "ghcr.io/thrishal12345/lastbite-frontend"
+                    },
+                    {
+                        "forceString": true,
+                        "name": "frontend.tag",
+                        "value": "178015224d2786be2f2621554e6d09beb25d01b2"
+                    },
+                    {
+                        "name": "ingress.enabled",
+                        "value": "true"
+                    },
+                    {
+                        "name": "ingress.host",
+                        "value": "lastbite.local"
+                    },
+                    {
+                        "name": "monitoring.enabled",
+                        "value": "true"
+                    }
+                ],
+                "releaseName": "lastbite"
+            },
+            "path": "helm/lastbite",
+            "repoURL": "https://github.com/THRISHAL12345/lastbite.git",
+            "targetRevision": "178015224d2786be2f2621554e6d09beb25d01b2"
+        },
+        "syncPolicy": {
+            "automated": {
+                "prune": true,
+                "selfHeal": true
+            },
+            "retry": {
+                "limit": 3
+            },
+            "syncOptions": [
+                "CreateNamespace=true"
+            ]
+        }
+    },
+    "status": {
+        "controllerNamespace": "argocd",
+        "health": {
+            "lastTransitionTime": "2026-10-16T18:12:35Z",
+            "status": "Healthy"
+        },
+        "history": [
+            {
+                "deployStartedAt": "2026-10-16T18:12:16Z",
+                "deployedAt": "2026-10-16T18:12:27Z",
+                "id": 0,
+                "initiatedBy": {
+                    "automated": true
+                },
+                "revision": "178015224d2786be2f2621554e6d09beb25d01b2",
+                "source": {
+                    "helm": {
+                        "parameters": [
+                            {
+                                "forceString": true,
+                                "name": "backend.repository",
+                                "value": "ghcr.io/thrishal12345/lastbite-backend"
+                            },
+                            {
+                                "forceString": true,
+                                "name": "backend.tag",
+                                "value": "178015224d2786be2f2621554e6d09beb25d01b2"
+                            },
+                            {
+                                "forceString": true,
+                                "name": "frontend.repository",
+                                "value": "ghcr.io/thrishal12345/lastbite-frontend"
+                            },
+                            {
+                                "forceString": true,
+                                "name": "frontend.tag",
+                                "value": "178015224d2786be2f2621554e6d09beb25d01b2"
+                            },
+                            {
+                                "name": "ingress.enabled",
+                                "value": "true"
+                            },
+                            {
+                                "name": "ingress.host",
+                                "value": "lastbite.local"
+                            },
+                            {
+                                "name": "monitoring.enabled",
+                                "value": "true"
+                            }
+                        ],
+                        "releaseName": "lastbite"
+                    },
+                    "path": "helm/lastbite",
+                    "repoURL": "https://github.com/THRISHAL12345/lastbite.git",
+                    "targetRevision": "178015224d2786be2f2621554e6d09beb25d01b2"
+                }
+            }
+        ],
+        "operationState": {
+            "finishedAt": "2026-10-16T18:12:33Z",
+            "message": "successfully synced (all tasks run)",
+            "operation": {
+                "initiatedBy": {
+                    "automated": true
+                },
+                "retry": {
+                    "limit": 3
+                },
+                "sync": {
+                    "autoHealAttemptsCount": 1,
+                    "prune": true,
+                    "resources": [
+                        {
+                            "group": "apps",
+                            "kind": "Deployment",
+                            "name": "lastbite-frontend"
+                        }
+                    ],
+                    "revision": "178015224d2786be2f2621554e6d09beb25d01b2",
+                    "source": {
+                        "helm": {
+                            "parameters": [
+                                {
+                                    "forceString": true,
+                                    "name": "backend.repository",
+                                    "value": "ghcr.io/thrishal12345/lastbite-backend"
+                                },
+                                {
+                                    "forceString": true,
+                                    "name": "backend.tag",
+                                    "value": "178015224d2786be2f2621554e6d09beb25d01b2"
+                                },
+                                {
+                                    "forceString": true,
+                                    "name": "frontend.repository",
+                                    "value": "ghcr.io/thrishal12345/lastbite-frontend"
+                                },
+                                {
+                                    "forceString": true,
+                                    "name": "frontend.tag",
+                                    "value": "178015224d2786be2f2621554e6d09beb25d01b2"
+                                },
+                                {
+                                    "name": "ingress.enabled",
+                                    "value": "true"
+                                },
+                                {
+                                    "name": "ingress.host",
+                                    "value": "lastbite.local"
+                                },
+                                {
+                                    "name": "monitoring.enabled",
+                                    "value": "true"
+                                }
+                            ],
+                            "releaseName": "lastbite"
+                        },
+                        "path": "helm/lastbite",
+                        "repoURL": "https://github.com/THRISHAL12345/lastbite.git",
+                        "targetRevision": "178015224d2786be2f2621554e6d09beb25d01b2"
+                    },
+                    "syncOptions": [
+                        "CreateNamespace=true"
+                    ]
+                }
+            },
+            "phase": "Succeeded",
+            "startedAt": "2026-10-16T18:12:33Z",
+            "syncResult": {
+                "resources": [
+                    {
+                        "group": "apps",
+                        "hookPhase": "Running",
+                        "images": [
+                            "ghcr.io/thrishal12345/lastbite-frontend:178015224d2786be2f2621554e6d09beb25d01b2"
+                        ],
+                        "kind": "Deployment",
+                        "message": "deployment.apps/lastbite-frontend configured",
+                        "name": "lastbite-frontend",
+                        "namespace": "lastbite",
+                        "status": "Synced",
+                        "syncPhase": "Sync",
+                        "version": "v1"
+                    }
+                ],
+                "revision": "178015224d2786be2f2621554e6d09beb25d01b2",
+                "source": {
+                    "helm": {
+                        "parameters": [
+                            {
+                                "forceString": true,
+                                "name": "backend.repository",
+                                "value": "ghcr.io/thrishal12345/lastbite-backend"
+                            },
+                            {
+                                "forceString": true,
+                                "name": "backend.tag",
+                                "value": "178015224d2786be2f2621554e6d09beb25d01b2"
+                            },
+                            {
+                                "forceString": true,
+                                "name": "frontend.repository",
+                                "value": "ghcr.io/thrishal12345/lastbite-frontend"
+                            },
+                            {
+                                "forceString": true,
+                                "name": "frontend.tag",
+                                "value": "178015224d2786be2f2621554e6d09beb25d01b2"
+                            },
+                            {
+                                "name": "ingress.enabled",
+                                "value": "true"
+                            },
+                            {
+                                "name": "ingress.host",
+                                "value": "lastbite.local"
+                            },
+                            {
+                                "name": "monitoring.enabled",
+                                "value": "true"
+                            }
+                        ],
+                        "releaseName": "lastbite"
+                    },
+                    "path": "helm/lastbite",
+                    "repoURL": "https://github.com/THRISHAL12345/lastbite.git",
+                    "targetRevision": "178015224d2786be2f2621554e6d09beb25d01b2"
+                }
+            }
+        },
+        "reconciledAt": "2026-10-16T18:12:34Z",
+        "resourceHealthSource": "appTree",
+        "resources": [
+            {
+                "kind": "Service",
+                "name": "lastbite-backend",
+                "namespace": "lastbite",
+                "status": "Synced",
+                "version": "v1"
+            },
+            {
+                "kind": "Service",
+                "name": "lastbite-frontend",
+                "namespace": "lastbite",
+                "status": "Synced",
+                "version": "v1"
+            },
+            {
+                "kind": "Service",
+                "name": "lastbite-postgres",
+                "namespace": "lastbite",
+                "status": "Synced",
+                "syncWave": -2,
+                "version": "v1"
+            },
+            {
+                "group": "apps",
+                "kind": "Deployment",
+                "name": "lastbite-backend",
+                "namespace": "lastbite",
+                "status": "Synced",
+                "version": "v1"
+            },
+            {
+                "group": "apps",
+                "kind": "Deployment",
+                "name": "lastbite-frontend",
+                "namespace": "lastbite",
+                "status": "Synced",
+                "version": "v1"
+            },
+            {
+                "group": "apps",
+                "kind": "StatefulSet",
+                "name": "lastbite-postgres",
+                "namespace": "lastbite",
+                "status": "Synced",
+                "syncWave": -2,
+                "version": "v1"
+            },
+            {
+                "group": "monitoring.coreos.com",
+                "kind": "ServiceMonitor",
+                "name": "lastbite",
+                "namespace": "lastbite",
+                "status": "Synced",
+                "version": "v1"
+            },
+            {
+                "group": "networking.k8s.io",
+                "kind": "Ingress",
+                "name": "lastbite",
+                "namespace": "lastbite",
+                "status": "Synced",
+                "version": "v1"
+            }
+        ],
+        "sourceHydrator": {},
+        "sourceType": "Helm",
+        "summary": {
+            "externalURLs": [
+                "http://lastbite.local/",
+                "http://lastbite.local/api"
+            ],
+            "images": [
+                "ghcr.io/thrishal12345/lastbite-backend:178015224d2786be2f2621554e6d09beb25d01b2",
+                "ghcr.io/thrishal12345/lastbite-frontend:178015224d2786be2f2621554e6d09beb25d01b2",
+                "postgres:16-alpine"
+            ]
+        },
+        "sync": {
+            "comparedTo": {
+                "destination": {
+                    "namespace": "lastbite",
+                    "server": "https://kubernetes.default.svc"
+                },
+                "source": {
+                    "helm": {
+                        "parameters": [
+                            {
+                                "forceString": true,
+                                "name": "backend.repository",
+                                "value": "ghcr.io/thrishal12345/lastbite-backend"
+                            },
+                            {
+                                "forceString": true,
+                                "name": "backend.tag",
+                                "value": "178015224d2786be2f2621554e6d09beb25d01b2"
+                            },
+                            {
+                                "forceString": true,
+                                "name": "frontend.repository",
+                                "value": "ghcr.io/thrishal12345/lastbite-frontend"
+                            },
+                            {
+                                "forceString": true,
+                                "name": "frontend.tag",
+                                "value": "178015224d2786be2f2621554e6d09beb25d01b2"
+                            },
+                            {
+                                "name": "ingress.enabled",
+                                "value": "true"
+                            },
+                            {
+                                "name": "ingress.host",
+                                "value": "lastbite.local"
+                            },
+                            {
+                                "name": "monitoring.enabled",
+                                "value": "true"
+                            }
+                        ],
+                        "releaseName": "lastbite"
+                    },
+                    "path": "helm/lastbite",
+                    "repoURL": "https://github.com/THRISHAL12345/lastbite.git",
+                    "targetRevision": "178015224d2786be2f2621554e6d09beb25d01b2"
+                }
+            },
+            "revision": "178015224d2786be2f2621554e6d09beb25d01b2",
+            "status": "Synced"
+        }
+    }
+}

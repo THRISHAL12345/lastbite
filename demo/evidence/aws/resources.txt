@@ -1,0 +1,18 @@
+NAME                                    READY   STATUS      RESTARTS   AGE     IP            NODE                                         NOMINATED NODE   READINESS GATES
+pod/lastbite-backend-7687cfc496-6dp85   1/1     Running     0          2m14s   10.30.2.151   ip-10-30-2-194.ap-south-1.compute.internal   <none>           <none>
+pod/lastbite-backend-7687cfc496-gc9tm   1/1     Running     0          2m29s   10.30.1.162   ip-10-30-1-119.ap-south-1.compute.internal   <none>           <none>
+pod/lastbite-frontend-c95cbd678-4r8vh   1/1     Running     0          2m29s   10.30.2.248   ip-10-30-2-194.ap-south-1.compute.internal   <none>           <none>
+pod/lastbite-frontend-c95cbd678-6xzk6   1/1     Running     0          2m29s   10.30.1.141   ip-10-30-1-119.ap-south-1.compute.internal   <none>           <none>
+pod/lastbite-migrate-e573f19213-9fx7x   0/1     Completed   0          2m29s   10.30.2.244   ip-10-30-2-194.ap-south-1.compute.internal   <none>           <none>
+pod/lastbite-postgres-0                 1/1     Running     0          2m29s   10.30.1.231   ip-10-30-1-119.ap-south-1.compute.internal   <none>           <none>
+
+NAME                        TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)    AGE     SELECTOR
+service/lastbite-backend    ClusterIP   172.20.252.203   <none>        8000/TCP   2m29s   app.kubernetes.io/component=backend,app.kubernetes.io/instance=lastbite
+service/lastbite-frontend   ClusterIP   172.20.134.220   <none>        8080/TCP   2m29s   app.kubernetes.io/component=frontend,app.kubernetes.io/instance=lastbite
+service/lastbite-postgres   ClusterIP   None             <none>        5432/TCP   2m29s   app.kubernetes.io/component=postgres,app.kubernetes.io/instance=lastbite
+
+NAME                                 CLASS     HOSTS       ADDRESS     PORTS   AGE
+ingress.networking.k8s.io/lastbite   traefik   localhost   127.0.0.1   80      2m29s
+
+NAME                                                   REFERENCE                     TARGETS       MINPODS   MAXPODS   REPLICAS   AGE
+horizontalpodautoscaler.autoscaling/lastbite-backend   Deployment/lastbite-backend   cpu: 3%/60%   2         6         2          2m29s

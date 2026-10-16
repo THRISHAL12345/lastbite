@@ -1,0 +1,24 @@
+{
+    "name": "main-20261016183501365000000015",
+    "status": "ACTIVE",
+    "instanceTypes": [
+        "m7i-flex.large"
+    ],
+    "scaling": {
+        "minSize": 2,
+        "maxSize": 4,
+        "desiredSize": 2
+    },
+    "health": [],
+    "subnets": [
+        "subnet-0bc430b110032fb2f",
+        "subnet-0eb4ffc837cd5f3c3"
+    ],
+    "resources": {
+        "autoScalingGroups": [
+            {
+                "name": "eks-main-20261016183501365000000015-b6d0a2ff-7ef0-5fd3-26dd-166ea83ed316"
+            }
+        ]
+    }
+}

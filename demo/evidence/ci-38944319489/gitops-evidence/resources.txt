@@ -1,0 +1,14 @@
+NAME                                     READY   STATUS    RESTARTS   AGE   IP            NODE                        NOMINATED NODE   READINESS GATES
+pod/lastbite-backend-77bbcc7df7-8s75t    1/1     Running   0          9s    10.244.0.29   lastbite-ci-control-plane   <none>           <none>
+pod/lastbite-backend-77bbcc7df7-gwxdz    1/1     Running   0          9s    10.244.0.27   lastbite-ci-control-plane   <none>           <none>
+pod/lastbite-frontend-5b45f55d64-ddndd   1/1     Running   0          3s    10.244.0.30   lastbite-ci-control-plane   <none>           <none>
+pod/lastbite-frontend-5b45f55d64-n8gtr   1/1     Running   0          9s    10.244.0.28   lastbite-ci-control-plane   <none>           <none>
+pod/lastbite-postgres-0                  1/1     Running   0          20s   10.244.0.24   lastbite-ci-control-plane   <none>           <none>
+
+NAME                        TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE   SELECTOR
+service/lastbite-backend    ClusterIP   10.96.239.35    <none>        8000/TCP   9s    app.kubernetes.io/component=backend,app.kubernetes.io/instance=lastbite
+service/lastbite-frontend   ClusterIP   10.96.116.202   <none>        8080/TCP   9s    app.kubernetes.io/component=frontend,app.kubernetes.io/instance=lastbite
+service/lastbite-postgres   ClusterIP   None            <none>        5432/TCP   20s   app.kubernetes.io/component=postgres,app.kubernetes.io/instance=lastbite
+
+NAME                                 CLASS     HOSTS            ADDRESS     PORTS   AGE
+ingress.networking.k8s.io/lastbite   traefik   lastbite.local   127.0.0.1   80      9s

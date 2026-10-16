@@ -1,0 +1,36 @@
+module.eks.module.kms.data.aws_caller_identity.current[0]: Reading...
+module.eks.data.aws_partition.current[0]: Reading...
+module.eks.module.eks_managed_node_group["main"].data.aws_iam_policy_document.assume_role_policy[0]: Reading...
+data.aws_availability_zones.available: Reading...
+module.eks.module.eks_managed_node_group["main"].data.aws_partition.current: Reading...
+module.eks.data.aws_iam_policy_document.assume_role_policy[0]: Reading...
+module.eks.module.eks_managed_node_group["main"].data.aws_caller_identity.current: Reading...
+module.eks.module.kms.data.aws_partition.current[0]: Reading...
+module.vpc.aws_vpc.this[0]: Refreshing state... [id=vpc-0a8adadd78c356bfe]
+module.eks.module.kms.data.aws_partition.current[0]: Read complete after 0s [id=aws]
+module.eks.module.eks_managed_node_group["main"].data.aws_iam_policy_document.assume_role_policy[0]: Read complete after 0s [id=2560088296]
+module.eks.data.aws_iam_policy_document.assume_role_policy[0]: Read complete after 0s [id=2830595799]
+module.eks.data.aws_partition.current[0]: Read complete after 0s [id=aws]
+module.eks.module.eks_managed_node_group["main"].data.aws_partition.current: Read complete after 0s [id=aws]
+module.eks.data.aws_caller_identity.current[0]: Reading...
+module.eks.data.aws_iam_policy_document.custom[0]: Reading...
+module.eks.data.aws_iam_policy_document.custom[0]: Read complete after 0s [id=513122117]
+module.eks.module.kms.data.aws_caller_identity.current[0]: Read complete after 0s [id=920154934493]
+module.eks.module.eks_managed_node_group["main"].data.aws_caller_identity.current: Read complete after 0s [id=920154934493]
+module.eks.data.aws_caller_identity.current[0]: Read complete after 0s [id=920154934493]
+module.eks.data.aws_iam_session_context.current[0]: Reading...
+module.eks.data.aws_iam_session_context.current[0]: Read complete after 0s [id=arn:aws:iam::920154934493:user/relaydesk-admin]
+
+Error: fetching Availability Zones: operation error EC2: DescribeAvailabilityZones, https response error StatusCode: 0, RequestID: , request send failed, Post "https://ec2.ap-south-1.amazonaws.com/": dial tcp: lookup ec2.ap-south-1.amazonaws.com: no such host
+
+  with data.aws_availability_zones.available,
+  on main.tf line 1, in data "aws_availability_zones" "available":
+   1: data "aws_availability_zones" "available" {
+
+
+Error: reading EC2 VPC (vpc-0a8adadd78c356bfe): operation error EC2: DescribeVpcs, https response error StatusCode: 0, RequestID: , request send failed, Post "https://ec2.ap-south-1.amazonaws.com/": dial tcp: lookup ec2.ap-south-1.amazonaws.com: no such host
+
+  with module.vpc.aws_vpc.this[0],
+  on .terraform/modules/vpc/main.tf line 28, in resource "aws_vpc" "this":
+  28: resource "aws_vpc" "this" {
+

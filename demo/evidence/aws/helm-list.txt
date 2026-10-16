@@ -1,0 +1,5 @@
+NAME          	NAMESPACE     	REVISION	UPDATED                             	STATUS  	CHART                       	APP VERSION
+lastbite      	lastbite      	1       	2026-10-17 00:10:18.283957 +0530 IST	deployed	lastbite-2.0.0              	2.0.0      
+metrics-server	kube-system   	1       	2026-10-17 00:08:27.011167 +0530 IST	deployed	metrics-server-3.14.0       	0.9.0      
+monitoring    	monitoring    	1       	2026-10-17 00:09:04.135968 +0530 IST	deployed	kube-prometheus-stack-92.9.0	v0.94.1    
+traefik       	ingress-system	1       	2026-10-17 00:08:15.453988 +0530 IST	deployed	traefik-41.7.1              	v3.7.14    

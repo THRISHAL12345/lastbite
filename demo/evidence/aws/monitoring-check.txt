@@ -1,0 +1,6 @@
+Waiting for monitoring: Need positive request rate
+Waiting for monitoring: Need positive request rate
+Waiting for monitoring: Need positive request rate
+Waiting for monitoring: Panel Requests per second needs at least two finite samples
+Waiting for monitoring: Panel Requests per second needs at least two finite samples
+PASS: two UP backend targets, positive request rate, and live data for all four Grafana panels.

@@ -1,6 +1,6 @@
 # LastBite publication prerequisite
 
-The repository has been renamed to `THRISHAL12345/lastbite` using gh-personal. Before following cloud/GitOps commands, verify a successful CI run and promote real LastBite image SHA tags. `values-release.yaml` currently says `build-required`. Use your existing AWS profile `relaydesk`; changing the application name does not rename CLI profiles.
+The repository is `THRISHAL12345/lastbite`. Release values pin source revision `178015224d2786be2f2621554e6d09beb25d01b2`, whose CI tests, scans, deployment checks, and image publication passed. Use the existing AWS profile `relaydesk`; changing the application name does not rename CLI profiles.
 
 # Deployment runbook
 
@@ -33,12 +33,27 @@ terraform -chdir=terraform fmt -check
 terraform -chdir=terraform validate
 terraform -chdir=terraform plan -out=deployment.tfplan
 terraform -chdir=terraform apply deployment.tfplan
-aws eks update-kubeconfig --region ap-south-1 --name lastbite-eks
+export KUBECONFIG="$PWD/artifacts/lastbite/aws/kubeconfig"
+mkdir -p artifacts/lastbite/aws
+aws eks update-kubeconfig --region ap-south-1 --name lastbite-eks --kubeconfig "$KUBECONFIG"
 kubectl get nodes
 kubectl apply -f k8s/storageclass.yaml
 ```
 
 The committed `.terraform.lock.hcl` pins provider selections for Linux AMD64 and macOS ARM64. Keep state, plan files, credentials and tfvars out of Git. For team use, configure an encrypted S3 state backend with locking and least-privilege access before the first apply. EKS, nodes, NAT, disks and logs incur charges. The admin CIDR can be updated when your public IP changes.
+
+## Optional short demo bootstrap
+
+After Terraform apply succeeds, the following helper installs the pinned platform charts and deploys the promoted LastBite images. It uses a separate kubeconfig and a private ingress with hostname `localhost`, so the browser does not need a hosts-file change:
+
+```bash
+export AWS_PROFILE=relaydesk AWS_REGION=ap-south-1
+export KUBECONFIG="$PWD/artifacts/lastbite/aws/kubeconfig"
+mkdir -p artifacts/lastbite/aws
+bash scripts/aws-demo-bootstrap.sh
+```
+
+The helper verifies the dedicated cluster and its API endpoint before deploying. Continue using the same `KUBECONFIG` for every access and cleanup command. It does not run Terraform apply or destroy. Skip manual sections 3–5A if you used the helper; the app initially belongs to Helm. To open this helper's ingress, run `kubectl port-forward -n ingress-system svc/traefik 3100:80` and visit http://localhost:3100. The monitoring port-forwards in section 6 still apply. Section 5B explains the separate Argo CD demonstration; do not run it against an application still owned by Helm.
 
 ## 3. Bootstrap namespace and database credentials
 
@@ -64,19 +79,19 @@ helm repo add traefik https://traefik.github.io/charts
 helm repo add metrics-server https://kubernetes-sigs.github.io/metrics-server/
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 helm repo add argo https://argoproj.github.io/argo-helm
-helm repo update
+helm repo update traefik metrics-server prometheus-community argo
 helm upgrade --install traefik traefik/traefik --version 41.7.1 \
   -n ingress-system --create-namespace -f k8s/traefik-values.yaml --wait
 helm upgrade --install metrics-server metrics-server/metrics-server \
-  -n kube-system --wait
+  --version 3.14.0 -n kube-system --wait
 helm upgrade --install monitoring prometheus-community/kube-prometheus-stack \
-  -n monitoring --create-namespace -f monitoring/prometheus-values.yaml \
+  --version 92.9.0 -n monitoring --create-namespace -f monitoring/prometheus-values.yaml -f monitoring/values-demo.yaml \
   --wait --timeout 15m
 kubectl apply -f monitoring/dashboard-configmap.yaml
 kubectl apply -f monitoring/alerts.yaml
 ```
 
-For repeatable platform installations, select and record compatible versions of the metrics, monitoring and Argo CD charts before evaluation. These platform charts are installed separately from the app chart. The `monitoring` release name matches the ServiceMonitor and PrometheusRule labels. Default app values keep CRDs and HPA optional so a bare-cluster Helm render is valid.
+These versions match `scripts/platform-versions.sh`. The demo override gives Grafana 1 GiB to avoid memory-reclaim stalls. These platform charts are installed separately from the app chart. The `monitoring` release name matches the ServiceMonitor and PrometheusRule labels. Default app values keep CRDs and HPA optional so a bare-cluster Helm render is valid.
 
 ## 5A. Direct Helm demonstration
 
@@ -95,7 +110,7 @@ The migration Job is named from the image reference. Use unique SHA tags for eve
 For the required GitOps walkthrough, bootstrap Argo CD and let it own the app from the start:
 
 ```bash
-helm upgrade --install argocd argo/argo-cd -n argocd --create-namespace --wait --timeout 10m
+helm upgrade --install argocd argo/argo-cd --version 10.10.5 -n argocd --create-namespace -f gitops/values-demo.yaml --wait --timeout 10m
 kubectl apply -f gitops/application.yaml
 kubectl get application lastbite -n argocd
 kubectl port-forward -n argocd svc/argocd-server 8443:443

@@ -1,0 +1,137 @@
+﻿2026-10-16T18:06:41.7157320Z ##[group]Run docker tag "$IMAGE_PREFIX-backend:178015224d2786be2f2621554e6d09beb25d01b2" lastbite-backend:dev
+2026-10-16T18:06:41.7157944Z ^[[36;1mdocker tag "$IMAGE_PREFIX-backend:178015224d2786be2f2621554e6d09beb25d01b2" lastbite-backend:dev^[[0m
+2026-10-16T18:06:41.7158511Z ^[[36;1mdocker tag "$IMAGE_PREFIX-frontend:178015224d2786be2f2621554e6d09beb25d01b2" lastbite-frontend:dev^[[0m
+2026-10-16T18:06:41.7158977Z ^[[36;1mdocker compose up -d --no-build --wait --wait-timeout 180^[[0m
+2026-10-16T18:06:41.7217077Z shell: /usr/bin/bash -e {0}
+2026-10-16T18:06:41.7217332Z env:
+2026-10-16T18:06:41.7217547Z   IMAGE_PREFIX: ghcr.io/thrishal12345/lastbite
+2026-10-16T18:06:41.7217818Z ##[endgroup]
+2026-10-16T18:06:41.8246037Z  postgres Pulling 
+2026-10-16T18:06:42.7968294Z  e2de96513ba9 Already exists 
+2026-10-16T18:06:42.7979719Z  1b7f9cd581ee Pulling fs layer 
+2026-10-16T18:06:42.7980151Z  210b280f9556 Pulling fs layer 
+2026-10-16T18:06:42.7980512Z  81717818649a Pulling fs layer 
+2026-10-16T18:06:42.7980918Z  3ae6141cfd99 Pulling fs layer 
+2026-10-16T18:06:42.7981351Z  25b77f59fd95 Pulling fs layer 
+2026-10-16T18:06:42.7981749Z  6c25da34e03f Pulling fs layer 
+2026-10-16T18:06:42.7982103Z  a88782f92806 Pulling fs layer 
+2026-10-16T18:06:42.7982438Z  d8d21be4bf02 Pulling fs layer 
+2026-10-16T18:06:42.7982685Z  6117bd39f23f Pulling fs layer 
+2026-10-16T18:06:42.7982910Z  509688edf37b Pulling fs layer 
+2026-10-16T18:06:42.7983200Z  a88782f92806 Waiting 
+2026-10-16T18:06:42.7983435Z  3ae6141cfd99 Waiting 
+2026-10-16T18:06:42.7983655Z  25b77f59fd95 Waiting 
+2026-10-16T18:06:42.7983861Z  6c25da34e03f Waiting 
+2026-10-16T18:06:42.7984143Z  d8d21be4bf02 Waiting 
+2026-10-16T18:06:42.7984341Z  6117bd39f23f Waiting 
+2026-10-16T18:06:42.7984545Z  509688edf37b Waiting 
+2026-10-16T18:06:42.9645076Z  210b280f9556 Downloading [>                                                  ]  15.79kB/901.4kB
+2026-10-16T18:06:42.9649507Z  1b7f9cd581ee Downloading [==================================================>]     969B/969B
+2026-10-16T18:06:42.9650336Z  1b7f9cd581ee Verifying Checksum 
+2026-10-16T18:06:42.9651021Z  1b7f9cd581ee Download complete 
+2026-10-16T18:06:42.9652729Z  1b7f9cd581ee Extracting [==================================================>]     969B/969B
+2026-10-16T18:06:42.9664060Z  1b7f9cd581ee Extracting [==================================================>]     969B/969B
+2026-10-16T18:06:42.9678907Z  81717818649a Downloading [==================================================>]     172B/172B
+2026-10-16T18:06:43.0093858Z  81717818649a Verifying Checksum 
+2026-10-16T18:06:43.0095094Z  81717818649a Download complete 
+2026-10-16T18:06:43.0186907Z  210b280f9556 Verifying Checksum 
+2026-10-16T18:06:43.0187678Z  210b280f9556 Download complete 
+2026-10-16T18:06:43.1368886Z  3ae6141cfd99 Downloading [==================================================>]     116B/116B
+2026-10-16T18:06:43.1370225Z  3ae6141cfd99 Verifying Checksum 
+2026-10-16T18:06:43.1370641Z  3ae6141cfd99 Download complete 
+2026-10-16T18:06:43.1995512Z  6c25da34e03f Downloading [==================>                                ]  3.501kB/9.669kB
+2026-10-16T18:06:43.2157193Z  6c25da34e03f Download complete 
+2026-10-16T18:06:43.2211698Z  25b77f59fd95 Downloading [>                                                  ]  539.2kB/111.3MB
+2026-10-16T18:06:43.3110065Z  a88782f92806 Download complete 
+2026-10-16T18:06:43.3215515Z  25b77f59fd95 Downloading [===================>                               ]  42.55MB/111.3MB
+2026-10-16T18:06:43.3824467Z  d8d21be4bf02 Downloading [==================================================>]     169B/169B
+2026-10-16T18:06:43.3825801Z  d8d21be4bf02 Verifying Checksum 
+2026-10-16T18:06:43.3827279Z  d8d21be4bf02 Download complete 
+2026-10-16T18:06:43.4221213Z  25b77f59fd95 Downloading [======================================>            ]  85.63MB/111.3MB
+2026-10-16T18:06:43.4812075Z  25b77f59fd95 Verifying Checksum 
+2026-10-16T18:06:43.4812684Z  25b77f59fd95 Download complete 
+2026-10-16T18:06:43.4813322Z  6117bd39f23f Downloading [============================>                      ]  3.501kB/6.111kB
+2026-10-16T18:06:43.4814251Z  6117bd39f23f Downloading [==================================================>]  6.111kB/6.111kB
+2026-10-16T18:06:43.4814641Z  6117bd39f23f Verifying Checksum 
+2026-10-16T18:06:43.4814922Z  6117bd39f23f Download complete 
+2026-10-16T18:06:43.5630247Z  509688edf37b Downloading [==================================================>]     185B/185B
+2026-10-16T18:06:43.5630717Z  509688edf37b Verifying Checksum 
+2026-10-16T18:06:43.5630997Z  509688edf37b Download complete 
+2026-10-16T18:06:48.1892339Z  1b7f9cd581ee Pull complete 
+2026-10-16T18:06:48.1903503Z  210b280f9556 Extracting [=>                                                 ]  32.77kB/901.4kB
+2026-10-16T18:06:48.2075667Z  210b280f9556 Extracting [==================================================>]  901.4kB/901.4kB
+2026-10-16T18:06:48.2076573Z  210b280f9556 Extracting [==================================================>]  901.4kB/901.4kB
+2026-10-16T18:06:48.8661668Z  210b280f9556 Pull complete 
+2026-10-16T18:06:48.8668746Z  81717818649a Extracting [==================================================>]     172B/172B
+2026-10-16T18:06:48.8675276Z  81717818649a Extracting [==================================================>]     172B/172B
+2026-10-16T18:06:48.8790006Z  81717818649a Pull complete 
+2026-10-16T18:06:48.8798368Z  3ae6141cfd99 Extracting [==================================================>]     116B/116B
+2026-10-16T18:06:48.8801364Z  3ae6141cfd99 Extracting [==================================================>]     116B/116B
+2026-10-16T18:06:48.8849029Z  3ae6141cfd99 Pull complete 
+2026-10-16T18:06:48.8909691Z  25b77f59fd95 Extracting [>                                                  ]  557.1kB/111.3MB
+2026-10-16T18:06:48.9942772Z  25b77f59fd95 Extracting [===>                                               ]  7.799MB/111.3MB
+2026-10-16T18:06:49.0991469Z  25b77f59fd95 Extracting [========>                                          ]  18.94MB/111.3MB
+2026-10-16T18:06:49.2005602Z  25b77f59fd95 Extracting [=============>                                     ]  29.52MB/111.3MB
+2026-10-16T18:06:49.3010154Z  25b77f59fd95 Extracting [==================>                                ]  40.11MB/111.3MB
+2026-10-16T18:06:49.4045285Z  25b77f59fd95 Extracting [=======================>                           ]  51.25MB/111.3MB
+2026-10-16T18:06:49.5067871Z  25b77f59fd95 Extracting [==========================>                        ]  58.49MB/111.3MB
+2026-10-16T18:06:49.6116285Z  25b77f59fd95 Extracting [==============================>                    ]  67.96MB/111.3MB
+2026-10-16T18:06:49.7154094Z  25b77f59fd95 Extracting [==================================>                ]  76.32MB/111.3MB
+2026-10-16T18:06:49.8448248Z  25b77f59fd95 Extracting [====================================>              ]  81.33MB/111.3MB
+2026-10-16T18:06:49.9603830Z  25b77f59fd95 Extracting [=====================================>             ]  83.56MB/111.3MB
+2026-10-16T18:06:50.0656781Z  25b77f59fd95 Extracting [=======================================>           ]  88.01MB/111.3MB
+2026-10-16T18:06:50.1694862Z  25b77f59fd95 Extracting [==========================================>        ]  93.59MB/111.3MB
+2026-10-16T18:06:50.2780126Z  25b77f59fd95 Extracting [============================================>      ]  98.04MB/111.3MB
+2026-10-16T18:06:50.3799853Z  25b77f59fd95 Extracting [=================================================> ]  110.3MB/111.3MB
+2026-10-16T18:06:50.4034294Z  25b77f59fd95 Extracting [==================================================>]  111.3MB/111.3MB
+2026-10-16T18:06:51.9431609Z  25b77f59fd95 Pull complete 
+2026-10-16T18:06:51.9463286Z  6c25da34e03f Extracting [==================================================>]  9.669kB/9.669kB
+2026-10-16T18:06:51.9467316Z  6c25da34e03f Extracting [==================================================>]  9.669kB/9.669kB
+2026-10-16T18:06:51.9546193Z  6c25da34e03f Pull complete 
+2026-10-16T18:06:51.9554318Z  a88782f92806 Extracting [==================================================>]     128B/128B
+2026-10-16T18:06:51.9558833Z  a88782f92806 Extracting [==================================================>]     128B/128B
+2026-10-16T18:06:51.9613948Z  a88782f92806 Pull complete 
+2026-10-16T18:06:51.9621365Z  d8d21be4bf02 Extracting [==================================================>]     169B/169B
+2026-10-16T18:06:51.9625378Z  d8d21be4bf02 Extracting [==================================================>]     169B/169B
+2026-10-16T18:06:51.9680366Z  d8d21be4bf02 Pull complete 
+2026-10-16T18:06:51.9689664Z  6117bd39f23f Extracting [==================================================>]  6.111kB/6.111kB
+2026-10-16T18:06:51.9693482Z  6117bd39f23f Extracting [==================================================>]  6.111kB/6.111kB
+2026-10-16T18:06:51.9989749Z  6117bd39f23f Pull complete 
+2026-10-16T18:06:52.0926138Z  509688edf37b Extracting [==================================================>]     185B/185B
+2026-10-16T18:06:52.0929557Z  509688edf37b Extracting [==================================================>]     185B/185B
+2026-10-16T18:06:52.0990290Z  509688edf37b Pull complete 
+2026-10-16T18:06:52.1932313Z  postgres Pulled 
+2026-10-16T18:06:52.1953067Z  Network lastbite_default  Creating
+2026-10-16T18:06:52.3144488Z  Network lastbite_default  Created
+2026-10-16T18:06:52.3155043Z  Volume "lastbite_postgres-data"  Creating
+2026-10-16T18:06:52.3165425Z  Volume "lastbite_postgres-data"  Created
+2026-10-16T18:06:52.3169334Z  Container lastbite-postgres-1  Creating
+2026-10-16T18:06:52.3307577Z  Container lastbite-postgres-1  Created
+2026-10-16T18:06:52.3308134Z  Container lastbite-migrate-1  Creating
+2026-10-16T18:06:52.3376618Z  Container lastbite-migrate-1  Created
+2026-10-16T18:06:52.3377381Z  Container lastbite-backend-1  Creating
+2026-10-16T18:06:52.3445908Z  Container lastbite-backend-1  Created
+2026-10-16T18:06:52.3446418Z  Container lastbite-frontend-1  Creating
+2026-10-16T18:06:52.3528000Z  Container lastbite-frontend-1  Created
+2026-10-16T18:06:52.3537135Z  Container lastbite-postgres-1  Starting
+2026-10-16T18:06:52.5670196Z  Container lastbite-postgres-1  Started
+2026-10-16T18:06:52.5670802Z  Container lastbite-postgres-1  Waiting
+2026-10-16T18:06:58.0685213Z  Container lastbite-postgres-1  Healthy
+2026-10-16T18:06:58.0685870Z  Container lastbite-migrate-1  Starting
+2026-10-16T18:06:58.6346754Z  Container lastbite-migrate-1  Started
+2026-10-16T18:06:58.6347342Z  Container lastbite-migrate-1  Waiting
+2026-10-16T18:07:01.2042668Z  Container lastbite-migrate-1  Exited
+2026-10-16T18:07:01.2043244Z  Container lastbite-backend-1  Starting
+2026-10-16T18:07:01.6937136Z  Container lastbite-backend-1  Started
+2026-10-16T18:07:01.6937733Z  Container lastbite-backend-1  Waiting
+2026-10-16T18:07:12.1951872Z  Container lastbite-backend-1  Healthy
+2026-10-16T18:07:12.1952434Z  Container lastbite-frontend-1  Starting
+2026-10-16T18:07:12.3336922Z  Container lastbite-frontend-1  Started
+2026-10-16T18:07:12.3337356Z  Container lastbite-migrate-1  Waiting
+2026-10-16T18:07:12.3337639Z  Container lastbite-backend-1  Waiting
+2026-10-16T18:07:12.3338058Z  Container lastbite-frontend-1  Waiting
+2026-10-16T18:07:12.3338518Z  Container lastbite-postgres-1  Waiting
+2026-10-16T18:07:12.8354006Z  Container lastbite-migrate-1  Exited
+2026-10-16T18:07:12.8354617Z  Container lastbite-postgres-1  Healthy
+2026-10-16T18:07:12.8355077Z  Container lastbite-backend-1  Healthy
+2026-10-16T18:07:22.8346140Z  Container lastbite-frontend-1  Healthy

@@ -1,0 +1,2 @@
+NAME    	NAMESPACE	REVISION	UPDATED                                	STATUS  	CHART         	APP VERSION
+lastbite	lastbite 	1       	2026-10-16 18:08:29.650533014 +0000 UTC	deployed	lastbite-2.0.0	2.0.0      

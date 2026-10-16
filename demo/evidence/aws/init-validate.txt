@@ -1,0 +1,35 @@
+{
+    "UserId": "AIDA5MPMCBTOU3QWRTT2L",
+    "Account": "920154934493",
+    "Arn": "arn:aws:iam::920154934493:user/relaydesk-admin"
+}
+Profile: relaydesk | Region: ap-south-1
+Using existing terraform/terraform.tfvars; check its region and admin_cidrs before planning.
+Initializing the backend...
+
+Initializing modules...
+
+Initializing provider plugins...
+- Reusing previous version of hashicorp/time from the dependency lock file
+- Reusing previous version of hashicorp/cloudinit from the dependency lock file
+- Reusing previous version of hashicorp/null from the dependency lock file
+- Reusing previous version of hashicorp/aws from the dependency lock file
+- Reusing previous version of hashicorp/tls from the dependency lock file
+- Using previously-installed hashicorp/null v3.3.2
+- Using previously-installed hashicorp/aws v5.100.0
+- Using previously-installed hashicorp/tls v4.4.1
+- Using previously-installed hashicorp/time v0.14.2
+- Using previously-installed hashicorp/cloudinit v2.4.1
+
+Terraform has been successfully initialized!
+
+You may now begin working with Terraform. Try running "terraform plan" to see
+any changes that are required for your infrastructure. All Terraform commands
+should now work.
+
+If you ever set or change modules or backend configuration for Terraform,
+rerun this command to reinitialize your working directory. If you forget, other
+commands will detect it and remind you to do so if necessary.
+Success! The configuration is valid.
+
+Preflight complete. Review the printed AWS account, then follow docs/YOUR-NEXT-STEPS.md.

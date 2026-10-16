@@ -1,0 +1,624 @@
+{
+  "conclusion": "success",
+  "createdAt": "2026-10-16T18:02:48Z",
+  "headSha": "178015224d2786be2f2621554e6d09beb25d01b2",
+  "jobs": [
+    {
+      "completedAt": "2026-10-16T18:05:10Z",
+      "conclusion": "success",
+      "databaseId": 117120067315,
+      "name": "test",
+      "startedAt": "2026-10-16T18:04:13Z",
+      "status": "completed",
+      "steps": [
+        {
+          "completedAt": "2026-10-16T18:04:15Z",
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "startedAt": "2026-10-16T18:04:13Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-16T18:04:27Z",
+          "conclusion": "success",
+          "name": "Initialize containers",
+          "number": 2,
+          "startedAt": "2026-10-16T18:04:15Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-16T18:04:28Z",
+          "conclusion": "success",
+          "name": "Run actions/checkout@v4",
+          "number": 3,
+          "startedAt": "2026-10-16T18:04:27Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-16T18:04:28Z",
+          "conclusion": "success",
+          "name": "Run actions/setup-python@v5",
+          "number": 4,
+          "startedAt": "2026-10-16T18:04:28Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-16T18:04:33Z",
+          "conclusion": "success",
+          "name": "Install PostgreSQL client runtime",
+          "number": 5,
+          "startedAt": "2026-10-16T18:04:28Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-16T18:04:41Z",
+          "conclusion": "success",
+          "name": "Run pip install -r backend/requirements-dev.txt",
+          "number": 6,
+          "startedAt": "2026-10-16T18:04:33Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-16T18:04:44Z",
+          "conclusion": "success",
+          "name": "Test API and real PostgreSQL migrations",
+          "number": 7,
+          "startedAt": "2026-10-16T18:04:41Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-16T18:04:45Z",
+          "conclusion": "success",
+          "name": "Run actions/setup-node@v4",
+          "number": 8,
+          "startedAt": "2026-10-16T18:04:44Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-16T18:04:50Z",
+          "conclusion": "success",
+          "name": "Run npm ci && npm test && npm run build",
+          "number": 9,
+          "startedAt": "2026-10-16T18:04:45Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-16T18:04:50Z",
+          "conclusion": "success",
+          "name": "Run azure/setup-helm@v4.3.0",
+          "number": 10,
+          "startedAt": "2026-10-16T18:04:50Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-16T18:04:50Z",
+          "conclusion": "success",
+          "name": "Run helm lint helm/lastbite",
+          "number": 11,
+          "startedAt": "2026-10-16T18:04:50Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-16T18:04:52Z",
+          "conclusion": "success",
+          "name": "Run hashicorp/setup-terraform@v3",
+          "number": 12,
+          "startedAt": "2026-10-16T18:04:50Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-16T18:04:52Z",
+          "conclusion": "success",
+          "name": "Run terraform fmt -check -recursive terraform",
+          "number": 13,
+          "startedAt": "2026-10-16T18:04:52Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-16T18:05:05Z",
+          "conclusion": "success",
+          "name": "Run terraform -chdir=terraform init -backend=false -lockfile=readonly && terraform -chdir=terraform validate",
+          "number": 14,
+          "startedAt": "2026-10-16T18:04:52Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-16T18:05:06Z",
+          "conclusion": "success",
+          "name": "Run actions/upload-artifact@v4",
+          "number": 15,
+          "startedAt": "2026-10-16T18:05:05Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-16T18:05:06Z",
+          "conclusion": "success",
+          "name": "Post Run actions/setup-node@v4",
+          "number": 27,
+          "startedAt": "2026-10-16T18:05:06Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-16T18:05:06Z",
+          "conclusion": "success",
+          "name": "Post Run actions/setup-python@v5",
+          "number": 28,
+          "startedAt": "2026-10-16T18:05:06Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-16T18:05:06Z",
+          "conclusion": "success",
+          "name": "Post Run actions/checkout@v4",
+          "number": 29,
+          "startedAt": "2026-10-16T18:05:06Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-16T18:05:09Z",
+          "conclusion": "success",
+          "name": "Stop containers",
+          "number": 30,
+          "startedAt": "2026-10-16T18:05:06Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-16T18:05:09Z",
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 31,
+          "startedAt": "2026-10-16T18:05:09Z",
+          "status": "completed"
+        }
+      ],
+      "url": "https://github.com/THRISHAL12345/lastbite/actions/runs/38944319489/job/117120067315"
+    },
+    {
+      "completedAt": "2026-10-16T18:13:30Z",
+      "conclusion": "success",
+      "databaseId": 117120455679,
+      "name": "images",
+      "startedAt": "2026-10-16T18:05:13Z",
+      "status": "completed",
+      "steps": [
+        {
+          "completedAt": "2026-10-16T18:05:21Z",
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "startedAt": "2026-10-16T18:05:14Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-16T18:05:23Z",
+          "conclusion": "success",
+          "name": "Run actions/checkout@v4",
+          "number": 2,
+          "startedAt": "2026-10-16T18:05:21Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-16T18:05:23Z",
+          "conclusion": "success",
+          "name": "Set lowercase registry path",
+          "number": 3,
+          "startedAt": "2026-10-16T18:05:23Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-16T18:05:32Z",
+          "conclusion": "success",
+          "name": "Run docker/setup-buildx-action@v3",
+          "number": 4,
+          "startedAt": "2026-10-16T18:05:23Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-16T18:05:42Z",
+          "conclusion": "success",
+          "name": "Build backend",
+          "number": 5,
+          "startedAt": "2026-10-16T18:05:32Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-16T18:05:50Z",
+          "conclusion": "success",
+          "name": "Build frontend",
+          "number": 6,
+          "startedAt": "2026-10-16T18:05:42Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-16T18:06:07Z",
+          "conclusion": "success",
+          "name": "Scan backend",
+          "number": 7,
+          "startedAt": "2026-10-16T18:05:50Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-16T18:06:11Z",
+          "conclusion": "success",
+          "name": "Scan frontend",
+          "number": 8,
+          "startedAt": "2026-10-16T18:06:07Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-16T18:06:12Z",
+          "conclusion": "success",
+          "name": "Run actions/upload-artifact@v4",
+          "number": 9,
+          "startedAt": "2026-10-16T18:06:11Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-16T18:06:12Z",
+          "conclusion": "success",
+          "name": "Enforce both security gates",
+          "number": 10,
+          "startedAt": "2026-10-16T18:06:12Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-16T18:06:15Z",
+          "conclusion": "success",
+          "name": "Run actions/setup-node@v4",
+          "number": 11,
+          "startedAt": "2026-10-16T18:06:12Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-16T18:06:41Z",
+          "conclusion": "success",
+          "name": "Install real-browser test dependencies",
+          "number": 12,
+          "startedAt": "2026-10-16T18:06:15Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-16T18:07:22Z",
+          "conclusion": "success",
+          "name": "Start the exact candidate images with PostgreSQL",
+          "number": 13,
+          "startedAt": "2026-10-16T18:06:41Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-16T18:07:23Z",
+          "conclusion": "success",
+          "name": "Verify non-root containers and live API workflow",
+          "number": 14,
+          "startedAt": "2026-10-16T18:07:22Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-16T18:07:29Z",
+          "conclusion": "success",
+          "name": "Exercise the UI against PostgreSQL in Chromium",
+          "number": 15,
+          "startedAt": "2026-10-16T18:07:23Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-16T18:07:29Z",
+          "conclusion": "success",
+          "name": "Collect Compose evidence",
+          "number": 16,
+          "startedAt": "2026-10-16T18:07:29Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-16T18:07:30Z",
+          "conclusion": "success",
+          "name": "Stop the disposable Compose stack",
+          "number": 17,
+          "startedAt": "2026-10-16T18:07:29Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-16T18:07:31Z",
+          "conclusion": "success",
+          "name": "Run actions/upload-artifact@v4",
+          "number": 18,
+          "startedAt": "2026-10-16T18:07:30Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-16T18:07:32Z",
+          "conclusion": "success",
+          "name": "Run azure/setup-helm@v4.3.0",
+          "number": 19,
+          "startedAt": "2026-10-16T18:07:31Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-16T18:08:17Z",
+          "conclusion": "success",
+          "name": "Create disposable Kubernetes cluster",
+          "number": 20,
+          "startedAt": "2026-10-16T18:07:32Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-16T18:08:56Z",
+          "conclusion": "success",
+          "name": "Verify Helm deployment and real ingress routing",
+          "number": 21,
+          "startedAt": "2026-10-16T18:08:17Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-16T18:11:39Z",
+          "conclusion": "success",
+          "name": "Verify live Prometheus scraping and Grafana dashboard",
+          "number": 22,
+          "startedAt": "2026-10-16T18:08:56Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-16T18:12:41Z",
+          "conclusion": "success",
+          "name": "Verify Argo CD sync and automatic drift repair",
+          "number": 23,
+          "startedAt": "2026-10-16T18:11:39Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-16T18:12:41Z",
+          "conclusion": "skipped",
+          "name": "Collect Kubernetes failure diagnostics",
+          "number": 24,
+          "startedAt": "2026-10-16T18:12:41Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-16T18:12:42Z",
+          "conclusion": "success",
+          "name": "Run actions/upload-artifact@v4",
+          "number": 25,
+          "startedAt": "2026-10-16T18:12:41Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-16T18:12:43Z",
+          "conclusion": "success",
+          "name": "Run actions/upload-artifact@v4",
+          "number": 26,
+          "startedAt": "2026-10-16T18:12:42Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-16T18:12:45Z",
+          "conclusion": "success",
+          "name": "Run actions/upload-artifact@v4",
+          "number": 27,
+          "startedAt": "2026-10-16T18:12:43Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-16T18:12:46Z",
+          "conclusion": "success",
+          "name": "Run docker/login-action@v3",
+          "number": 28,
+          "startedAt": "2026-10-16T18:12:45Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-16T18:13:05Z",
+          "conclusion": "success",
+          "name": "Push the exact images that passed scanning",
+          "number": 29,
+          "startedAt": "2026-10-16T18:12:46Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-16T18:13:05Z",
+          "conclusion": "success",
+          "name": "Prepare GitOps release values",
+          "number": 30,
+          "startedAt": "2026-10-16T18:13:05Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-16T18:13:06Z",
+          "conclusion": "success",
+          "name": "Run actions/upload-artifact@v4",
+          "number": 31,
+          "startedAt": "2026-10-16T18:13:05Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-16T18:13:07Z",
+          "conclusion": "success",
+          "name": "Post Run docker/login-action@v3",
+          "number": 54,
+          "startedAt": "2026-10-16T18:13:06Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-16T18:13:15Z",
+          "conclusion": "success",
+          "name": "Post Create disposable Kubernetes cluster",
+          "number": 55,
+          "startedAt": "2026-10-16T18:13:07Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-16T18:13:15Z",
+          "conclusion": "success",
+          "name": "Post Run actions/setup-node@v4",
+          "number": 56,
+          "startedAt": "2026-10-16T18:13:15Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-16T18:13:21Z",
+          "conclusion": "success",
+          "name": "Post Scan frontend",
+          "number": 57,
+          "startedAt": "2026-10-16T18:13:15Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-16T18:13:22Z",
+          "conclusion": "success",
+          "name": "Post Scan backend",
+          "number": 58,
+          "startedAt": "2026-10-16T18:13:21Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-16T18:13:24Z",
+          "conclusion": "success",
+          "name": "Post Build frontend",
+          "number": 59,
+          "startedAt": "2026-10-16T18:13:22Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-16T18:13:26Z",
+          "conclusion": "success",
+          "name": "Post Build backend",
+          "number": 60,
+          "startedAt": "2026-10-16T18:13:24Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-16T18:13:27Z",
+          "conclusion": "success",
+          "name": "Post Run docker/setup-buildx-action@v3",
+          "number": 61,
+          "startedAt": "2026-10-16T18:13:26Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-16T18:13:27Z",
+          "conclusion": "success",
+          "name": "Post Run actions/checkout@v4",
+          "number": 62,
+          "startedAt": "2026-10-16T18:13:27Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-16T18:13:27Z",
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 63,
+          "startedAt": "2026-10-16T18:13:27Z",
+          "status": "completed"
+        }
+      ],
+      "url": "https://github.com/THRISHAL12345/lastbite/actions/runs/38944319489/job/117120455679"
+    }
+  ],
+  "status": "completed",
+  "updatedAt": "2026-10-16T18:13:30Z",
+  "url": "https://github.com/THRISHAL12345/lastbite/actions/runs/38944319489",
+  "archived_at": "2026-10-16T18:24:17.259365+00:00",
+  "environment": "GitHub Actions disposable Kind cluster; not AWS/EKS evidence",
+  "files": [
+    {
+      "path": "test-results/pytest.xml",
+      "sha256": "8f73ca5e3c62deb4c5e0d7cc2c105ea6be0b08838d994dbd204e9c7184302e13"
+    },
+    {
+      "path": "security-reports/backend-trivy.txt",
+      "sha256": "0566b907762c72bba851089017c3291b2ba3e2547ca01d3076b69191c129e0dd"
+    },
+    {
+      "path": "security-reports/frontend-trivy.txt",
+      "sha256": "993d27423c10290853c8e9a671a486b27c6276dbc98f00d6b4d32a4072ae09ca"
+    },
+    {
+      "path": "kubernetes-evidence/resources.txt",
+      "sha256": "3b238cec59490e019423c87405831a1c152594bfe8cbae1c59e73889e1527488"
+    },
+    {
+      "path": "kubernetes-evidence/helm-list.txt",
+      "sha256": "868478542e995cbf1c1538ebf621a772994eb2b4200c0fdd5e42ade79c20c3a8"
+    },
+    {
+      "path": "kubernetes-evidence/deployments.json",
+      "sha256": "9c15b292ac649343a91481bc9cabcc2c367f857e098658e0b535fe9489933094"
+    },
+    {
+      "path": "kubernetes-evidence/smoke.json",
+      "sha256": "c90df86513b0e28ac7874970b72f8d7775e0c37c27a4b712eb1bd9e3239858b2"
+    },
+    {
+      "path": "kubernetes-evidence/metrics.txt",
+      "sha256": "c0fc6005dd10770d15255a9362ef751a1544dc1ad5fde51af0dda67b15cd317a"
+    },
+    {
+      "path": "monitoring-evidence/verification.json",
+      "sha256": "6ea400c6f824e00807f0fbf339cc8111b323437c5773826b524a66693b8bfab3"
+    },
+    {
+      "path": "monitoring-evidence/resources.txt",
+      "sha256": "d2d52fa271839586a83b9b76af2bc2f38df8ca08a78657f9f28d3e810d3660db"
+    },
+    {
+      "path": "monitoring-evidence/helm-list.txt",
+      "sha256": "e43e9cd295a032a9a399363476b428e4f324e61ed2884d55d758f6911d45510e"
+    },
+    {
+      "path": "monitoring-evidence/servicemonitor.yaml",
+      "sha256": "15a6faa430054c9bdee5bd023f495158d396be94b75380e25dde9ef8aea089d6"
+    },
+    {
+      "path": "monitoring-evidence/grafana-dashboard.png",
+      "sha256": "ed69714ccf179dcb89cb4c8e2f1bfce94cea3f48935eb49e2b9f4941ddc52740"
+    },
+    {
+      "path": "monitoring-evidence/prometheus-targets.png",
+      "sha256": "1e9d4ffb5f7744f50fb1d214acd65d76f999e4eb91e3e0409bdd1f080e093b98"
+    },
+    {
+      "path": "gitops-evidence/application.json",
+      "sha256": "d5c36903da20bcece6dd0d3ebd65ea6caf619d8963fea1f5e6606721664f80e4"
+    },
+    {
+      "path": "gitops-evidence/deployment-drift.json",
+      "sha256": "c74df52e02df8f415d2561b79676fbd110995450d8489931bae3f623eac0c36d"
+    },
+    {
+      "path": "gitops-evidence/deployment-healed.json",
+      "sha256": "40ec0e533430038d0344f02ee445b866888f7e3c7b178e6b29c0ed12b2753cdc"
+    },
+    {
+      "path": "gitops-evidence/smoke.json",
+      "sha256": "5f4a9ccc02b111290def10d25391d276abb8d60c975542eef4811e53e1743252"
+    },
+    {
+      "path": "gitops-evidence/resources.txt",
+      "sha256": "e8200fe0fa31ba3752649fd0aadedebc054ec9d2fef66d82d6d644cbb48a95e8"
+    },
+    {
+      "path": "gitops-evidence/argocd-synced-healthy.png",
+      "sha256": "31add7a599e69f6ca0f2b09f3f33ac9673cade9e890e2176e23706bdcce97965"
+    },
+    {
+      "path": "compose-and-browser-evidence/smoke.json",
+      "sha256": "239e917da9d725e6826ecf8265279274ef3175022f98f1bee8ac8fe799b54da6"
+    },
+    {
+      "path": "compose-and-browser-evidence/services.txt",
+      "sha256": "d5dcbd4ea2975c6f1c9e8a98a78ccb19b55e15bc1d46aad1d58716fdcd9396c5"
+    },
+    {
+      "path": "compose-and-browser-evidence/desktop-marketplace.png",
+      "sha256": "947e5e301746068a25f91e6d703aea768e7411b935516676d424c309aa292914"
+    },
+    {
+      "path": "compose-and-browser-evidence/mobile-marketplace.png",
+      "sha256": "7a9a742b01d9370f13b46762c43cc7c74a2bd3dfd3be15ff32cd1ad48fee2729"
+    },
+    {
+      "path": "compose-and-browser-evidence/pickup-confirmed.png",
+      "sha256": "461d5612f3d9933bb3f3d83c54837ac15a22cb3991baf34142eafa9d72dd4662"
+    }
+  ]
+}

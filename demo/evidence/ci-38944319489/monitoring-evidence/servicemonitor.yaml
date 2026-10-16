@@ -1,0 +1,29 @@
+apiVersion: v1
+items:
+- apiVersion: monitoring.coreos.com/v1
+  kind: ServiceMonitor
+  metadata:
+    annotations:
+      meta.helm.sh/release-name: lastbite
+      meta.helm.sh/release-namespace: lastbite
+    creationTimestamp: "2026-10-16T18:09:48Z"
+    generation: 1
+    labels:
+      app.kubernetes.io/managed-by: Helm
+      release: monitoring
+    name: lastbite
+    namespace: lastbite
+    resourceVersion: "1149"
+    uid: 0cafdbee-007f-4c49-a20d-cdd76cbbf922
+  spec:
+    endpoints:
+    - interval: 15s
+      path: /metrics
+      port: http
+    selector:
+      matchLabels:
+        app.kubernetes.io/component: backend
+        app.kubernetes.io/instance: lastbite
+kind: List
+metadata:
+  resourceVersion: ""

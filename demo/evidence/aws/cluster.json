@@ -1,0 +1,11 @@
+{
+    "name": "lastbite-eks",
+    "status": "ACTIVE",
+    "version": "1.35",
+    "vpc": "vpc-0a8adadd78c356bfe",
+    "subnets": [
+        "subnet-0bc430b110032fb2f",
+        "subnet-0eb4ffc837cd5f3c3"
+    ],
+    "health": null
+}

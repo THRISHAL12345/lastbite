@@ -1,0 +1,14 @@
+{
+  "started_at": "2026-10-16T18:07:23.098584+00:00",
+  "frontend_url": "http://127.0.0.1:3000",
+  "backend_url": "http://127.0.0.1:8000",
+  "checks": [
+    "Frontend, API liveness and migrated database readiness",
+    "Listing create/read/update/delete and search through frontend proxy",
+    "Reservation decrements stock, overselling blocked, cancellation restores stock",
+    "Pickup code validated, duplicate pickup blocked, persisted impact totals",
+    "Reserved listing history protected; synthetic listing paused",
+    "Prometheus metrics with bounded route labels"
+  ],
+  "passed": true
+}

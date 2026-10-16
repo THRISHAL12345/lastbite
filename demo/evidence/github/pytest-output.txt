@@ -1,0 +1,61 @@
+﻿2026-10-16T18:04:41.9183210Z ##[group]Run pytest -v --junitxml=../artifacts/pytest.xml
+2026-10-16T18:04:41.9183683Z ^[[36;1mpytest -v --junitxml=../artifacts/pytest.xml^[[0m
+2026-10-16T18:04:41.9248817Z shell: /usr/bin/bash -e {0}
+2026-10-16T18:04:41.9249087Z env:
+2026-10-16T18:04:41.9249591Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-16T18:04:41.9250117Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib/pkgconfig
+2026-10-16T18:04:41.9250599Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-16T18:04:41.9251011Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-16T18:04:41.9251404Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-16T18:04:41.9251792Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib
+2026-10-16T18:04:41.9252867Z ##[endgroup]
+2026-10-16T18:04:43.3657858Z ============================= test session starts ==============================
+2026-10-16T18:04:43.3659092Z platform linux -- Python 3.12.15, pytest-9.1.1, pluggy-1.7.0 -- /opt/hostedtoolcache/Python/3.12.15/x64/bin/python
+2026-10-16T18:04:43.3661076Z cachedir: .pytest_cache
+2026-10-16T18:04:43.3661568Z rootdir: /home/runner/work/lastbite/lastbite/backend
+2026-10-16T18:04:43.3661963Z configfile: pytest.ini
+2026-10-16T18:04:43.3662236Z testpaths: tests
+2026-10-16T18:04:43.3662514Z plugins: anyio-4.15.1
+2026-10-16T18:04:43.4212927Z collecting ... collected 32 items
+2026-10-16T18:04:43.4213480Z 
+2026-10-16T18:04:43.5311597Z tests/test_api.py::test_migrations_and_health PASSED                     [  3%]
+2026-10-16T18:04:43.5712121Z tests/test_api.py::test_crud PASSED                                      [  6%]
+2026-10-16T18:04:43.5777940Z tests/test_api.py::test_listing_validation[change0] PASSED               [  9%]
+2026-10-16T18:04:43.5839251Z tests/test_api.py::test_listing_validation[change1] PASSED               [ 12%]
+2026-10-16T18:04:43.5903568Z tests/test_api.py::test_listing_validation[change2] PASSED               [ 15%]
+2026-10-16T18:04:43.5964096Z tests/test_api.py::test_listing_validation[change3] PASSED               [ 18%]
+2026-10-16T18:04:43.6044543Z tests/test_api.py::test_listing_validation[change4] PASSED               [ 21%]
+2026-10-16T18:04:43.6112878Z tests/test_api.py::test_listing_validation[change5] PASSED               [ 25%]
+2026-10-16T18:04:43.6173365Z tests/test_api.py::test_listing_validation[change6] PASSED               [ 28%]
+2026-10-16T18:04:43.6234621Z tests/test_api.py::test_listing_validation[change7] PASSED               [ 31%]
+2026-10-16T18:04:43.6296631Z tests/test_api.py::test_listing_validation[change8] PASSED               [ 34%]
+2026-10-16T18:04:43.6364782Z tests/test_api.py::test_listing_validation[change9] PASSED               [ 37%]
+2026-10-16T18:04:43.6464911Z tests/test_api.py::test_invalid_times PASSED                             [ 40%]
+2026-10-16T18:04:43.7020325Z tests/test_api.py::test_search_filters_and_pagination PASSED             [ 43%]
+2026-10-16T18:04:43.7518353Z tests/test_api.py::test_reservation_stock_and_snapshot PASSED            [ 46%]
+2026-10-16T18:04:43.7857712Z tests/test_api.py::test_overselling_is_rejected PASSED                   [ 50%]
+2026-10-16T18:04:43.8993344Z tests/test_api.py::test_concurrent_reservations_do_not_oversell PASSED   [ 53%]
+2026-10-16T18:04:43.9481673Z tests/test_api.py::test_cancel_restores_stock_once PASSED                [ 56%]
+2026-10-16T18:04:43.9877250Z tests/test_api.py::test_concurrent_cancel_does_not_duplicate_stock PASSED [ 59%]
+2026-10-16T18:04:44.0405365Z tests/test_api.py::test_pickup_code_and_rescued_statistics PASSED        [ 62%]
+2026-10-16T18:04:44.0653721Z tests/test_api.py::test_pickup_before_window_rejected PASSED             [ 65%]
+2026-10-16T18:04:44.1311358Z tests/test_api.py::test_expiry_is_enforced_without_background_job PASSED [ 68%]
+2026-10-16T18:04:44.1780995Z tests/test_api.py::test_paused_listing_rejects_new_reservations_but_allows_pickup PASSED [ 71%]
+2026-10-16T18:04:44.2273625Z tests/test_api.py::test_reservation_history_and_promises_protected PASSED [ 75%]
+2026-10-16T18:04:44.2440883Z tests/test_api.py::test_reservation_validation[0] PASSED                 [ 78%]
+2026-10-16T18:04:44.2602465Z tests/test_api.py::test_reservation_validation[-1] PASSED                [ 81%]
+2026-10-16T18:04:44.2760348Z tests/test_api.py::test_reservation_validation[21] PASSED                [ 84%]
+2026-10-16T18:04:44.2921375Z tests/test_api.py::test_reservation_validation[1.5] PASSED               [ 87%]
+2026-10-16T18:04:44.3085620Z tests/test_api.py::test_reservation_validation[True] PASSED              [ 90%]
+2026-10-16T18:04:44.3646013Z tests/test_api.py::test_missing_resources PASSED                         [ 93%]
+2026-10-16T18:04:44.3723324Z tests/test_api.py::test_readiness_failure_does_not_break_liveness PASSED [ 96%]
+2026-10-16T18:04:44.4994435Z tests/test_api.py::test_metrics_use_route_templates PASSED               [100%]
+2026-10-16T18:04:44.4995082Z 
+2026-10-16T18:04:44.4995336Z =============================== warnings summary ===============================
+2026-10-16T18:04:44.4996291Z ../../../../../../opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/fastapi/testclient.py:1
+2026-10-16T18:04:44.4998061Z   /opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+2026-10-16T18:04:44.5000303Z     from starlette.testclient import TestClient as TestClient  # noqa
+2026-10-16T18:04:44.5000786Z 
+2026-10-16T18:04:44.5001125Z -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+2026-10-16T18:04:44.5001966Z - generated xml file: /home/runner/work/lastbite/lastbite/artifacts/pytest.xml -
+2026-10-16T18:04:44.5002727Z ======================== 32 passed, 1 warning in 1.06s =========================

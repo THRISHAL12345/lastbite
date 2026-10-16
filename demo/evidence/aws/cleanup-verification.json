@@ -1,0 +1,22 @@
+{
+  "checked_at": "2026-10-16T18:58:37.455739+00:00",
+  "account": "920154934493",
+  "region": "ap-south-1",
+  "cluster": "lastbite-eks",
+  "passed": true,
+  "checks": {
+    "cluster_deleted": true,
+    "workers_terminated": true,
+    "database_and_worker_disks_deleted": true,
+    "vpc_deleted": true,
+    "network_interfaces_deleted": true,
+    "nat_deleted": true,
+    "elastic_ip_released": true,
+    "no_vpc_load_balancers": true,
+    "no_vpc_classic_load_balancers": true,
+    "control_plane_logs_deleted": true,
+    "kms_deletion_scheduled": true,
+    "terraform_state_empty": true
+  },
+  "kms_deletion_date": "2026-11-16T00:26:04.655000+05:30"
+}

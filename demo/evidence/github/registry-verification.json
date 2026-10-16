@@ -1,0 +1,10 @@
+{
+  "backend": {
+    "anonymous_pull": true,
+    "digest": "sha256:9526200bc36a813ebd8ba22d896e1160742bc835fd095fc00a379bacf76b5b12"
+  },
+  "frontend": {
+    "anonymous_pull": true,
+    "digest": "sha256:81558ed98ef66d257b12d2060cf790fe8e52b84cf234f38086a7b11cae3195fc"
+  }
+}

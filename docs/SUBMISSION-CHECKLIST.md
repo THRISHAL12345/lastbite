@@ -1,18 +1,22 @@
 # LastBite submission checklist
 
-Use `devsecops-python-main/GRADING.md` as the authority. Automated logs supplement screenshots; they do not replace screenshots explicitly requested by the rubric.
+Use `devsecops-python-main/GRADING.md` as the authority. See the [evidence index](../demo/evidence/README.md) for the actual proof.
 
-- [ ] Final LastBite repository URL and at least ten meaningful commits, all using the requested identity.
-- [ ] Browser proof of listing creation, reservation, cancellation, code-verified pickup and responsive layout.
-- [ ] Pytest terminal screenshot, with at least five cases across three API routes and a disposable database.
-- [ ] Compose startup and non-root container proof.
-- [ ] New successful LastBite Actions URL, SHA-tagged GHCR images, and both Trivy reports.
-- [ ] Explain a scan finding or explain what a clean scan covers.
-- [ ] LastBite Terraform plan, AWS Console VPC/EKS screenshots, worker group and successful cleanup output.
-- [ ] LastBite pods, services, two replicas per application deployment, Helm release and ingress screenshots.
-- [ ] LastBite Prometheus targets UP, `/metrics` output and populated Grafana dashboard.
-- [ ] Argo CD Synced/Healthy and a demonstrated self-heal with the new repository revision.
-- [ ] Present the updated ten-slide PDF, then record the complete live walkthrough with your own narration.
-- [ ] Upload the video and slides when publication is authorized, then submit the instructor's form.
+- [x] Public LastBite repository and more than ten meaningful commits under the requested identity.
+- [x] Owner reports the instructor's submission form is complete.
+- [x] Browser proof and tests of listing creation, reservation, cancellation, code-verified pickup and responsive layout.
+- [x] 32 passing PostgreSQL API tests, isolated database, archived output and output screenshot.
+- [x] Compose startup and non-root container proof.
+- [x] Successful LastBite Actions URL, SHA-tagged GHCR images, and both Trivy reports.
+- [x] Written explanation of what the clean security scans cover.
+- [x] LastBite Terraform plan/apply, AWS Console VPC/EKS screenshots, worker group and verified cleanup.
+- [x] Pods/services, two ready replicas per application deployment, Helm release and working ingress.
+- [x] Prometheus targets UP, `/metrics` output and four populated Grafana panels, including the AWS deployment.
+- [x] Argo CD Synced/Healthy and demonstrated automatic drift repair in the CI Kind cluster.
+- [x] Complete README and ten-slide PDF committed.
+- [ ] Present the slides, then record the full live walkthrough with your own narration, including the security explanation.
+- [ ] Capture native pytest and Compose terminal screenshots during recording if strict screenshot-format compliance is required; the current output screenshots are browser-rendered archived logs.
+- [ ] Upload the narrated video to `demo/` or a GitHub release and link it from the README.
+- [ ] Confirm the submitted form points to `https://github.com/THRISHAL12345/lastbite`.
 
-Historical RelayDesk evidence is retained under `demo/legacy-relaydesk/` and ignored `artifacts/aws/`. Do not submit it as if it were LastBite evidence. See [VALIDATION.md](VALIDATION.md) for the new local checks already completed.
+The AWS demo was temporary and has been removed after evidence collection. Recreate it for the live recording, then remove it again. Historical RelayDesk evidence is retained under `demo/legacy-relaydesk/`; it is not LastBite proof.
