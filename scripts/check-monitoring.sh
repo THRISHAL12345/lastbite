@@ -19,8 +19,8 @@ GRAFANA_PID=$!
 kubectl port-forward -n lastbite svc/lastbite-backend 8100:8000 > artifacts/monitoring/backend-forward.log 2>&1 &
 BACKEND_PID=$!
 trap 'kill "$PROM_PID" "$GRAFANA_PID" "$BACKEND_PID" 2>/dev/null || true' EXIT
-python3 scripts/check-monitoring.py
-node scripts/capture-monitoring.mjs
 kubectl get pods,svc -n monitoring -o wide > artifacts/monitoring/resources.txt
 kubectl get servicemonitor -n lastbite -o yaml > artifacts/monitoring/servicemonitor.yaml
 helm list -n monitoring > artifacts/monitoring/helm-list.txt
+python3 scripts/check-monitoring.py
+node scripts/capture-monitoring.mjs
