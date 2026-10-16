@@ -1,0 +1,15 @@
+{
+  "started_at": "2026-10-16T13:50:32.094581+00:00",
+  "frontend_url": "http://127.0.0.1:3100",
+  "backend_url": "http://127.0.0.1:8100",
+  "checks": [
+    "API liveness and database readiness",
+    "Frontend HTML served",
+    "Create/read through frontend proxy and four-hour SLA",
+    "Search and statistics",
+    "Update, comment, resolution and reopening",
+    "Prometheus metrics with bounded route labels",
+    "Delete and subsequent 404"
+  ],
+  "passed": true
+}

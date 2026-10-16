@@ -193,12 +193,16 @@ The dashboard shows request rate, P95 latency, 5xx percentage and available repl
 
 - [demo/slides.pdf](demo/slides.pdf): 10-slide presentation; editable generation source included.
 - [docs/YOUR-NEXT-STEPS.md](docs/YOUR-NEXT-STEPS.md): exact remaining AWS, recording, cleanup and submission steps.
+- [demo/evidence/README.md](demo/evidence/README.md): observed CI/monitoring/GitOps evidence with source revision and hashes.
+- [docs/SCORECARD.md](docs/SCORECARD.md): criterion-by-criterion estimate and the remaining points.
 - [demo/RECORDING.md](demo/RECORDING.md): slide-first live walkthrough and capture order.
 - [docs/SUBMISSION-CHECKLIST.md](docs/SUBMISSION-CHECKLIST.md): M1-M10 mapping and outstanding real evidence.
 - [docs/SCAFFOLD-REVIEW.md](docs/SCAFFOLD-REVIEW.md): original scaffold review and corrections.
 - [docs/VALIDATION.md](docs/VALIDATION.md): what was actually checked locally and what still needs a real environment.
 
-The required video, GitHub run links, AWS screenshots and live cluster evidence must be captured from your actual deployment. They are not represented by fabricated screenshots or a synthetic commit history. The supplied submission file calls 19 October 2026 a Sunday; that calendar date is Monday, so confirm the intended deadline with the instructor.
+The evidence index records actual CI and Kind results. AWS screenshots and your narrated
+walkthrough remain required. The supplied submission file calls 19 October 2026 a
+Sunday; that calendar date is Monday, so confirm the intended deadline with the instructor.
 
 ## Known limits
 

@@ -23,7 +23,7 @@ Requirements: AWS CLI and configured AWS credentials, Terraform >=1.7, kubectl, 
 aws sts get-caller-identity
 cp terraform/terraform.tfvars.example terraform/terraform.tfvars
 # Edit admin_cidrs to your real public IP /32. Do not leave the example address.
-terraform -chdir=terraform init
+terraform -chdir=terraform init -lockfile=readonly
 terraform -chdir=terraform fmt -check
 terraform -chdir=terraform validate
 terraform -chdir=terraform plan -out=deployment.tfplan
@@ -33,7 +33,7 @@ kubectl get nodes
 kubectl apply -f k8s/storageclass.yaml
 ```
 
-Commit the generated `.terraform.lock.hcl` to pin provider selections. Keep state, plan files, credentials and tfvars out of Git. For team use, configure an encrypted S3 state backend with locking and least-privilege access before the first apply. EKS, nodes, NAT, disks and logs incur charges. The admin CIDR can be updated when your public IP changes.
+The committed `.terraform.lock.hcl` pins provider selections for Linux AMD64 and macOS ARM64. Keep state, plan files, credentials and tfvars out of Git. For team use, configure an encrypted S3 state backend with locking and least-privilege access before the first apply. EKS, nodes, NAT, disks and logs incur charges. The admin CIDR can be updated when your public IP changes.
 
 ## 3. Bootstrap namespace and database credentials
 

@@ -1,0 +1,144 @@
+# HELP python_gc_objects_collected_total Objects collected during gc
+# TYPE python_gc_objects_collected_total counter
+python_gc_objects_collected_total{generation="0"} 690.0
+python_gc_objects_collected_total{generation="1"} 51.0
+python_gc_objects_collected_total{generation="2"} 0.0
+# HELP python_gc_objects_uncollectable_total Uncollectable objects found during GC
+# TYPE python_gc_objects_uncollectable_total counter
+python_gc_objects_uncollectable_total{generation="0"} 0.0
+python_gc_objects_uncollectable_total{generation="1"} 0.0
+python_gc_objects_uncollectable_total{generation="2"} 0.0
+# HELP python_gc_collections_total Number of times this generation was collected
+# TYPE python_gc_collections_total counter
+python_gc_collections_total{generation="0"} 209.0
+python_gc_collections_total{generation="1"} 18.0
+python_gc_collections_total{generation="2"} 1.0
+# HELP python_info Python platform information
+# TYPE python_info gauge
+python_info{implementation="CPython",major="3",minor="12",patchlevel="15",version="3.12.15"} 1.0
+# HELP process_virtual_memory_bytes Virtual memory size in bytes.
+# TYPE process_virtual_memory_bytes gauge
+process_virtual_memory_bytes 9.1942912e+07
+# HELP process_resident_memory_bytes Resident memory size in bytes.
+# TYPE process_resident_memory_bytes gauge
+process_resident_memory_bytes 8.103936e+07
+# HELP process_start_time_seconds Start time of the process since unix epoch in seconds.
+# TYPE process_start_time_seconds gauge
+process_start_time_seconds 1.79215837414e+09
+# HELP process_cpu_seconds_total Total user and system CPU time spent in seconds.
+# TYPE process_cpu_seconds_total counter
+process_cpu_seconds_total 1.7599999999999998
+# HELP process_open_fds Number of open file descriptors.
+# TYPE process_open_fds gauge
+process_open_fds 12.0
+# HELP process_max_fds Maximum number of open file descriptors.
+# TYPE process_max_fds gauge
+process_max_fds 1.048576e+06
+# HELP relaydesk_http_requests_total HTTP requests
+# TYPE relaydesk_http_requests_total counter
+relaydesk_http_requests_total{method="POST",route="/api/tickets",status="201"} 1.0
+relaydesk_http_requests_total{method="GET",route="/api/tickets",status="200"} 1.0
+relaydesk_http_requests_total{method="PUT",route="/api/tickets/{ticket_id}",status="200"} 2.0
+relaydesk_http_requests_total{method="GET",route="/api/tickets/{ticket_id}/events",status="200"} 1.0
+relaydesk_http_requests_total{method="GET",route="/api/tickets/{ticket_id}",status="404"} 1.0
+# HELP relaydesk_http_requests_created HTTP requests
+# TYPE relaydesk_http_requests_created gauge
+relaydesk_http_requests_created{method="POST",route="/api/tickets",status="201"} 1.792158399973565e+09
+relaydesk_http_requests_created{method="GET",route="/api/tickets",status="200"} 1.7921583999945183e+09
+relaydesk_http_requests_created{method="PUT",route="/api/tickets/{ticket_id}",status="200"} 1.7921584000124629e+09
+relaydesk_http_requests_created{method="GET",route="/api/tickets/{ticket_id}/events",status="200"} 1.7921584002045982e+09
+relaydesk_http_requests_created{method="GET",route="/api/tickets/{ticket_id}",status="404"} 1.792158400238091e+09
+# HELP relaydesk_http_request_duration_seconds Request latency
+# TYPE relaydesk_http_request_duration_seconds histogram
+relaydesk_http_request_duration_seconds_bucket{le="0.005",method="POST",route="/api/tickets"} 0.0
+relaydesk_http_request_duration_seconds_bucket{le="0.01",method="POST",route="/api/tickets"} 0.0
+relaydesk_http_request_duration_seconds_bucket{le="0.025",method="POST",route="/api/tickets"} 0.0
+relaydesk_http_request_duration_seconds_bucket{le="0.05",method="POST",route="/api/tickets"} 0.0
+relaydesk_http_request_duration_seconds_bucket{le="0.075",method="POST",route="/api/tickets"} 0.0
+relaydesk_http_request_duration_seconds_bucket{le="0.1",method="POST",route="/api/tickets"} 0.0
+relaydesk_http_request_duration_seconds_bucket{le="0.25",method="POST",route="/api/tickets"} 1.0
+relaydesk_http_request_duration_seconds_bucket{le="0.5",method="POST",route="/api/tickets"} 1.0
+relaydesk_http_request_duration_seconds_bucket{le="0.75",method="POST",route="/api/tickets"} 1.0
+relaydesk_http_request_duration_seconds_bucket{le="1.0",method="POST",route="/api/tickets"} 1.0
+relaydesk_http_request_duration_seconds_bucket{le="2.5",method="POST",route="/api/tickets"} 1.0
+relaydesk_http_request_duration_seconds_bucket{le="5.0",method="POST",route="/api/tickets"} 1.0
+relaydesk_http_request_duration_seconds_bucket{le="7.5",method="POST",route="/api/tickets"} 1.0
+relaydesk_http_request_duration_seconds_bucket{le="10.0",method="POST",route="/api/tickets"} 1.0
+relaydesk_http_request_duration_seconds_bucket{le="+Inf",method="POST",route="/api/tickets"} 1.0
+relaydesk_http_request_duration_seconds_count{method="POST",route="/api/tickets"} 1.0
+relaydesk_http_request_duration_seconds_sum{method="POST",route="/api/tickets"} 0.10400351499998806
+relaydesk_http_request_duration_seconds_bucket{le="0.005",method="GET",route="/api/tickets"} 0.0
+relaydesk_http_request_duration_seconds_bucket{le="0.01",method="GET",route="/api/tickets"} 1.0
+relaydesk_http_request_duration_seconds_bucket{le="0.025",method="GET",route="/api/tickets"} 1.0
+relaydesk_http_request_duration_seconds_bucket{le="0.05",method="GET",route="/api/tickets"} 1.0
+relaydesk_http_request_duration_seconds_bucket{le="0.075",method="GET",route="/api/tickets"} 1.0
+relaydesk_http_request_duration_seconds_bucket{le="0.1",method="GET",route="/api/tickets"} 1.0
+relaydesk_http_request_duration_seconds_bucket{le="0.25",method="GET",route="/api/tickets"} 1.0
+relaydesk_http_request_duration_seconds_bucket{le="0.5",method="GET",route="/api/tickets"} 1.0
+relaydesk_http_request_duration_seconds_bucket{le="0.75",method="GET",route="/api/tickets"} 1.0
+relaydesk_http_request_duration_seconds_bucket{le="1.0",method="GET",route="/api/tickets"} 1.0
+relaydesk_http_request_duration_seconds_bucket{le="2.5",method="GET",route="/api/tickets"} 1.0
+relaydesk_http_request_duration_seconds_bucket{le="5.0",method="GET",route="/api/tickets"} 1.0
+relaydesk_http_request_duration_seconds_bucket{le="7.5",method="GET",route="/api/tickets"} 1.0
+relaydesk_http_request_duration_seconds_bucket{le="10.0",method="GET",route="/api/tickets"} 1.0
+relaydesk_http_request_duration_seconds_bucket{le="+Inf",method="GET",route="/api/tickets"} 1.0
+relaydesk_http_request_duration_seconds_count{method="GET",route="/api/tickets"} 1.0
+relaydesk_http_request_duration_seconds_sum{method="GET",route="/api/tickets"} 0.009219309999991765
+relaydesk_http_request_duration_seconds_bucket{le="0.005",method="PUT",route="/api/tickets/{ticket_id}"} 1.0
+relaydesk_http_request_duration_seconds_bucket{le="0.01",method="PUT",route="/api/tickets/{ticket_id}"} 2.0
+relaydesk_http_request_duration_seconds_bucket{le="0.025",method="PUT",route="/api/tickets/{ticket_id}"} 2.0
+relaydesk_http_request_duration_seconds_bucket{le="0.05",method="PUT",route="/api/tickets/{ticket_id}"} 2.0
+relaydesk_http_request_duration_seconds_bucket{le="0.075",method="PUT",route="/api/tickets/{ticket_id}"} 2.0
+relaydesk_http_request_duration_seconds_bucket{le="0.1",method="PUT",route="/api/tickets/{ticket_id}"} 2.0
+relaydesk_http_request_duration_seconds_bucket{le="0.25",method="PUT",route="/api/tickets/{ticket_id}"} 2.0
+relaydesk_http_request_duration_seconds_bucket{le="0.5",method="PUT",route="/api/tickets/{ticket_id}"} 2.0
+relaydesk_http_request_duration_seconds_bucket{le="0.75",method="PUT",route="/api/tickets/{ticket_id}"} 2.0
+relaydesk_http_request_duration_seconds_bucket{le="1.0",method="PUT",route="/api/tickets/{ticket_id}"} 2.0
+relaydesk_http_request_duration_seconds_bucket{le="2.5",method="PUT",route="/api/tickets/{ticket_id}"} 2.0
+relaydesk_http_request_duration_seconds_bucket{le="5.0",method="PUT",route="/api/tickets/{ticket_id}"} 2.0
+relaydesk_http_request_duration_seconds_bucket{le="7.5",method="PUT",route="/api/tickets/{ticket_id}"} 2.0
+relaydesk_http_request_duration_seconds_bucket{le="10.0",method="PUT",route="/api/tickets/{ticket_id}"} 2.0
+relaydesk_http_request_duration_seconds_bucket{le="+Inf",method="PUT",route="/api/tickets/{ticket_id}"} 2.0
+relaydesk_http_request_duration_seconds_count{method="PUT",route="/api/tickets/{ticket_id}"} 2.0
+relaydesk_http_request_duration_seconds_sum{method="PUT",route="/api/tickets/{ticket_id}"} 0.011601510999923903
+relaydesk_http_request_duration_seconds_bucket{le="0.005",method="GET",route="/api/tickets/{ticket_id}/events"} 1.0
+relaydesk_http_request_duration_seconds_bucket{le="0.01",method="GET",route="/api/tickets/{ticket_id}/events"} 1.0
+relaydesk_http_request_duration_seconds_bucket{le="0.025",method="GET",route="/api/tickets/{ticket_id}/events"} 1.0
+relaydesk_http_request_duration_seconds_bucket{le="0.05",method="GET",route="/api/tickets/{ticket_id}/events"} 1.0
+relaydesk_http_request_duration_seconds_bucket{le="0.075",method="GET",route="/api/tickets/{ticket_id}/events"} 1.0
+relaydesk_http_request_duration_seconds_bucket{le="0.1",method="GET",route="/api/tickets/{ticket_id}/events"} 1.0
+relaydesk_http_request_duration_seconds_bucket{le="0.25",method="GET",route="/api/tickets/{ticket_id}/events"} 1.0
+relaydesk_http_request_duration_seconds_bucket{le="0.5",method="GET",route="/api/tickets/{ticket_id}/events"} 1.0
+relaydesk_http_request_duration_seconds_bucket{le="0.75",method="GET",route="/api/tickets/{ticket_id}/events"} 1.0
+relaydesk_http_request_duration_seconds_bucket{le="1.0",method="GET",route="/api/tickets/{ticket_id}/events"} 1.0
+relaydesk_http_request_duration_seconds_bucket{le="2.5",method="GET",route="/api/tickets/{ticket_id}/events"} 1.0
+relaydesk_http_request_duration_seconds_bucket{le="5.0",method="GET",route="/api/tickets/{ticket_id}/events"} 1.0
+relaydesk_http_request_duration_seconds_bucket{le="7.5",method="GET",route="/api/tickets/{ticket_id}/events"} 1.0
+relaydesk_http_request_duration_seconds_bucket{le="10.0",method="GET",route="/api/tickets/{ticket_id}/events"} 1.0
+relaydesk_http_request_duration_seconds_bucket{le="+Inf",method="GET",route="/api/tickets/{ticket_id}/events"} 1.0
+relaydesk_http_request_duration_seconds_count{method="GET",route="/api/tickets/{ticket_id}/events"} 1.0
+relaydesk_http_request_duration_seconds_sum{method="GET",route="/api/tickets/{ticket_id}/events"} 0.00401052099999788
+relaydesk_http_request_duration_seconds_bucket{le="0.005",method="GET",route="/api/tickets/{ticket_id}"} 1.0
+relaydesk_http_request_duration_seconds_bucket{le="0.01",method="GET",route="/api/tickets/{ticket_id}"} 1.0
+relaydesk_http_request_duration_seconds_bucket{le="0.025",method="GET",route="/api/tickets/{ticket_id}"} 1.0
+relaydesk_http_request_duration_seconds_bucket{le="0.05",method="GET",route="/api/tickets/{ticket_id}"} 1.0
+relaydesk_http_request_duration_seconds_bucket{le="0.075",method="GET",route="/api/tickets/{ticket_id}"} 1.0
+relaydesk_http_request_duration_seconds_bucket{le="0.1",method="GET",route="/api/tickets/{ticket_id}"} 1.0
+relaydesk_http_request_duration_seconds_bucket{le="0.25",method="GET",route="/api/tickets/{ticket_id}"} 1.0
+relaydesk_http_request_duration_seconds_bucket{le="0.5",method="GET",route="/api/tickets/{ticket_id}"} 1.0
+relaydesk_http_request_duration_seconds_bucket{le="0.75",method="GET",route="/api/tickets/{ticket_id}"} 1.0
+relaydesk_http_request_duration_seconds_bucket{le="1.0",method="GET",route="/api/tickets/{ticket_id}"} 1.0
+relaydesk_http_request_duration_seconds_bucket{le="2.5",method="GET",route="/api/tickets/{ticket_id}"} 1.0
+relaydesk_http_request_duration_seconds_bucket{le="5.0",method="GET",route="/api/tickets/{ticket_id}"} 1.0
+relaydesk_http_request_duration_seconds_bucket{le="7.5",method="GET",route="/api/tickets/{ticket_id}"} 1.0
+relaydesk_http_request_duration_seconds_bucket{le="10.0",method="GET",route="/api/tickets/{ticket_id}"} 1.0
+relaydesk_http_request_duration_seconds_bucket{le="+Inf",method="GET",route="/api/tickets/{ticket_id}"} 1.0
+relaydesk_http_request_duration_seconds_count{method="GET",route="/api/tickets/{ticket_id}"} 1.0
+relaydesk_http_request_duration_seconds_sum{method="GET",route="/api/tickets/{ticket_id}"} 0.001971749999995609
+# HELP relaydesk_http_request_duration_seconds_created Request latency
+# TYPE relaydesk_http_request_duration_seconds_created gauge
+relaydesk_http_request_duration_seconds_created{method="POST",route="/api/tickets"} 1.792158399973592e+09
+relaydesk_http_request_duration_seconds_created{method="GET",route="/api/tickets"} 1.7921583999945397e+09
+relaydesk_http_request_duration_seconds_created{method="PUT",route="/api/tickets/{ticket_id}"} 1.7921584000124826e+09
+relaydesk_http_request_duration_seconds_created{method="GET",route="/api/tickets/{ticket_id}/events"} 1.79215840020462e+09
+relaydesk_http_request_duration_seconds_created{method="GET",route="/api/tickets/{ticket_id}"} 1.7921584002381105e+09

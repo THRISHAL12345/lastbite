@@ -88,21 +88,27 @@ until destruction; never add them to Git.
 
 ## 3. Use a published image release and prepare the database
 
-Choose a green run from GitHub Actions and copy its complete source SHA. Both
+The committed `values-release.yaml` identifies the verified release to deploy;
+its source run is linked in [the evidence index](../demo/evidence/README.md).
+For a later release, choose a green run and copy its complete source SHA. Both
 images must have been published by that run. Public GitHub repositories do not
 automatically make GHCR packages public. For this classroom project, open each
-package's settings and make the backend and frontend packages public, or configure
-a read-only registry pull secret using the deployment runbook.
+package's settings and make the backend and frontend packages public. Open your
+GitHub profile → Packages → `relaydesk-backend` / `relaydesk-frontend` → Package
+settings → Change visibility → Public. Capture each package page showing its SHA tag.
+If your account requires private packages, create a registry pull secret and add
+`imagePullSecrets: [{name: ghcr}]` to the environment values before deploying.
+
+Only if promoting a newer release:
 
 ```bash
 python3 scripts/promote.py THRISHAL12345 FULL_SHA_FROM_SUCCESSFUL_RUN
 git diff -- helm/relaydesk/values-release.yaml
 ```
 
-In `helm/relaydesk/values-prod.yaml`, set `ingress.host` to `relaydesk.local` for the
-private port-forward demonstration. Keep `database.storageClass: gp3` for EKS.
-Commit the reviewed release values and hostname, then push. These are real release
-changes, not empty commits.
+The production values already use `ingress.host: relaydesk.local` for the private
+port-forward demonstration and `database.storageClass: gp3` for EKS. If you promoted
+a newer release, commit and push its reviewed values:
 
 ```bash
 git add helm/relaydesk/values-release.yaml helm/relaydesk/values-prod.yaml
@@ -199,6 +205,13 @@ kubectl get hpa -n relaydesk
 Capture both backend targets UP, Grafana panels with real data, the application UI,
 and Argo `Synced/Healthy`. Show HPA readings; do not claim a scaling event unless observed.
 
+Capture the terminal output of `kubectl get pods -n relaydesk`,
+`kubectl get svc -n relaydesk`, and `curl http://localhost:8000/metrics`, plus the
+earlier `helm list -n relaydesk` output. On macOS use Shift–Command–4 to select the
+terminal area. The passing pytest screenshot is already archived; capture Trivy
+output and your EKS walkthrough's terminal screenshots. The committed JSON/text reports are useful supporting evidence,
+but the rubric explicitly requests these screenshots.
+
 ## 6. Record your own presentation
 
 Use QuickTime Player → File → New Screen Recording, or your preferred recorder.
@@ -259,11 +272,17 @@ with your instructor. Do not assume completion of CI submits the form.
 Install Kind, Docker, kubectl, Helm, Python 3 and Node 22. From a clean pushed checkout:
 
 ```bash
+export PATH="$HOME/.local/bin:$PATH"
 bash scripts/local-demo.sh
 bash scripts/demo-access.sh
 ```
 
-This creates only the dedicated `relaydesk-demo` Docker/Kind cluster, builds local
+Node 22 and the verified Kind binary are installed under `~/.local/bin` on the
+current machine; the PATH line selects them. The current workspace already has a
+running `kind-relaydesk-demo` cluster. To use it
+again, select `kubectl config use-context kind-relaydesk-demo` and run
+`bash scripts/demo-access.sh`; do not recreate it. For a fresh machine, the command
+above creates only the dedicated `relaydesk-demo` Docker/Kind cluster, builds local
 images, verifies Helm, monitoring and Argo self-heal, and leaves it running for rehearsal.
 It is not AWS evidence. To discard only this local demo later:
 

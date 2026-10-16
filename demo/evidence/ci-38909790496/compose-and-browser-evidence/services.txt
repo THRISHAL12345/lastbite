@@ -1,0 +1,5 @@
+NAME                   IMAGE                    COMMAND                  SERVICE    CREATED          STATUS                      PORTS
+relaydesk-backend-1    relaydesk-backend:dev    "uvicorn app.main:ap…"   backend    35 seconds ago   Up 26 seconds (healthy)     127.0.0.1:8000->8000/tcp
+relaydesk-frontend-1   relaydesk-frontend:dev   "/docker-entrypoint.…"   frontend   35 seconds ago   Up 15 seconds (healthy)     127.0.0.1:3000->8080/tcp
+relaydesk-migrate-1    relaydesk-backend:dev    "sh -c 'python -m ap…"   migrate    35 seconds ago   Exited (0) 26 seconds ago   
+relaydesk-postgres-1   postgres:16-alpine       "docker-entrypoint.s…"   postgres   35 seconds ago   Up 34 seconds (healthy)     5432/tcp

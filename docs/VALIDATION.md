@@ -45,10 +45,35 @@ Local scan and smoke reports, browser screenshots, video, and trace/report files
 are under ignored `artifacts/`. GitHub CI separately verifies Linux AMD64 images
 before publication; local ARM64 results do not substitute for that run.
 
-## Deployment evidence still required
+## Live Kubernetes, monitoring and GitOps validation
+
+The dedicated local `kind-relaydesk-demo` cluster successfully ran the application
+with two backend and two frontend replicas, PostgreSQL, Traefik, Prometheus,
+Grafana and Argo CD. The namespace manifest applied, Helm deployed the application,
+and the smoke test exercised `/` and `/api` through the real ingress controller.
+
+Prometheus reported both backend targets UP. The verification script queried a
+positive request rate through Prometheus and through Grafana's data-source proxy.
+The actual Grafana screenshot was visually checked for populated request-rate,
+latency, error-rate and replica panels. Screenshot capture now waits for chart
+rendering rather than only the panel title.
+
+Argo CD synced an immutable Git revision and became Healthy. Scaling the backend
+to one replica was automatically repaired to two; the test saved the before/after
+deployment objects and reran the live application smoke test. Traefik publishes
+the private demonstration's localhost endpoint so Ingress health is observable.
+The same checks are gates in GitHub CI before image publication.
+
+See [the evidence index](../demo/evidence/README.md) for the archived successful
+remote run, its source revision, actual screenshots, reports and file hashes.
+The repository now has at least ten meaningful commits under `THRISHAL12345`.
+
+## Evidence still required from the user
 
 - Terraform plan, apply and destroy require configured AWS credentials. Provider validation does not prove infrastructure will provision.
-- EKS, Argo CD, HPA and Prometheus/Grafana runtime behavior require deployment evidence.
+- EKS deployment and HPA readings still require the cloud walkthrough. Existing
+  Kind monitoring/Argo evidence does not establish that EKS was provisioned.
 - A real presenter walkthrough and AWS screenshots are still required for submission.
 
-CI performs PostgreSQL tests and migrations, frontend workflow testing/building, Helm linting, Terraform initialization/validation, image builds and the security gate. Failures must be resolved before promotion; local results are not a claim of a green remote pipeline.
+Follow [YOUR-NEXT-STEPS.md](YOUR-NEXT-STEPS.md) for the remaining commands, required
+screenshots, own narration, cleanup and official submission.

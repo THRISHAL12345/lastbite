@@ -1,0 +1,400 @@
+{
+    "apiVersion": "argoproj.io/v1alpha1",
+    "kind": "Application",
+    "metadata": {
+        "annotations": {
+            "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"argoproj.io/v1alpha1\",\"kind\":\"Application\",\"metadata\":{\"annotations\":{},\"name\":\"relaydesk\",\"namespace\":\"argocd\"},\"spec\":{\"destination\":{\"namespace\":\"relaydesk\",\"server\":\"https://kubernetes.default.svc\"},\"project\":\"default\",\"source\":{\"helm\":{\"parameters\":[{\"forceString\":true,\"name\":\"backend.repository\",\"value\":\"relaydesk-demo-backend\"},{\"forceString\":true,\"name\":\"backend.tag\",\"value\":\"93904eff1e2364c373def884515bb382b105480c\"},{\"forceString\":true,\"name\":\"frontend.repository\",\"value\":\"relaydesk-demo-frontend\"},{\"forceString\":true,\"name\":\"frontend.tag\",\"value\":\"93904eff1e2364c373def884515bb382b105480c\"},{\"forceString\":false,\"name\":\"ingress.enabled\",\"value\":\"true\"},{\"forceString\":false,\"name\":\"ingress.host\",\"value\":\"relaydesk.local\"},{\"forceString\":false,\"name\":\"monitoring.enabled\",\"value\":\"true\"}],\"releaseName\":\"relaydesk\"},\"path\":\"helm/relaydesk\",\"repoURL\":\"https://github.com/THRISHAL12345/relaydesk.git\",\"targetRevision\":\"93904eff1e2364c373def884515bb382b105480c\"},\"syncPolicy\":{\"automated\":{\"prune\":true,\"selfHeal\":true},\"retry\":{\"limit\":3},\"syncOptions\":[\"CreateNamespace=true\"]}}}\n"
+        },
+        "creationTimestamp": "2026-10-16T13:36:25Z",
+        "generation": 23,
+        "name": "relaydesk",
+        "namespace": "argocd",
+        "resourceVersion": "2940",
+        "uid": "e06463bc-96a6-4167-b517-150fca554cd4"
+    },
+    "spec": {
+        "destination": {
+            "namespace": "relaydesk",
+            "server": "https://kubernetes.default.svc"
+        },
+        "project": "default",
+        "source": {
+            "helm": {
+                "parameters": [
+                    {
+                        "forceString": true,
+                        "name": "backend.repository",
+                        "value": "relaydesk-demo-backend"
+                    },
+                    {
+                        "forceString": true,
+                        "name": "backend.tag",
+                        "value": "93904eff1e2364c373def884515bb382b105480c"
+                    },
+                    {
+                        "forceString": true,
+                        "name": "frontend.repository",
+                        "value": "relaydesk-demo-frontend"
+                    },
+                    {
+                        "forceString": true,
+                        "name": "frontend.tag",
+                        "value": "93904eff1e2364c373def884515bb382b105480c"
+                    },
+                    {
+                        "name": "ingress.enabled",
+                        "value": "true"
+                    },
+                    {
+                        "name": "ingress.host",
+                        "value": "relaydesk.local"
+                    },
+                    {
+                        "name": "monitoring.enabled",
+                        "value": "true"
+                    }
+                ],
+                "releaseName": "relaydesk"
+            },
+            "path": "helm/relaydesk",
+            "repoURL": "https://github.com/THRISHAL12345/relaydesk.git",
+            "targetRevision": "93904eff1e2364c373def884515bb382b105480c"
+        },
+        "syncPolicy": {
+            "automated": {
+                "prune": true,
+                "selfHeal": true
+            },
+            "retry": {
+                "limit": 3
+            },
+            "syncOptions": [
+                "CreateNamespace=true"
+            ]
+        }
+    },
+    "status": {
+        "controllerNamespace": "argocd",
+        "health": {
+            "lastTransitionTime": "2026-10-16T13:40:30Z",
+            "status": "Healthy"
+        },
+        "history": [
+            {
+                "deployStartedAt": "2026-10-16T13:36:37Z",
+                "deployedAt": "2026-10-16T13:36:47Z",
+                "id": 0,
+                "initiatedBy": {
+                    "automated": true
+                },
+                "revision": "93904eff1e2364c373def884515bb382b105480c",
+                "source": {
+                    "helm": {
+                        "parameters": [
+                            {
+                                "forceString": true,
+                                "name": "backend.repository",
+                                "value": "relaydesk-demo-backend"
+                            },
+                            {
+                                "forceString": true,
+                                "name": "backend.tag",
+                                "value": "93904eff1e2364c373def884515bb382b105480c"
+                            },
+                            {
+                                "forceString": true,
+                                "name": "frontend.repository",
+                                "value": "relaydesk-demo-frontend"
+                            },
+                            {
+                                "forceString": true,
+                                "name": "frontend.tag",
+                                "value": "93904eff1e2364c373def884515bb382b105480c"
+                            },
+                            {
+                                "name": "ingress.enabled",
+                                "value": "true"
+                            },
+                            {
+                                "name": "ingress.host",
+                                "value": "relaydesk.local"
+                            },
+                            {
+                                "name": "monitoring.enabled",
+                                "value": "true"
+                            }
+                        ],
+                        "releaseName": "relaydesk"
+                    },
+                    "path": "helm/relaydesk",
+                    "repoURL": "https://github.com/THRISHAL12345/relaydesk.git",
+                    "targetRevision": "93904eff1e2364c373def884515bb382b105480c"
+                }
+            }
+        ],
+        "operationState": {
+            "finishedAt": "2026-10-16T13:40:25Z",
+            "message": "successfully synced (all tasks run)",
+            "operation": {
+                "initiatedBy": {
+                    "automated": true
+                },
+                "retry": {
+                    "limit": 3
+                },
+                "sync": {
+                    "autoHealAttemptsCount": 1,
+                    "prune": true,
+                    "resources": [
+                        {
+                            "group": "apps",
+                            "kind": "Deployment",
+                            "name": "relaydesk-backend"
+                        }
+                    ],
+                    "revision": "93904eff1e2364c373def884515bb382b105480c",
+                    "source": {
+                        "helm": {
+                            "parameters": [
+                                {
+                                    "forceString": true,
+                                    "name": "backend.repository",
+                                    "value": "relaydesk-demo-backend"
+                                },
+                                {
+                                    "forceString": true,
+                                    "name": "backend.tag",
+                                    "value": "93904eff1e2364c373def884515bb382b105480c"
+                                },
+                                {
+                                    "forceString": true,
+                                    "name": "frontend.repository",
+                                    "value": "relaydesk-demo-frontend"
+                                },
+                                {
+                                    "forceString": true,
+                                    "name": "frontend.tag",
+                                    "value": "93904eff1e2364c373def884515bb382b105480c"
+                                },
+                                {
+                                    "name": "ingress.enabled",
+                                    "value": "true"
+                                },
+                                {
+                                    "name": "ingress.host",
+                                    "value": "relaydesk.local"
+                                },
+                                {
+                                    "name": "monitoring.enabled",
+                                    "value": "true"
+                                }
+                            ],
+                            "releaseName": "relaydesk"
+                        },
+                        "path": "helm/relaydesk",
+                        "repoURL": "https://github.com/THRISHAL12345/relaydesk.git",
+                        "targetRevision": "93904eff1e2364c373def884515bb382b105480c"
+                    },
+                    "syncOptions": [
+                        "CreateNamespace=true"
+                    ]
+                }
+            },
+            "phase": "Succeeded",
+            "startedAt": "2026-10-16T13:40:25Z",
+            "syncResult": {
+                "resources": [
+                    {
+                        "group": "apps",
+                        "hookPhase": "Running",
+                        "images": [
+                            "relaydesk-demo-backend:93904eff1e2364c373def884515bb382b105480c"
+                        ],
+                        "kind": "Deployment",
+                        "message": "deployment.apps/relaydesk-backend configured",
+                        "name": "relaydesk-backend",
+                        "namespace": "relaydesk",
+                        "status": "Synced",
+                        "syncPhase": "Sync",
+                        "version": "v1"
+                    }
+                ],
+                "revision": "93904eff1e2364c373def884515bb382b105480c",
+                "source": {
+                    "helm": {
+                        "parameters": [
+                            {
+                                "forceString": true,
+                                "name": "backend.repository",
+                                "value": "relaydesk-demo-backend"
+                            },
+                            {
+                                "forceString": true,
+                                "name": "backend.tag",
+                                "value": "93904eff1e2364c373def884515bb382b105480c"
+                            },
+                            {
+                                "forceString": true,
+                                "name": "frontend.repository",
+                                "value": "relaydesk-demo-frontend"
+                            },
+                            {
+                                "forceString": true,
+                                "name": "frontend.tag",
+                                "value": "93904eff1e2364c373def884515bb382b105480c"
+                            },
+                            {
+                                "name": "ingress.enabled",
+                                "value": "true"
+                            },
+                            {
+                                "name": "ingress.host",
+                                "value": "relaydesk.local"
+                            },
+                            {
+                                "name": "monitoring.enabled",
+                                "value": "true"
+                            }
+                        ],
+                        "releaseName": "relaydesk"
+                    },
+                    "path": "helm/relaydesk",
+                    "repoURL": "https://github.com/THRISHAL12345/relaydesk.git",
+                    "targetRevision": "93904eff1e2364c373def884515bb382b105480c"
+                }
+            }
+        },
+        "reconciledAt": "2026-10-16T13:40:25Z",
+        "resourceHealthSource": "appTree",
+        "resources": [
+            {
+                "kind": "Service",
+                "name": "relaydesk-backend",
+                "namespace": "relaydesk",
+                "status": "Synced",
+                "version": "v1"
+            },
+            {
+                "kind": "Service",
+                "name": "relaydesk-frontend",
+                "namespace": "relaydesk",
+                "status": "Synced",
+                "version": "v1"
+            },
+            {
+                "kind": "Service",
+                "name": "relaydesk-postgres",
+                "namespace": "relaydesk",
+                "status": "Synced",
+                "syncWave": -2,
+                "version": "v1"
+            },
+            {
+                "group": "apps",
+                "kind": "Deployment",
+                "name": "relaydesk-backend",
+                "namespace": "relaydesk",
+                "status": "Synced",
+                "version": "v1"
+            },
+            {
+                "group": "apps",
+                "kind": "Deployment",
+                "name": "relaydesk-frontend",
+                "namespace": "relaydesk",
+                "status": "Synced",
+                "version": "v1"
+            },
+            {
+                "group": "apps",
+                "kind": "StatefulSet",
+                "name": "relaydesk-postgres",
+                "namespace": "relaydesk",
+                "status": "Synced",
+                "syncWave": -2,
+                "version": "v1"
+            },
+            {
+                "group": "monitoring.coreos.com",
+                "kind": "ServiceMonitor",
+                "name": "relaydesk",
+                "namespace": "relaydesk",
+                "status": "Synced",
+                "version": "v1"
+            },
+            {
+                "group": "networking.k8s.io",
+                "kind": "Ingress",
+                "name": "relaydesk",
+                "namespace": "relaydesk",
+                "status": "Synced",
+                "version": "v1"
+            }
+        ],
+        "sourceHydrator": {},
+        "sourceType": "Helm",
+        "summary": {
+            "externalURLs": [
+                "http://relaydesk.local/",
+                "http://relaydesk.local/api"
+            ],
+            "images": [
+                "postgres:16-alpine",
+                "relaydesk-demo-backend:93904eff1e2364c373def884515bb382b105480c",
+                "relaydesk-demo-frontend:93904eff1e2364c373def884515bb382b105480c"
+            ]
+        },
+        "sync": {
+            "comparedTo": {
+                "destination": {
+                    "namespace": "relaydesk",
+                    "server": "https://kubernetes.default.svc"
+                },
+                "source": {
+                    "helm": {
+                        "parameters": [
+                            {
+                                "forceString": true,
+                                "name": "backend.repository",
+                                "value": "relaydesk-demo-backend"
+                            },
+                            {
+                                "forceString": true,
+                                "name": "backend.tag",
+                                "value": "93904eff1e2364c373def884515bb382b105480c"
+                            },
+                            {
+                                "forceString": true,
+                                "name": "frontend.repository",
+                                "value": "relaydesk-demo-frontend"
+                            },
+                            {
+                                "forceString": true,
+                                "name": "frontend.tag",
+                                "value": "93904eff1e2364c373def884515bb382b105480c"
+                            },
+                            {
+                                "name": "ingress.enabled",
+                                "value": "true"
+                            },
+                            {
+                                "name": "ingress.host",
+                                "value": "relaydesk.local"
+                            },
+                            {
+                                "name": "monitoring.enabled",
+                                "value": "true"
+                            }
+                        ],
+                        "releaseName": "relaydesk"
+                    },
+                    "path": "helm/relaydesk",
+                    "repoURL": "https://github.com/THRISHAL12345/relaydesk.git",
+                    "targetRevision": "93904eff1e2364c373def884515bb382b105480c"
+                }
+            },
+            "revision": "93904eff1e2364c373def884515bb382b105480c",
+            "status": "Synced"
+        }
+    }
+}

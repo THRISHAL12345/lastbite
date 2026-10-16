@@ -1,6 +1,9 @@
 # Submission evidence checklist
 
-Use the original GRADING.md for final scoring. This map identifies implemented files and evidence that must come from an actual run. Checked items mean files exist or local checks passed, not that AWS or GitHub deployment has happened.
+Use the original GRADING.md for final scoring. Checked items below identify observed
+results; the evidence is indexed in [demo/evidence/README.md](../demo/evidence/README.md).
+Kubernetes evidence uses Kind and does not claim an AWS deployment. Follow
+[YOUR-NEXT-STEPS.md](YOUR-NEXT-STEPS.md) for the unchecked items.
 
 | Module | Project artifacts | Evidence to capture |
 |---|---|---|
@@ -27,19 +30,25 @@ Use the original GRADING.md for final scoring. This map identifies implemented f
 - [x] Terraform formatting passes.
 - [x] PDF slide deck generated and rendered for inspection.
 
-## Remaining real-environment evidence
+## Execution and submission status
 
-- [ ] Start Compose and capture healthy PostgreSQL/API/UI.
-- [ ] Inspect desktop and mobile rendering in a browser.
-- [ ] Publish your GitHub repository and build genuine commit history.
-- [ ] Run CI against PostgreSQL and obtain both Trivy reports.
-- [ ] Publish GHCR images and promote their source SHA.
+- [x] Start Compose and capture healthy PostgreSQL/API/UI.
+- [x] Inspect desktop and mobile rendering in a browser.
+- [x] Publish the public repository and build ten meaningful commits.
+- [x] Run CI against PostgreSQL and obtain both Trivy reports.
+- [x] Publish GHCR images and promote their verified source SHA.
+- [x] Apply the namespace, deploy through Helm, and verify ingress in Kind.
+- [x] Verify Prometheus targets and populated Grafana panels in Kind.
+- [x] Show Argo CD Synced/Healthy and prove automatic replica drift repair in Kind.
 - [ ] Run Terraform init, validate, plan and apply with your AWS account.
-- [ ] Configure your repository URL, hostname, CIDR, secret and registry visibility.
+- [x] Configure the repository URL and private demo hostname.
+- [ ] Configure AWS CIDR/profile, production DB secret and registry visibility.
 - [ ] Install the platform charts and application in EKS.
 - [ ] Show Argo CD Synced/Healthy and the complete live walkthrough.
 - [ ] Record Prometheus/Grafana/HPA evidence after generating traffic.
 - [ ] Record the MP4 and commit/upload the presentation assets.
 - [ ] Destroy infrastructure and verify retained disks are cleaned up.
+- [ ] Capture all requested terminal/GHCR/AWS screenshots (text/JSON reports supplement these).
+- [ ] Submit the repository URL in the official form and retain confirmation.
 
 Do not invent test output, cloud screenshots, ten artificial commits, a green CI URL, a clean security report or a presentation video. Record the real outcome, fix failures, then capture the evidence.

@@ -1,0 +1,27 @@
+{
+  "environment": "Local macOS ARM64 Kind cluster kind-relaydesk-demo; not AWS/EKS",
+  "source_revision": "93904eff1e2364c373def884515bb382b105480c",
+  "notes": "Local screenshot captured after the private Traefik endpoint fix; same application and dashboard as CI release. Independent evidence, not artifacts from the GitHub run.",
+  "files": [
+    {
+      "path": "grafana-dashboard.png",
+      "sha256": "734e0613f44b171cdb9ba2c245bc1250e4089d46219292ca077afc8d1e4ceff5",
+      "captured_file_mtime_utc": "2026-10-16T13:41:01.951670+00:00"
+    },
+    {
+      "path": "prometheus-targets.png",
+      "sha256": "ebce6eb37f3bb159316c4b8f0f8e0aa1ce89ddc6c582d602872d5bbe84c2b053",
+      "captured_file_mtime_utc": "2026-10-16T13:41:04.890378+00:00"
+    },
+    {
+      "path": "verification.json",
+      "sha256": "0780306e243b2a01daa543dc1754eef86b2b87b95a1068d59194b4262266c9a8",
+      "captured_file_mtime_utc": "2026-10-16T13:35:11.238154+00:00"
+    },
+    {
+      "path": "application.json",
+      "sha256": "37352f64f276a9708ea0b0cb2bc3be1027358a682326a6d9e3619b01379b7507",
+      "captured_file_mtime_utc": "2026-10-16T13:40:31.168382+00:00"
+    }
+  ]
+}

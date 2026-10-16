@@ -15,9 +15,13 @@ try {
   const page = await context.newPage();
   await page.goto('http://127.0.0.1:3001/d/relaydesk-health/relaydesk?orgId=1&from=now-15m&to=now&timezone=utc');
   await page.getByText('Requests per second', {exact:true}).waitFor({timeout:60000});
-  // Wait for actual chart rendering, not just panel titles or a fixed delay.
+  // A fresh cluster can show replica data before the request-rate range query
+  // has enough samples. Let the dashboard's 15-second refresh fill all panels.
   await page.getByRole('button', {name:'Cancel',exact:true}).waitFor({state:'hidden',timeout:90000});
-  await page.locator('.uplot canvas').first().waitFor({state:'visible',timeout:90000});
+  await page.locator('.uplot canvas').nth(3).waitFor({state:'visible',timeout:180000});
+  if (await page.getByText('No data', {exact:true}).count()) {
+    throw new Error('Grafana must display data in all four panels before evidence is captured');
+  }
   await page.waitForTimeout(2000);
   await page.screenshot({path:`${output}/grafana-dashboard.png`, fullPage:true});
   await page.goto('http://127.0.0.1:9090/targets?search=relaydesk-backend');

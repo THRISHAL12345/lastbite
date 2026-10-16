@@ -1,0 +1,14 @@
+NAME                                     READY   STATUS    RESTARTS   AGE   IP            NODE                         NOMINATED NODE   READINESS GATES
+pod/relaydesk-backend-5bc4f7d5cb-dcccl   1/1     Running   0          12s   10.244.0.26   relaydesk-ci-control-plane   <none>           <none>
+pod/relaydesk-backend-5bc4f7d5cb-fdq9f   1/1     Running   0          6s    10.244.0.30   relaydesk-ci-control-plane   <none>           <none>
+pod/relaydesk-frontend-8b845f87f-gdx2z   1/1     Running   0          12s   10.244.0.29   relaydesk-ci-control-plane   <none>           <none>
+pod/relaydesk-frontend-8b845f87f-zp9hr   1/1     Running   0          12s   10.244.0.28   relaydesk-ci-control-plane   <none>           <none>
+pod/relaydesk-postgres-0                 1/1     Running   0          22s   10.244.0.24   relaydesk-ci-control-plane   <none>           <none>
+
+NAME                         TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)    AGE   SELECTOR
+service/relaydesk-backend    ClusterIP   10.96.122.80   <none>        8000/TCP   12s   app.kubernetes.io/component=backend,app.kubernetes.io/instance=relaydesk
+service/relaydesk-frontend   ClusterIP   10.96.17.91    <none>        8080/TCP   12s   app.kubernetes.io/component=frontend,app.kubernetes.io/instance=relaydesk
+service/relaydesk-postgres   ClusterIP   None           <none>        5432/TCP   22s   app.kubernetes.io/component=postgres,app.kubernetes.io/instance=relaydesk
+
+NAME                                  CLASS     HOSTS             ADDRESS     PORTS   AGE
+ingress.networking.k8s.io/relaydesk   traefik   relaydesk.local   127.0.0.1   80      12s

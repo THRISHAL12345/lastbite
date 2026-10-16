@@ -1,0 +1,29 @@
+apiVersion: v1
+items:
+- apiVersion: monitoring.coreos.com/v1
+  kind: ServiceMonitor
+  metadata:
+    annotations:
+      meta.helm.sh/release-name: relaydesk
+      meta.helm.sh/release-namespace: relaydesk
+    creationTimestamp: "2026-10-16T13:47:32Z"
+    generation: 1
+    labels:
+      app.kubernetes.io/managed-by: Helm
+      release: monitoring
+    name: relaydesk
+    namespace: relaydesk
+    resourceVersion: "1175"
+    uid: 689e31c9-29c6-4143-9aa2-a22cd08ab58c
+  spec:
+    endpoints:
+    - interval: 15s
+      path: /metrics
+      port: http
+    selector:
+      matchLabels:
+        app.kubernetes.io/component: backend
+        app.kubernetes.io/instance: relaydesk
+kind: List
+metadata:
+  resourceVersion: ""
