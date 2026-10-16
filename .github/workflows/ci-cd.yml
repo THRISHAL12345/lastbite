@@ -150,6 +150,28 @@ jobs:
           name: compose-and-browser-evidence
           path: artifacts/
           retention-days: 30
+      - uses: azure/setup-helm@v4.3.0
+      - name: Create disposable Kubernetes cluster
+        uses: helm/kind-action@v1.12.0
+        with:
+          cluster_name: relaydesk-ci
+      - name: Verify Helm deployment and real ingress routing
+        env:
+          IMAGE_TAG: ${{ github.sha }}
+        run: bash scripts/check-kubernetes.sh
+      - name: Collect Kubernetes failure diagnostics
+        if: failure()
+        run: |
+          mkdir -p artifacts/kubernetes
+          kubectl get pods,svc,ingress,jobs -n relaydesk-ci -o wide > artifacts/kubernetes/failure-resources.txt || true
+          kubectl get events -n relaydesk-ci --sort-by=.lastTimestamp > artifacts/kubernetes/events.txt || true
+          kubectl logs -n relaydesk-ci -l job-name --all-containers --tail=200 > artifacts/kubernetes/migration-logs.txt || true
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: kubernetes-evidence
+          path: artifacts/kubernetes/
+          retention-days: 30
       - uses: docker/login-action@v3
         if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
         with:

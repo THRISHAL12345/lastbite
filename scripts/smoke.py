@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Exercise a running demo stack and write evidence only for observed responses."""
 import argparse
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 import json
 from pathlib import Path
 from urllib.error import HTTPError
@@ -9,9 +9,12 @@ from urllib.request import Request, urlopen
 import uuid
 
 
+INGRESS_HOST = None
+
+
 def request(url, method="GET", body=None, expected=200):
     req = Request(url, method=method, data=json.dumps(body).encode() if body is not None else None,
-                  headers={"Content-Type": "application/json"})
+                  headers={"Content-Type": "application/json", **({"Host": INGRESS_HOST} if INGRESS_HOST else {})})
     try:
         response = urlopen(req, timeout=15)
     except HTTPError as error:
@@ -37,7 +40,7 @@ def run(frontend_url, backend_url):
     path = front + f"/api/tickets/{ticket['id']}"
     try:
         assert ticket['title'] == title and not ticket['overdue']
-        assert datetime.fromisoformat(ticket['due_at']) - datetime.fromisoformat(ticket['created_at']) == __import__('datetime').timedelta(hours=4)
+        assert datetime.fromisoformat(ticket['due_at'].replace('Z', '+00:00')) - datetime.fromisoformat(ticket['created_at'].replace('Z', '+00:00')) == timedelta(hours=4)
         assert request(path)['id'] == ticket['id']
         checks.append("Create/read through frontend proxy and four-hour SLA")
         page = request(front + "/api/tickets?q=" + title.replace(' ', '%20'))
@@ -68,8 +71,11 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--frontend-url', default='http://127.0.0.1:3000')
     parser.add_argument('--backend-url', default='http://127.0.0.1:8000')
+    parser.add_argument('--host', help='Optional HTTP Host header for an ingress port-forward')
     parser.add_argument('--output', default='artifacts/smoke.json')
     args = parser.parse_args()
+    global INGRESS_HOST
+    INGRESS_HOST = args.host
     result = {'started_at': datetime.now(timezone.utc).isoformat(), 'frontend_url': args.frontend_url, 'backend_url': args.backend_url}
     try:
         result['checks'] = run(args.frontend_url, args.backend_url)
