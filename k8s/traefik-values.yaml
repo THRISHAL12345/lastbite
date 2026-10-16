@@ -4,5 +4,11 @@ service:
 providers:
   kubernetesIngress:
     enabled: true
+    # This private demo is reached through localhost port-forwarding on Kind/EKS.
+    # Publish that endpoint so Argo CD can assess Ingress health.
+    publishedService:
+      enabled: false
+    ingressEndpoint:
+      ip: 127.0.0.1
   kubernetesGateway:
     enabled: false

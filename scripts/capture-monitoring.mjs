@@ -15,10 +15,12 @@ try {
   const page = await context.newPage();
   await page.goto('http://127.0.0.1:3001/d/relaydesk-health/relaydesk?orgId=1&from=now-15m&to=now&timezone=utc');
   await page.getByText('Requests per second', {exact:true}).waitFor({timeout:60000});
-  // Allow the visible graph's asynchronous query and rendering to settle.
-  await page.waitForTimeout(10000);
+  // Wait for actual chart rendering, not just panel titles or a fixed delay.
+  await page.getByRole('button', {name:'Cancel',exact:true}).waitFor({state:'hidden',timeout:90000});
+  await page.locator('.uplot canvas').first().waitFor({state:'visible',timeout:90000});
+  await page.waitForTimeout(2000);
   await page.screenshot({path:`${output}/grafana-dashboard.png`, fullPage:true});
-  await page.goto('http://127.0.0.1:9090/targets?search=relaydesk');
+  await page.goto('http://127.0.0.1:9090/targets?search=relaydesk-backend');
   await page.getByText(/relaydesk/).first().waitFor({timeout:60000});
   await page.waitForTimeout(2000);
   await page.screenshot({path:`${output}/prometheus-targets.png`, fullPage:true});

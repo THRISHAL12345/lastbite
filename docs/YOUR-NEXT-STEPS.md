@@ -9,6 +9,22 @@ Do not send credentials in chat or include them in screenshots or videos.
 
 ## 1. Configure your AWS access locally
 
+For a normal AWS Console IAM/federated login, your installed AWS CLI supports a
+browser sign-in without creating long-lived access keys:
+
+```bash
+aws login --profile relaydesk-console
+aws configure set credential_process "aws configure export-credentials --profile relaydesk-console --format process" --profile relaydesk
+aws configure set region ap-south-1 --profile relaydesk
+```
+
+Select the intended account/role in your browser and use `ap-south-1` when prompted
+for the deployment region. The second profile lets the pinned Terraform AWS provider
+obtain the temporary credentials through the CLI. Your IAM identity needs
+`SignInLocalDevelopmentAccess` as well as the deployment permissions listed below.
+See [AWS's console-login and credential-process instructions](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-sign-in.html).
+Renew this session with `aws login --profile relaydesk-console` when it expires.
+
 If your account uses IAM Identity Center (SSO):
 
 ```bash
