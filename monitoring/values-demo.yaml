@@ -16,8 +16,10 @@ defaultRules:
 grafana:
   defaultDashboardsEnabled: false
   resources:
-    requests: {cpu: 50m, memory: 128Mi}
-    limits: {memory: 512Mi}
+    # Grafana 13 exceeds 512Mi when loading the dashboard. At that limit it
+    # stalls in memory reclaim and stops serving queries and health checks.
+    requests: {cpu: 100m, memory: 256Mi}
+    limits: {memory: 1Gi}
 prometheus:
   prometheusSpec:
     retention: 6h
