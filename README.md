@@ -138,11 +138,11 @@ For direct API development, use `DATABASE_URL=sqlite:///./lastbite.db` and run `
 
 ## Publication status
 
-The repository has been renamed to [THRISHAL12345/lastbite](https://github.com/THRISHAL12345/lastbite) using `gh-personal`, and the local Git remote points to that URL. The LastBite conversion is committed locally with author and committer `THRISHAL12345 <73953301+THRISHAL12345@users.noreply.github.com>`. It has **not been pushed**. GitHub still contains the previous application until an explicitly authorized push.
+Source repository: [THRISHAL12345/lastbite](https://github.com/THRISHAL12345/lastbite). The application conversion uses author and committer `THRISHAL12345 <73953301+THRISHAL12345@users.noreply.github.com>`. The repository was renamed from RelayDesk using `gh-personal`.
 
 Use `gh-personal` for future GitHub operations and retain the `THRISHAL12345` commit identity.
 
-The Argo Application points to the renamed `lastbite` repository; its LastBite chart is not available remotely until the conversion is pushed. `values-release.yaml` deliberately uses `build-required`; it must not point to an old RelayDesk image. After a successful LastBite CI run and image publication, generate values with:
+The Argo Application points to the `lastbite` repository and its `helm/lastbite` chart. `values-release.yaml` deliberately uses `build-required`; it must not point to an old RelayDesk image. After a successful LastBite CI run and image publication, generate values with:
 
 ```bash
 python3 scripts/promote.py THRISHAL12345 FULL_40_CHARACTER_LASTBITE_COMMIT_SHA

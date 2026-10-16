@@ -1,4 +1,4 @@
-# Repository renamed; do not apply before the LastBite commit and images are published.
+# Do not apply before the LastBite images pass CI, publish, and are promoted.
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:

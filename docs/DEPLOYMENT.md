@@ -1,6 +1,6 @@
 # LastBite publication prerequisite
 
-The repository has been renamed to `THRISHAL12345/lastbite` and the conversion is committed locally. Before following cloud/GitOps commands, publish it using gh-personal when authorized, run its CI, and promote real LastBite image SHA tags. `values-release.yaml` currently says `build-required`. Use your existing AWS profile `relaydesk`; changing the application name does not rename CLI profiles.
+The repository has been renamed to `THRISHAL12345/lastbite` using gh-personal. Before following cloud/GitOps commands, verify a successful CI run and promote real LastBite image SHA tags. `values-release.yaml` currently says `build-required`. Use your existing AWS profile `relaydesk`; changing the application name does not rename CLI profiles.
 
 # Deployment runbook
 
