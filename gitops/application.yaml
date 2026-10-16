@@ -6,7 +6,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/REPLACE_OWNER/REPLACE_REPOSITORY.git
+    repoURL: https://github.com/THRISHAL12345/relaydesk.git
     targetRevision: main
     path: helm/relaydesk
     helm:

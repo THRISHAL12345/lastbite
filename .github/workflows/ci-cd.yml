@@ -2,7 +2,6 @@ name: RelayDesk CI and image delivery
 on:
   push:
     branches: [main]
-    paths-ignore: ["demo/**", "docs/**", "**/*.md", "helm/relaydesk/values-release.yaml"]
   pull_request:
     branches: [main]
   workflow_dispatch:

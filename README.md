@@ -171,7 +171,7 @@ git commit -m "Promote scanned RelayDesk release to EKS"
 git push
 ```
 
-The script validates syntax, not the CI outcome; use the SHA from a successful CI run or copy the workflow's `gitops-release-values` artifact. Argo CD watches that file and reconciles the release. Protect main and review promotion commits. Release-values-only pushes avoid rebuilding the application, preventing a promotion loop. Do not manage the same release with both Argo CD and `helm upgrade` concurrently.
+The script validates syntax, not the CI outcome; use the SHA from a successful CI run or copy the workflow's `gitops-release-values` artifact. Argo CD watches that file and reconciles the release. Protect main and review promotion commits. Every main push runs CI, including release-values and documentation changes. The workflow publishes a promotion artifact but does not commit or push changes, so it cannot create a promotion loop. Do not manage the same release with both Argo CD and `helm upgrade` concurrently.
 
 ## AWS, Kubernetes and monitoring
 
