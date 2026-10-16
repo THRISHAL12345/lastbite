@@ -208,8 +208,8 @@ and Argo `Synced/Healthy`. Show HPA readings; do not claim a scaling event unles
 Capture the terminal output of `kubectl get pods -n relaydesk`,
 `kubectl get svc -n relaydesk`, and `curl http://localhost:8000/metrics`, plus the
 earlier `helm list -n relaydesk` output. On macOS use Shift–Command–4 to select the
-terminal area. The passing pytest screenshot is already archived; capture Trivy
-output and your EKS walkthrough's terminal screenshots. The committed JSON/text reports are useful supporting evidence,
+terminal area. Passing pytest and both Trivy report screenshots are already
+archived; capture your EKS walkthrough's terminal screenshots. The committed JSON/text reports are useful supporting evidence,
 but the rubric explicitly requests these screenshots.
 
 ## 6. Record your own presentation

@@ -25,7 +25,7 @@ preserves the exact source run rather than relabeling its evidence as a newer ru
 | Application / Docker | [Desktop UI](ci-38909790496/compose-and-browser-evidence/desktop-queue.png), [mobile UI](ci-38909790496/compose-and-browser-evidence/mobile-queue.png), [resolved ticket](ci-38909790496/compose-and-browser-evidence/resolved-ticket.png), [Compose services](ci-38909790496/compose-and-browser-evidence/services.txt), [API smoke results](ci-38909790496/compose-and-browser-evidence/smoke.json) |
 | Testing | [Passing pytest screenshot](github/pytest-postgresql.png), [19-test JUnit report](ci-38909790496/test-results/pytest.xml), [PostgreSQL test job](https://github.com/THRISHAL12345/relaydesk/actions/runs/38909790496/job/117002671202) |
 | Git | [Actual GitHub history with ten meaningful commits](github/ten-commits.png); every author/committer is THRISHAL12345 |
-| Security | [Backend scan](ci-38909790496/security-reports/backend-trivy.txt), [frontend scan](ci-38909790496/security-reports/frontend-trivy.txt) |
+| Security | [Backend scan](ci-38909790496/security-reports/backend-trivy.txt), [frontend scan](ci-38909790496/security-reports/frontend-trivy.txt), [backend output screenshot](github/backend-trivy-output.png), [frontend output screenshot](github/frontend-trivy-output.png) |
 | Kubernetes / Helm | [Pods/services/ingress](ci-38909790496/kubernetes-evidence/resources.txt), [Helm release](ci-38909790496/kubernetes-evidence/helm-list.txt), [replica objects](ci-38909790496/kubernetes-evidence/deployments.json), [ingress/API smoke results](ci-38909790496/kubernetes-evidence/smoke.json) |
 | Monitoring | [Metrics](ci-38909790496/kubernetes-evidence/metrics.txt), [both targets UP in CI](ci-38909790496/monitoring-evidence/prometheus-targets.png), [four populated Grafana panels locally](local-kind-2026-10-16/grafana-dashboard.png), [live CI API verification](ci-38909790496/monitoring-evidence/verification.json) |
 | GitOps walkthrough | [Argo CD Synced/Healthy](ci-38909790496/gitops-evidence/argocd-synced-healthy.png), [drift to one replica](ci-38909790496/gitops-evidence/deployment-drift.json), [automatic repair to two](ci-38909790496/gitops-evidence/deployment-healed.json), [application state](ci-38909790496/gitops-evidence/application.json) |
@@ -36,6 +36,10 @@ is retained unchanged: its replica panel had data while the request panels still
 showed `No data` at capture time, despite a successful live instant query. The
 capture check now waits for all four charts through dashboard refreshes, so this
 early screenshot cannot silently pass in a later run.
+
+The Trivy output screenshots show the unchanged CI reports in GitHub's file viewer
+at archive commit `6c03ed088bb361d50b33fc4d48cd6c5bb15ad3e4`; they are screenshots
+of the actual report files, not a recreated terminal or a new scan.
 
 ## Security explanation
 
